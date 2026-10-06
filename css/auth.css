@@ -1,0 +1,386 @@
+/* =========================================
+   RecoMate 인증 페이지 공통 CSS
+   로그인 / 회원가입
+========================================= */
+
+
+/* 전체 기본 설정 */
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background-color: #ffffff;
+    font-family: Arial, sans-serif;
+}
+
+
+/* =========================================
+   로그인 화면
+========================================= */
+
+/* 전체 로그인 영역 */
+.login-container {
+    min-height: 100vh;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background-color: #ffffff;
+}
+
+
+/* 로그인 박스 */
+.login-box {
+    width: 100%;
+    max-width: 500px;
+
+    padding: 30px;
+}
+
+
+/* RecoMate 로고 */
+.logo {
+    text-align: center;
+
+    font-size: 36px;
+    font-weight: 700;
+
+    margin-bottom: 70px;
+
+    color: #111111;
+}
+
+
+/* 아이디 / 비밀번호 입력창 */
+.login-input {
+    width: 100%;
+    height: 56px;
+
+    border: 1px solid #555555;
+    border-radius: 0;
+
+    background-color: #f5f5f5;
+
+    text-align: center;
+
+    font-size: 16px;
+}
+
+
+/* 입력창 선택 시 */
+.login-input:focus {
+    background-color: #ffffff;
+
+    border-color: #333333;
+
+    box-shadow: none;
+}
+
+
+/* placeholder */
+.login-input::placeholder {
+    color: #999999;
+}
+
+
+/* 로그인 버튼 */
+.login-button {
+    height: 56px;
+
+    border: 1px solid #555555;
+    border-radius: 0;
+
+    background-color: #b7b7b7;
+
+    color: #222222;
+
+    font-size: 16px;
+}
+
+
+/* 로그인 버튼 마우스 올렸을 때 */
+.login-button:hover {
+    background-color: #9f9f9f;
+
+    border-color: #555555;
+
+    color: #111111;
+}
+
+
+/* 회원가입 링크 영역 */
+.signup-area {
+    text-align: right;
+
+    margin-top: 20px;
+}
+
+
+/* 회원가입 / 로그인 돌아가기 링크 */
+.signup-link {
+    color: #aaaaaa;
+
+    text-decoration: none;
+
+    font-size: 15px;
+}
+
+
+.signup-link:hover {
+    color: #555555;
+
+    text-decoration: underline;
+}
+
+
+
+/* =========================================
+   회원가입 화면
+========================================= */
+
+
+/* 회원가입 전체 영역 */
+.signup-container {
+    min-height: 100vh;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background-color: #ffffff;
+}
+
+
+/* 회원가입 박스 */
+.signup-box {
+    width: 100%;
+    max-width: 500px;
+
+    padding: 30px;
+}
+
+
+/* 회원가입 화면 RecoMate 로고 */
+.signup-logo {
+    margin-bottom: 60px;
+}
+
+
+/* =========================================
+   아이디 + 중복확인
+========================================= */
+
+.id-row {
+    display: flex;
+
+    gap: 10px;
+
+    margin-bottom: 5px;
+}
+
+
+/* 아이디 입력창 */
+.id-input {
+    flex: 1;
+}
+
+
+/* 중복확인 버튼 */
+.check-button {
+    width: 100px;
+    height: 56px;
+
+    flex-shrink: 0;
+
+    border: 1px solid #555555;
+    border-radius: 0;
+
+    background-color: #b7b7b7;
+
+    color: #222222;
+
+    font-size: 15px;
+}
+
+
+/* 중복확인 버튼 마우스 */
+.check-button:hover {
+    background-color: #9f9f9f;
+
+    border-color: #555555;
+
+    color: #111111;
+}
+
+
+/* =========================================
+   아이디 중복확인 메시지
+========================================= */
+
+.id-check-message {
+    min-height: 24px;
+
+    margin-bottom: 8px;
+
+    padding-left: 5px;
+
+    font-size: 13px;
+}
+
+
+/* 사용 가능한 아이디 */
+.id-check-message.success {
+    color: #198754;
+}
+
+
+/* 사용할 수 없는 아이디 */
+.id-check-message.error {
+    color: #dc3545;
+}
+
+
+
+/* =========================================
+   비밀번호 확인 메시지
+========================================= */
+
+.password-message {
+    min-height: 24px;
+
+    margin-top: -15px;
+    margin-bottom: 15px;
+
+    padding-left: 5px;
+
+    font-size: 13px;
+}
+
+
+/* 비밀번호 일치 */
+.password-message.success {
+    color: #198754;
+}
+
+
+/* 비밀번호 불일치 */
+.password-message.error {
+    color: #dc3545;
+}
+
+
+
+/* =========================================
+   회원가입 버튼
+========================================= */
+
+.signup-button {
+    margin-top: 35px;
+}
+
+
+
+/* =========================================
+   이메일 인증 화면
+   나중에 Cognito 이메일 인증 사용 시 활용
+========================================= */
+
+.verify-description {
+    text-align: center;
+
+    margin-bottom: 25px;
+
+    color: #666666;
+
+    font-size: 15px;
+}
+
+
+.verify-description p {
+    margin: 0;
+}
+
+
+/* 인증 화면 하단 */
+.verify-actions {
+    display: flex;
+
+    justify-content: space-between;
+    align-items: center;
+
+    margin-top: 20px;
+}
+
+
+/* 인증번호 재전송 버튼 */
+.link-button {
+    padding: 0;
+
+    border: none;
+
+    background: none;
+
+    color: #aaaaaa;
+
+    font-size: 15px;
+
+    cursor: pointer;
+}
+
+
+.link-button:hover {
+    color: #555555;
+
+    text-decoration: underline;
+}
+
+
+
+/* =========================================
+   반응형 - 모바일
+========================================= */
+
+@media (max-width: 576px) {
+
+    /* 로그인 */
+    .login-box {
+        padding: 20px;
+    }
+
+
+    /* 회원가입 */
+    .signup-box {
+        padding: 20px;
+    }
+
+
+    /* 로고 */
+    .logo {
+        font-size: 30px;
+
+        margin-bottom: 50px;
+    }
+
+
+    /* 아이디 + 중복확인 */
+    .id-row {
+        gap: 7px;
+    }
+
+
+    /* 중복확인 버튼 */
+    .check-button {
+        width: 85px;
+
+        font-size: 14px;
+    }
+
+
+    /* 입력창 */
+    .login-input {
+        font-size: 14px;
+    }
+}
