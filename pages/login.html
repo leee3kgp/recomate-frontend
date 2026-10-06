@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>RecoMate 로그인</title>
+
+    <!-- Bootstrap 5 -->
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
+
+    <!-- 우리가 만든 CSS -->
+    <link rel="stylesheet" href="../css/auth.css">
+</head>
+
+<body>
+
+    <main class="login-container">
+
+        <div class="login-box">
+
+            <h1 class="logo">RecoMate</h1>
+
+            <form id="loginForm">
+
+                <!-- 아이디 -->
+                <div class="mb-3">
+                    <input
+                        type="text"
+                        class="form-control login-input"
+                        id="userId"
+                        placeholder="아이디를 입력하세요"
+                        required
+                    >
+                </div>
+
+                <!-- 비밀번호 -->
+                <div class="mb-4">
+                    <input
+                        type="password"
+                        class="form-control login-input"
+                        id="password"
+                        placeholder="비밀번호를 입력하세요"
+                        required
+                    >
+                </div>
+
+                <!-- 로그인 버튼 -->
+                <button
+                    type="submit"
+                    class="btn login-button w-100"
+                >
+                    로그인하기
+                </button>
+
+            </form>
+
+            <!-- 회원가입 -->
+            <div class="signup-area">
+                <a href="signup.html" class="signup-link">
+                    회원가입하기
+                </a>
+            </div>
+
+        </div>
+
+    </main>
+
+    <script src="../js/login.js"></script>
+
+</body>
+</html>
