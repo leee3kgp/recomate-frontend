@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -12,8 +13,24 @@
         rel="stylesheet"
     >
 
-    <!-- 우리가 만든 CSS -->
+    <!-- 기존 CSS -->
     <link rel="stylesheet" href="../css/auth.css">
+
+    <style>
+        .login-message {
+            margin-bottom: 15px;
+            font-size: 13px;
+            text-align: center;
+        }
+
+        .login-message.error {
+            color: #dc3545;
+        }
+
+        .login-message.success {
+            color: #198754;
+        }
+    </style>
 </head>
 
 <body>
@@ -26,13 +43,14 @@
 
             <form id="loginForm">
 
-                <!-- 아이디 -->
+                <!-- 이메일 -->
                 <div class="mb-3">
                     <input
-                        type="text"
+                        type="email"
                         class="form-control login-input"
                         id="userId"
-                        placeholder="아이디를 입력하세요"
+                        placeholder="아이디(이메일)를 입력하세요"
+                        autocomplete="email"
                         required
                     >
                 </div>
@@ -44,13 +62,23 @@
                         class="form-control login-input"
                         id="password"
                         placeholder="비밀번호를 입력하세요"
+                        autocomplete="current-password"
                         required
                     >
                 </div>
 
+                <!-- 로그인 결과 -->
+                <div
+                    id="loginMessage"
+                    class="login-message"
+                    role="status"
+                    aria-live="polite"
+                ></div>
+
                 <!-- 로그인 버튼 -->
                 <button
                     type="submit"
+                    id="loginButton"
                     class="btn login-button w-100"
                 >
                     로그인하기
@@ -69,7 +97,8 @@
 
     </main>
 
-    <script src="../js/login.js"></script>
+    <!-- 반드시 type="module" 사용 -->
+    <script type="module" src="../js/login.js"></script>
 
 </body>
 </html>
