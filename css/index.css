@@ -1,0 +1,154 @@
+/* =========================================
+   메인 화면 css
+========================================= */
+
+
+/* RecoMate 로고 */
+.logo {
+    padding: 8px 20px;
+
+    font-size: 36px;
+    font-weight: 700;
+
+    color: #111111;
+}
+
+
+/* 네비게이션 바 */
+.nav-bar{
+    display: flex;
+    align-items: center;
+
+    gap: 30px;
+
+    padding: 10px 20px;
+}
+
+
+/* 네비게이션 버튼 */
+.nav-btn {
+    padding: 8px;
+
+    border: 1px solid #555555;
+    border-radius: 0;
+    background-color: #f5f5f5;
+
+    color: #222222;
+    font-size: 16px;
+    cursor: pointer;
+}
+/* 네비게이션 버튼 마우스 올렸을 때 */
+.nav-btn:hover {
+    background-color: #9f9f9f;
+    border-color: #555555;
+    color: #111111;
+}
+
+
+
+
+/* =========================================
+   모달 css
+========================================= */
+
+
+/* 전체 화면을 어둡게 덮는 배경 */
+.count-modal-overlay {
+    display: none;
+    position: fixed;
+
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+
+    background-color: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+/* 모달이 활성화되었을 때 표시 */
+.count-modal-overlay.active {
+    display: flex;
+}
+
+
+/* 모달 창 */
+.count-modal-content {
+    width: 320px;
+    padding: 30px;
+
+    background-color: #ffffff;
+    border-radius: 12px;
+        
+    text-align: center;
+    position: relative;
+}
+
+
+/* 인원수 선택 창 */
+.count-modal-counter {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    gap: 15px;
+    margin: 20px 0;
+}
+
+    
+/* 인원수 선택 버튼 */
+.count-modal-btn {
+    width: 36px;
+    height: 36px;
+
+    border: 1px solid #b7b7b7;
+    background-color: #f5f5f5;
+    border-radius: 50%;
+
+    color: #aaaaaa;
+    cursor: pointer;
+}
+/* 인원수 선택 버튼 마우스 올렸을 때 */
+.count-modal-btn:hover {
+    background-color: #b7b7b7;
+    border-color: #555555;
+    color: #555555;
+}
+
+
+/* 인원수 제출 버튼 */
+.count-modal-submit {
+    width: 100%;
+    padding: 8px;
+
+    border: 1px solid #555555;
+    border-radius: 0;
+    background-color: #b7b7b7;
+
+    color: #222222;
+    font-size: 16px;
+    cursor: pointer;
+}
+/* 인원수 제출 버튼 마우스 올렸을 때 */
+.count-modal-submit:hover {
+    background-color: #9f9f9f;
+    border-color: #555555;
+    color: #111111;
+}
+
+
+/* 모달 창 닫기 버튼 */
+.count-modal-close {
+    display: block;
+
+    margin-left: auto;
+
+    background: none;
+    border: none;
+
+    color: #aaaaaa;
+    font-size: 16px;
+    
+    cursor: pointer;
+}

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>RecoMate</title>
+
+    <!-- 모달 CSS -->
+    <link rel="stylesheet" href="../css/index.css">  
+</head>
+<body>
+    <nav class="nav-bar">
+        <h1 class="logo">RecoMate</h1>
+        <button class="nav-btn">홈</button>
+        <button class="nav-btn">요즘 대세 콘텐츠</button>
+        <button class="nav-btn" style="margin-left: auto;">검색</button>
+        <button class="nav-btn">프로필</button>
+    </nav>
+    <!-- 메인 버튼 예시 -->
+    <button id="open-modal-btn">같이 볼 콘텐츠 추천 받기</button>
+
+    <!-- 모달 -->
+    <div id="count-modal-overlay" class="count-modal-overlay">
+        <div class="count-modal-content">
+            <h3 class="count-modal-title">몇 명이서 함께 시청하시나요?</h3>
+            
+            <div class="count-modal-counter">
+                <button type="button" class="count-modal-btn" id="minus-btn">-</button>
+                <span class="count-modal-count" id="guest-count">2명</span>
+                <button type="button" class="count-modal-btn" id="plus-btn">+</button>
+            </div>
+
+            <button type="button" class="count-modal-submit" id="submit-btn">선택 완료</button>
+            <button type="button" class="count-modal-close" id="close-btn">닫기</button>
+        </div>
+    </div>
+        
+    </div>
+
+    <script src="../js/guest-modal.js"></script>
+</body>
+</html>
