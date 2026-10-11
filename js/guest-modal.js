@@ -21,7 +21,7 @@ minusBtn.addEventListener('click', () => {
 });
 
 plusBtn.addEventListener('click', () => {
-    if (count < 10) { // 최대 인원수 제한(임의로 10명으로 설정)
+    if (count < 6) { // 최대 인원수 제한(API 명세서에 따라 설정)
         count++;
         countDisplay.textContent = `${count}명`;
     }
@@ -35,8 +35,7 @@ closeBtn.addEventListener('click', () => {
 });
 
 submitBtn.addEventListener('click', () => { 
-    alert(`${count}명 선택 완료, 취향 입력 페이지로 이동합니다.`);
-    // 실제 이동 시: window.location.href = `genre-select.html?count=${count}`;
+    window.location.href = `../pages/select.html?count=${count}`;
 
     // 모달 창 닫고 초기화
     modalOverlay.classList.remove('active');
