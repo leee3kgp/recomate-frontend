@@ -1,0 +1,112 @@
+/* =========================================
+   장르 선택 화면 css
+========================================= */
+
+
+/* 전체 메인 컨테이너 */
+.select-container {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+
+/* 인원 수 표시 영역 */
+.participant-count-wrapper {
+    font-size: 16px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 12px;
+    margin-bottom: 24px;
+    }
+
+.participant-count-text {
+    font-weight: bold;
+}
+
+/* 에러 메시지 */
+#error-message {
+    color: red;
+    margin-bottom: 16px;
+}
+
+
+/* 제출 버튼 */
+#submit-btn {
+    display: block;
+    margin-left: auto;
+    padding: 14px;
+
+    border: none;
+    border-radius: 0;
+    background-color: #b7b7b7;
+
+    color: #222222;
+    font-size: 16px;
+    cursor: pointer;
+}
+/* 제출 버튼 마우스 올렸을 때 */
+#submit-btn:hover {
+    background-color: #9f9f9f;
+    border-color: #555555;
+    color: #111111;
+}
+/* 제출 버튼 (로딩 중 상태) */
+#submit-btn:disabled {
+    cursor: not-allowed;
+}
+
+
+/* 참여자 카드 박스 */
+.participant-card {
+    border: 1px solid #b7b7b7;
+    border-radius: 0;
+
+    padding: 20px;
+    margin-bottom: 20px;
+    
+    background-color: #f5f5f5;
+}
+/* 참여자 타이틀 */
+.participant-title {
+    margin: 0 0 16px 0;
+    font-size: 16px;
+    color: #555555;
+}
+
+/* 장르 버튼 컨테이너 */
+.genre-btn-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+/* 장르 선택 버튼 (비선택 상태) */
+.genre-btn {
+    padding: 8px 16px;
+    border-radius: 20px;
+    border: 1px solid #b7b7b7;
+    background-color: #ffffff;
+    color: #555555;
+    cursor: pointer;
+}
+/* 장르 선택 버튼 (선택된 상태) */
+.genre-btn.selected {
+    border: 1px solid #555555;
+    background-color: #b7b7b7;
+    color: #222222;
+    font-weight: bold;
+}
+
+/* 장르 버튼 마우스 올렸을 때 */
+.genre-btn:hover {
+    background-color: #9f9f9f;
+    border-color: #555555;
+    color: #111111;
+}
+/* 장르 선택 버튼 (로딩 중 상태) */
+.genre-btn:disabled {
+    cursor: not-allowed;
+}
