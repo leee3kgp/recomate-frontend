@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const container = document.getElementById('recommendations-container');
+    const recommendationsContainer = document.getElementById('recommendations-container');
 
     // TMDB 이미지 기본 URL (API 명세서: posterPath는 TMDB 경로만 반환)
     const TMDB_IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/w500';
@@ -16,8 +16,8 @@ document.addEventListener('DOMContentLoaded', () => {
         ANIMATION: '애니메이션'
     });
 
-    // API 명세서 규격의 TOP 3 추천 더미 JSON 데이터
-    const dummyRecommendations = {
+    // API 명세서 규격의 TOP 3 추천 더미 JSON 데이터 (recommendations + analysis)
+    const dummyData = {
         sessionId: "01JAB38Z99XYZ1234567890ABC",
         recommendations: [
             {
@@ -44,7 +44,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 posterPath: "/1XS1oqL89opfnbLl8P2B212A43L.jpg",
                 genres: ["DRAMA", "SF", "FANTASY"]
             }
-        ]
+        ],
+        analysis: {
+            genreScores: [
+                { genre: "SF", count: 3 },
+                { genre: "ACTION", count: 2 },
+                { genre: "FANTASY", count: 2 },
+                { genre: "DRAMA", count: 1 }
+            ],
+            participantMatch: [
+                { index: 1, matchRate: 0.85 },
+                { index: 2, matchRate: 0.70 },
+                { index: 3, matchRate: 0.90 }
+            ]
+        }
     };
 
     // 카드 DOM 생성 함수
@@ -81,21 +94,73 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // 화면에 TOP 3 카드 출력
-    const renderRecommendations = (data) => {
-        if (!container) return;
-        container.innerHTML = '';
+    const renderRecommendations = (recommendations) => {
+        if (!recommendationsContainer) return;
+        recommendationsContainer.innerHTML = '';
 
-        if (!data || !data.recommendations || data.recommendations.length === 0) {
-            container.innerHTML = '<p class="no-result">추천 결과가 없습니다.</p>';
+        if (!recommendations || recommendations.length === 0) {
+            recommendationsContainer.innerHTML = '<p class="no-result">추천 결과가 없습니다.</p>';
             return;
         }
 
-        data.recommendations.forEach((item) => {
+        recommendations.forEach((item) => {
             const cardNode = createRecommendationCard(item);
-            container.appendChild(cardNode);
+            recommendationsContainer.appendChild(cardNode);
         });
     };
 
-    // 더미 데이터 초기 렌더링
-    renderRecommendations(dummyRecommendations);
+    // Chart.js 렌더링 함수
+    const renderCharts = (analysis) => {
+        // 장르 선호도 바 차트
+        const genreCtx = document.getElementById('genreChart').getContext('2d');
+        const genreLabels = analysis.genreScores.map(item => genreMap[item.genre] || item.genre);
+        const genreCounts = analysis.genreScores.map(item => item.count);
+
+        new Chart(genreCtx, {
+            type: 'bar',
+            data: {
+                labels: genreLabels,
+                datasets: [{
+                    label: '선택된 장르 횟수',
+                    data: genreCounts,
+                    backgroundColor: '#555555',
+                    borderColor: '#111111',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: { legend: { display: false } },
+                scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } }
+            }
+        });
+
+        // 참여자별 취향 일치율 바 차트
+        const matchCtx = document.getElementById('matchChart').getContext('2d');
+        const matchLabels = analysis.participantMatch.map(item => `참여자 ${item.index}`);
+        const matchRates = analysis.participantMatch.map(item => item.matchRate * 100);
+
+        new Chart(matchCtx, {
+            type: 'bar',
+            data: {
+                labels: matchLabels,
+                datasets: [{
+                    label: '취향 일치율 (%)',
+                    data: matchRates,
+                    backgroundColor: '#9f9f9f',
+                    borderColor: '#555555',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: { legend: { display: false } },
+                scales: { y: { beginAtZero: true, max: 100 } }
+            }
+        });
+    };
+
+    // 초기 실행 (더미 데이터 적용)
+    renderRecommendations(dummyData.recommendations);
+    renderCharts(dummyData.analysis);
 });

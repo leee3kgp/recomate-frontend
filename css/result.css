@@ -149,6 +149,7 @@
 
 /* 하단 버튼 영역 */
 .result-actions {
+    margin-top: 30px;
     display: flex;
     justify-content: flex-end;
     gap: 12px;
@@ -186,4 +187,51 @@
     background-color: #9f9f9f;
     border-color: #555555;
     color: #111111;
+}
+
+
+
+/* =========================================
+   취향 분석 차트 대시보드 css
+========================================= */
+
+
+
+.analysis-section {
+    margin-top: 50px;
+    padding-top: 30px;
+    border-top: 1px solid #b7b7b7;
+}
+.analysis-title {
+    font-size: 20px;
+    font-weight: bold;
+    color: #111111;
+    margin-bottom: 20px;
+}
+
+/* 차트 컨테이너 */
+.charts-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+/* 모바일/작은 화면 대응 */
+@media (max-width: 768px) {
+    .charts-container {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+.chart-box {
+    border: 1px solid #b7b7b7;
+    background-color: #ffffff;
+    padding: 20px;
+}
+.chart-box h4 {
+    font-size: 16px;
+    font-weight: bold;
+    color: #222222;
+    margin-bottom: 15px;
+    text-align: center;
 }
