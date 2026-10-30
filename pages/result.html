@@ -7,6 +7,9 @@
     <link rel="stylesheet" href="../css/index.css">
     <link rel="stylesheet" href="../css/result.css">
 
+    <!-- Chart.js CDN 추가 -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <!-- 장르 데이터 -->
     <script src="../js/genres.js"></script>
 </head>
@@ -31,6 +34,21 @@
         <section class="recommendations-section">
             <div id="recommendations-container" class="recommendations-grid">
                 <!-- JS가 더미/API 데이터를 동적으로 렌더링 -->
+            </div>
+        </section>
+
+        <!-- 취향 분석 차트 영역 추가 -->
+        <section class="analysis-section">
+            <h3 class="analysis-title">그룹 취향 분석 리포트</h3>
+            <div class="charts-container">
+                <div class="chart-box">
+                    <h4>장르 선호도 분포</h4>
+                    <canvas id="genreChart"></canvas>
+                </div>
+                <div class="chart-box">
+                    <h4>참여자별 취향 일치율</h4>
+                    <canvas id="matchChart"></canvas>
+                </div>
             </div>
         </section>
 
