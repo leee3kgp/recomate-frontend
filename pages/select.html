@@ -13,7 +13,8 @@
         <a class="nav-btn" href="index.html">홈</a>
         <a class="nav-btn">요즘 대세 콘텐츠</a>
         <a class="nav-btn" style="margin-left: auto;">검색</a>
-        <a class="nav-btn">프로필</a>
+        <a class="nav-btn" href="profile.html">프로필</a>
+        <a class="nav-btn" id="authButton" href="login.html">로그인</a>
     </nav>
 
     <!-- 메인 컨테이너 -->
@@ -41,6 +42,9 @@
             <button type="submit" id="submit-btn"> 추천받기 </button>
         </form>
     </main>
+
+    <!-- 로그인 상태 관리 -->
+    <script type="module" src="../js/auth-ui.js"></script>
 
     <!-- DOM 조작 로직 파일 -->
     <script type="module" src="../js/select.js"></script>
