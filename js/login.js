@@ -34,7 +34,7 @@ function showMessage(message, success = false) {
 // 로그인 성공 처리
 // =====================================
 
-function showLoginSuccess(user) {
+function showLoginSuccess() {
 
     showMessage(
         "이미 로그인된 상태입니다.",
@@ -72,7 +72,7 @@ async function checkLoginSession() {
             console.log("ID Token 존재:", true);
             console.log("Access Token 존재:", true);
 
-            showLoginSuccess(user);
+            showLoginSuccess();
 
             return true;
         }
@@ -156,8 +156,6 @@ loginForm.addEventListener(
                         "JWT 토큰 발급 확인 실패"
                     );
                 }
-
-                const user = await getCurrentUser();
 
                 console.log("Cognito 로그인 성공");
 

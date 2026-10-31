@@ -37,7 +37,7 @@ function showLoggedOutUI() {
 // 로그인 상태 UI
 // =====================================
 
-function showLoggedInUI(user) {
+function showLoggedInUI() {
 
     isLoggedIn = true;
 
@@ -81,7 +81,7 @@ async function checkAuthSession() {
         console.log("ID Token 확인 성공");
         console.log("Access Token 확인 성공");
 
-        showLoggedInUI(user);
+        showLoggedInUI();
 
     } catch (error) {
 
