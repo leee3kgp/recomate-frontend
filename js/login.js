@@ -34,14 +34,12 @@ function showMessage(message, success = false) {
 // 로그인 성공 처리
 // =====================================
 
-function showLoginSuccess(user) {
+function showLoginSuccess() {
 
     showMessage(
         "이미 로그인된 상태입니다.",
         true
     );
-
-    console.log("현재 로그인 사용자:", user.username);
 
     // 메인 페이지 이동
     window.location.replace("index.html");
@@ -71,11 +69,10 @@ async function checkLoginSession() {
         if (user && idToken && accessToken) {
 
             console.log("기존 로그인 세션 확인 성공");
-            console.log("사용자:", user.username);
             console.log("ID Token 존재:", true);
             console.log("Access Token 존재:", true);
 
-            showLoginSuccess(user);
+            showLoginSuccess();
 
             return true;
         }
@@ -160,10 +157,7 @@ loginForm.addEventListener(
                     );
                 }
 
-                const user = await getCurrentUser();
-
                 console.log("Cognito 로그인 성공");
-                console.log("사용자 ID:", user.userId);
 
                 console.log(
                     "ID Token 발급:",

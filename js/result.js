@@ -180,6 +180,18 @@ document.addEventListener('DOMContentLoaded', async () => {
         renderCharts(data.analysis);
     };
 
+    // GET /api/sessions/{sessionId}
+    // 서버에 저장된 결과 조회 (사용자 정보는 빼고 화면에 필요한 값만 저장)
+    const loadSavedResult = async () => {
+        const { recommendations, analysis } = await apiFetch(
+            `/api/sessions/${encodeURIComponent(sessionId)}`
+        );
+        const data = { recommendations, analysis };
+
+        saveCache(data);
+        render(data);
+    };
+
     // 새로고침 등으로 재방문한 경우 저장된 결과 사용
     const cached = loadCache();
     if (cached) {
@@ -206,7 +218,12 @@ document.addEventListener('DOMContentLoaded', async () => {
             switch (error.code) {
                 case 'RECOMMENDATION_EXISTS':
                     // 이미 생성된 세션인데 저장된 사본이 없는 경우 (다른 탭/브라우저 등)
-                    showMessage('이미 추천이 생성된 세션입니다. "다시 추천받기"로 새로 시작해주세요.');
+                    try {
+                        await loadSavedResult();
+                    } catch (detailError) {
+                        console.error('세션 조회 API 에러:', detailError);
+                        showMessage('저장된 추천 결과를 불러오지 못했습니다. 잠시 후 다시 시도해주세요.');
+                    }
                     return;
                 case 'NOT_FOUND':
                     showMessage('존재하지 않거나 접근할 수 없는 세션입니다.');
