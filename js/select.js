@@ -1,5 +1,10 @@
-document.addEventListener('DOMContentLoaded', () => {
-    const genresList = window.RECOMATE_GENRES || [];
+import { requireLogin, apiFetch, ApiError } from "./api.js";
+import { GENRES } from "./genres.js";
+
+document.addEventListener('DOMContentLoaded', async () => {
+    await requireLogin();
+
+    const genresList = GENRES;
     const container = document.getElementById('participants-container');
     const countText = document.getElementById('participantCountText');
     const errorDiv = document.getElementById('error-message');
@@ -8,8 +13,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let isLoading = false;
     let participants = [];
-
-
 
     // (?count=N) 읽기
     const getInitialCount = () => {
@@ -23,22 +26,12 @@ document.addEventListener('DOMContentLoaded', () => {
         return 2; // 기본값
     };
 
-    let participantCount = getInitialCount();
+    const participantCount = getInitialCount();
 
     // 화면 상단에 인원수 표시
     if (countText) {
         countText.textContent = `${participantCount}명`;
     }
-
-    // 인원수만큼 참여자 배열 초기화 및 생성
-    const updateParticipantsArray = (count) => {
-        participants = Array.from({ length: count }, (_, i) => ({
-            index: i + 1,
-            genres: participants[i] ? participants[i].genres : [],
-        }));
-        renderParticipants();
-    };
-
 
     // 화면(DOM) 그리는 함수
     const renderParticipants = () => {
@@ -46,29 +39,24 @@ document.addEventListener('DOMContentLoaded', () => {
         container.innerHTML = ''; // 기존 카드 초기화
 
         participants.forEach((participant) => {
-            // 참여자 카드 박스 생성
             const card = document.createElement('div');
             card.className = 'participant-card';
 
-            // 참여자 타이틀 (참여자 1, 참여자 2 ...)
             const title = document.createElement('h3');
             title.className = 'participant-title';
             title.textContent = `참여자 ${participant.index}`;
             card.appendChild(title);
 
-            // 장르 버튼들을 감싸는 컨테이너
             const btnContainer = document.createElement('div');
             btnContainer.className = 'genre-btn-container';
 
             genresList.forEach((genre) => {
                 const isSelected = participant.genres.includes(genre.code);
                 const btn = document.createElement('button');
-                
+
                 btn.type = 'button';
                 btn.textContent = genre.name;
                 btn.disabled = isLoading;
-
-                // 클래스로 스타일 제어
                 btn.className = 'genre-btn' + (isSelected ? ' selected' : '');
 
                 // 장르 버튼 클릭 이벤트 (토글)
@@ -78,7 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     } else {
                         participant.genres.push(genre.code);
                     }
-                    renderParticipants(); // 데이터 변경 반영을 위해 재렌더링
+                    renderParticipants();
                 });
 
                 btnContainer.appendChild(btn);
@@ -89,64 +77,79 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     };
 
+    // 인원수만큼 참여자 배열 생성
+    participants = Array.from({ length: participantCount }, (_, i) => ({
+        index: i + 1,
+        genres: [],
+    }));
+    renderParticipants();
 
+    const showError = (message) => {
+        if (!errorDiv) return;
+        errorDiv.textContent = message;
+        errorDiv.style.display = 'block';
+    };
 
     // Submit
     if (form) {
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
+
+            if (isLoading) return; // 이중 제출 방지
+
             if (errorDiv) {
                 errorDiv.style.display = 'none';
                 errorDiv.textContent = '';
             }
 
             // 모든 참여자가 최소 1개 이상 선택했는지 확인
-            const hasEmptyGenre = participants.some((p) => p.genres.length === 0);
-            if (hasEmptyGenre) {
-                if (errorDiv) {
-                    errorDiv.textContent = '모든 참여자가 최소 1개 이상의 장르를 선택해야 합니다.';
-                    errorDiv.style.display = 'block';
-                }
+            if (participants.some((p) => p.genres.length === 0)) {
+                showError('모든 참여자가 최소 1개 이상의 장르를 선택해야 합니다.');
                 return;
             }
 
-            const requestPayload = {
-                participantCount,
-                participants,
-            };
+            const requestPayload = { participantCount, participants };
 
-            console.log('=== 생성된 Request Payload ===', JSON.stringify(requestPayload, null, 2));
-
-            // 로딩 상태 변경
             isLoading = true;
             if (submitBtn) {
                 submitBtn.disabled = true;
-                submitBtn.textContent = '처리 중...';
+                submitBtn.textContent = '추천 생성 중...';
             }
             renderParticipants();
 
-            // 서버 통신 시뮬레이션 (300ms 딜레이)
-            await new Promise((resolve) => setTimeout(resolve, 300));
-            
-            isLoading = false;
-            if (submitBtn) {
-                submitBtn.disabled = false;
-                submitBtn.textContent = '추천받기';
+            let redirecting = false;
+
+            try {
+                // POST /api/sessions → 201 { sessionId, ... }
+                const data = await apiFetch('/api/sessions', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(requestPayload)
+                });
+
+                // 성공 시 결과 페이지로 이동
+                redirecting = true;
+                window.location.href = `result.html?sessionId=${encodeURIComponent(data.sessionId)}&count=${participantCount}`;
+
+            } catch (error) {
+                console.error('세션 생성 API 에러:', error);
+
+                if (error instanceof ApiError && error.code === 'NICKNAME_REQUIRED') {
+                    showError('닉네임 정보가 없어 추천을 시작할 수 없습니다. 닉네임을 확인해주세요.');
+                } else {
+                    showError(error.message || '세션 생성에 실패했습니다.');
+                }
+            } finally {
+                // 이동 중이면 버튼을 잠근 채로 둠
+                if (!redirecting) {
+                    isLoading = false;
+                    if (submitBtn) {
+                        submitBtn.disabled = false;
+                        submitBtn.textContent = '추천받기';
+                    }
+                    renderParticipants();
+                }
             }
-            renderParticipants();
-
-            // 결과 확인용
-            const resultText = participants
-                .map((p) => `• 참여자 ${p.index}: ${p.genres.join(', ')}`)
-                .join('\n');
-
-            alert(`세션 생성 데이터\n\n총 인원수: ${participantCount}명\n` + resultText);
-            window.location.href = `../pages/index.html`;
-            //임의로 index.html 설정
-            //window.location.href = `../pages/(추천결과).html?count=${participantCount}`;
         });
     }
-
-    // 초기 실행
-    updateParticipantsArray(participantCount);
 });

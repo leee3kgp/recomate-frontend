@@ -41,4 +41,4 @@ submitBtn.addEventListener('click', () => {
     modalOverlay.classList.remove('active');
     count = 2;
     countDisplay.textContent = `${count}명`;
-});
+});
