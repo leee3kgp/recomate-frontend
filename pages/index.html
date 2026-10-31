@@ -4,37 +4,102 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RecoMate</title>
-    <link rel="stylesheet" href="../css/index.css">  
+    <link rel="stylesheet" href="../css/index.css">
 </head>
 <body>
     <nav class="nav-bar">
         <h1 class="logo">RecoMate</h1>
+
         <a class="nav-btn" href="index.html">홈</a>
+
         <a class="nav-btn">요즘 대세 콘텐츠</a>
-        <a class="nav-btn" style="margin-left: auto;">검색</a>
-        <a class="nav-btn">프로필</a>
+
+        <a class="nav-btn" style="margin-left: auto;">
+            검색
+        </a>
+
+        <!-- 프로필 페이지 이동 -->
+        <a class="nav-btn" href="profile.html">
+            프로필
+        </a>
+
+        <!-- 로그인 상태에 따라 변경 -->
+        <a
+            class="nav-btn"
+            id="authButton"
+            href="login.html"
+        >
+            로그인
+        </a>
     </nav>
 
-    
-    <!-- 메인 버튼 예시 -->
-    <button id="open-modal-btn">같이 볼 콘텐츠 추천 받기</button>
+    <!-- 메인 버튼 -->
+    <button id="open-modal-btn">
+        같이 볼 콘텐츠 추천 받기
+    </button>
 
     <!-- 모달 -->
-    <div id="count-modal-overlay" class="count-modal-overlay">
+    <div
+        id="count-modal-overlay"
+        class="count-modal-overlay"
+    >
         <div class="count-modal-content">
-            <h3 class="count-modal-title">몇 명이서 함께 시청하시나요?</h3>
-            
+
+            <h3 class="count-modal-title">
+                몇 명이서 함께 시청하시나요?
+            </h3>
+
             <div class="count-modal-counter">
-                <button type="button" class="count-modal-btn" id="minus-btn">-</button>
-                <span class="count-modal-count" id="guest-count">2명</span>
-                <button type="button" class="count-modal-btn" id="plus-btn">+</button>
+
+                <button
+                    type="button"
+                    class="count-modal-btn"
+                    id="minus-btn"
+                >
+                    -
+                </button>
+
+                <span
+                    class="count-modal-count"
+                    id="guest-count"
+                >
+                    2명
+                </span>
+
+                <button
+                    type="button"
+                    class="count-modal-btn"
+                    id="plus-btn"
+                >
+                    +
+                </button>
             </div>
 
-            <button type="button" class="count-modal-submit" id="submit-btn">선택 완료</button>
-            <button type="button" class="count-modal-close" id="close-btn">닫기</button>
+            <button
+                type="button"
+                class="count-modal-submit"
+                id="submit-btn"
+            >
+                선택 완료
+            </button>
+
+            <button
+                type="button"
+                class="count-modal-close"
+                id="close-btn"
+            >
+                닫기
+            </button>
         </div>
     </div>
 
-    <script type="module" src="../js/guest-modal.js"></script>
+    <!-- 기존 모달 기능 유지 -->
+    <script src="../js/guest-modal.js"></script>
+
+    <!-- 로그인 상태 유지 -->
+    <script
+        type="module"
+        src="../js/auth-ui.js"
+    ></script>
 </body>
-</html>
+</html>
