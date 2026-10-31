@@ -13,6 +13,7 @@ export default defineConfig(({ mode }) => {
                     login: resolve(__dirname, "pages/login.html"),
                     signup: resolve(__dirname, "pages/signup.html"),
                     "verify-email": resolve(__dirname, "pages/verify-email.html"),
+                    profile: resolve(__dirname, "pages/profile.html"),
                     select: resolve(__dirname, "pages/select.html"),
                     result: resolve(__dirname, "pages/result.html")
                 }
