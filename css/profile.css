@@ -1,0 +1,203 @@
+
+/* =====================================
+   RecoMate 프로필 페이지
+===================================== */
+
+/* 프로필 전체 영역 */
+
+.profile-container {
+    max-width: 800px;
+    margin: 60px auto;
+    padding: 0 24px 60px;
+    box-sizing: border-box;
+}
+
+.profile-container h2 {
+    font-size: 30px;
+    font-weight: 700;
+    margin-bottom: 30px;
+}
+
+/* =====================================
+   안내 및 오류 메시지
+===================================== */
+
+#profileMessage {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 20px;
+    min-height: 20px;
+}
+
+#profileMessage:empty {
+    display: none;
+}
+
+/* =====================================
+   프로필 섹션
+===================================== */
+
+.profile-section {
+    background-color: #ffffff;
+    border: 1px solid #e5e5e5;
+    border-radius: 12px;
+    padding: 28px;
+    margin-bottom: 24px;
+    color: #222;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.04);
+}
+
+.profile-section h3 {
+    font-size: 20px;
+    margin: 0 0 20px;
+    font-weight: 600;
+}
+
+.profile-section p {
+    font-size: 14px;
+    color: #666;
+    line-height: 1.6;
+}
+
+/* =====================================
+   사용자 정보 입력
+===================================== */
+
+.profile-field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+.profile-field label {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.profile-field input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 12px 14px;
+    border: 1px solid #d6d6d6;
+    border-radius: 8px;
+    font-size: 15px;
+    outline: none;
+    background-color: #ffffff;
+    color: #222;
+}
+
+.profile-field input:focus {
+    border-color: #6750a4;
+}
+
+.profile-field input[readonly] {
+    background-color: #f5f5f5;
+    color: #777;
+}
+
+/* =====================================
+   공통 버튼
+===================================== */
+
+.profile-section button {
+    padding: 12px 22px;
+    border: none;
+    border-radius: 8px;
+    background-color: #6750a4;
+    color: white;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.profile-section button:hover {
+    background-color: #513a8c;
+}
+
+.profile-section button:disabled {
+    background-color: #aaa;
+    cursor: not-allowed;
+}
+
+/* =====================================
+   선호 장르 선택
+===================================== */
+
+#genreList {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 20px 0;
+    min-height: 35px;
+}
+
+.genre-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #fafafa;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.genre-item:hover {
+    border-color: #6750a4;
+}
+
+.genre-item input {
+    accent-color: #6750a4;
+    cursor: pointer;
+}
+
+/* =====================================
+   회원 탈퇴
+===================================== */
+
+.danger-section {
+    border-color: #f1cccc;
+}
+
+.danger-section h3 {
+    color: #c62828;
+}
+
+#deleteAccountBtn {
+    background-color: #d32f2f;
+}
+
+#deleteAccountBtn:hover {
+    background-color: #b71c1c;
+}
+
+/* =====================================
+   모바일 화면
+===================================== */
+
+@media (max-width: 600px) {
+
+    .profile-container {
+        margin: 30px auto;
+        padding: 0 16px 40px;
+    }
+
+    .profile-container h2 {
+        font-size: 25px;
+    }
+
+    .profile-section {
+        padding: 20px;
+    }
+
+    .profile-section h3 {
+        font-size: 18px;
+    }
+
+    .profile-section button {
+        width: 100%;
+    }
+}

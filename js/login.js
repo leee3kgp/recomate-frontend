@@ -43,8 +43,8 @@ function showLoginSuccess(user) {
 
     console.log("현재 로그인 사용자:", user.username);
 
-    // 메인 페이지가 완성되면 이동 처리
-    // window.location.href = "/pages/main.html";
+    // 메인 페이지 이동
+    window.location.replace("index.html");
 }
 
 // =====================================
@@ -55,7 +55,7 @@ async function checkLoginSession() {
 
     try {
 
-        // 현재 로그인된 사용자 확인
+        // 현재 로그인 사용자 확인
         const user = await getCurrentUser();
 
         // Cognito 인증 세션 확인
@@ -82,7 +82,6 @@ async function checkLoginSession() {
 
     } catch (error) {
 
-        // 로그인하지 않은 경우 정상적으로 발생 가능
         console.log("기존 로그인 세션 없음");
     }
 
@@ -127,8 +126,6 @@ loginForm.addEventListener(
                 await checkLoginSession();
 
             if (alreadyLoggedIn) {
-
-                // 이미 로그인 상태라면 재로그인 방지
                 return;
             }
 
@@ -185,8 +182,8 @@ loginForm.addEventListener(
 
                 passwordInput.value = "";
 
-                // 메인 페이지 완성 후 이동 처리
-                // window.location.href = "/pages/main.html";
+                // 메인 페이지 이동
+                window.location.replace("index.html");
 
             } else {
 
