@@ -1,4 +1,10 @@
+
 {
+  "scripts": {
+    "dev": "vite --host 0.0.0.0",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
   "dependencies": {
     "aws-amplify": "^6.22.1"
   },
