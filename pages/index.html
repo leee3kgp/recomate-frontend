@@ -10,13 +10,26 @@
 <body>
     <nav class="nav-bar">
         <h1 class="logo">RecoMate</h1>
+
         <a class="nav-btn" href="index.html">홈</a>
+
         <a class="nav-btn">요즘 대세 콘텐츠</a>
-        <a class="nav-btn" style="margin-left: auto;">검색</a>
-        <a class="nav-btn">프로필</a>
+
+        <a class="nav-btn" style="margin-left: auto;">
+            검색
+        </a>
+
+        <!-- 프로필 페이지 이동 -->
+        <a class="nav-btn" href="profile.html">
+            프로필
+        </a>
 
         <!-- 로그인 상태에 따라 변경 -->
-        <a class="nav-btn" id="authButton" href="login.html">
+        <a
+            class="nav-btn"
+            id="authButton"
+            href="login.html"
+        >
             로그인
         </a>
     </nav>
@@ -27,29 +40,40 @@
     </button>
 
     <!-- 모달 -->
-    <div id="count-modal-overlay" class="count-modal-overlay">
+    <div
+        id="count-modal-overlay"
+        class="count-modal-overlay"
+    >
         <div class="count-modal-content">
+
             <h3 class="count-modal-title">
                 몇 명이서 함께 시청하시나요?
             </h3>
 
             <div class="count-modal-counter">
+
                 <button
                     type="button"
                     class="count-modal-btn"
                     id="minus-btn"
-                >-</button>
+                >
+                    -
+                </button>
 
                 <span
                     class="count-modal-count"
                     id="guest-count"
-                >2명</span>
+                >
+                    2명
+                </span>
 
                 <button
                     type="button"
                     class="count-modal-btn"
                     id="plus-btn"
-                >+</button>
+                >
+                    +
+                </button>
             </div>
 
             <button
@@ -70,10 +94,13 @@
         </div>
     </div>
 
-    <!-- 기존 모달 기능 -->
+    <!-- 기존 모달 기능 유지 -->
     <script src="../js/guest-modal.js"></script>
 
     <!-- 로그인 상태 유지 -->
-    <script type="module" src="../js/auth-ui.js"></script>
+    <script
+        type="module"
+        src="../js/auth-ui.js"
+    ></script>
 </body>
 </html>

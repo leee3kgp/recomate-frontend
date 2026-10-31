@@ -1,0 +1,122 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>내 프로필 - RecoMate</title>
+
+    <link rel="stylesheet" href="../css/index.css">
+    <link rel="stylesheet" href="../css/profile.css">
+</head>
+
+<body>
+    <!-- 상단 메뉴 -->
+    <nav class="nav-bar">
+        <h1 class="logo">RecoMate</h1>
+
+        <a class="nav-btn" href="index.html">홈</a>
+        <a class="nav-btn">요즘 대세 콘텐츠</a>
+
+        <a class="nav-btn" style="margin-left: auto;">
+            검색
+        </a>
+
+        <a class="nav-btn" href="profile.html">
+            프로필
+        </a>
+
+        <a class="nav-btn"
+           id="authButton"
+           href="login.html">
+            로그인
+        </a>
+    </nav>
+
+    <!-- 프로필 영역 -->
+    <main class="profile-container">
+
+        <h2>내 프로필</h2>
+
+        <p id="profileMessage" role="status"
+           aria-live="polite">
+            사용자 정보를 불러오는 중입니다.
+        </p>
+
+        <!-- 사용자 정보 -->
+        <section class="profile-section">
+            <h3>기본 정보</h3>
+
+            <div class="profile-field">
+                <label for="userEmail">이메일</label>
+                <input
+                    type="email"
+                    id="userEmail"
+                    readonly
+                    placeholder="이메일"
+                >
+            </div>
+
+            <form id="nicknameForm">
+                <div class="profile-field">
+                    <label for="userNickname">닉네임</label>
+
+                    <input
+                        type="text"
+                        id="userNickname"
+                        maxlength="20"
+                        placeholder="닉네임을 입력하세요"
+                        required
+                    >
+                </div>
+
+                <button type="submit"
+                        id="saveNicknameBtn">
+                    닉네임 저장
+                </button>
+            </form>
+        </section>
+
+        <!-- 선호 장르 -->
+        <section class="profile-section">
+            <h3>내 선호 장르</h3>
+
+            <p>
+                좋아하는 장르를 선택하고 저장하세요.
+            </p>
+
+            <div id="genreList">
+                장르 정보를 불러오는 중입니다.
+            </div>
+
+            <button type="button"
+                    id="saveGenresBtn">
+                선호 장르 저장
+            </button>
+        </section>
+
+        <!-- 회원 탈퇴 -->
+        <section class="profile-section danger-section">
+            <h3>회원 탈퇴</h3>
+
+            <p>
+                회원 탈퇴 시 계정 및 관련 데이터가
+                삭제될 수 있습니다.
+            </p>
+
+            <button type="button"
+                    id="deleteAccountBtn">
+                회원 탈퇴
+            </button>
+        </section>
+    </main>
+
+    <!-- 로그인 상태 관리 -->
+    <script type="module" src="../js/auth-ui.js"></script>
+
+    <!-- 프로필 API 연동 -->
+    <script type="module" src="../js/profile.js"></script>
+</body>
+</html>
