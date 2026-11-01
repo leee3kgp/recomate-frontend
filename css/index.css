@@ -46,6 +46,17 @@
 }
 
 
+/* 아직 준비 중인 메뉴 */
+.nav-btn-disabled,
+.nav-btn-disabled:hover {
+    background-color: #f5f5f5;
+    border-color: #b7b7b7;
+
+    color: #999999;
+    cursor: not-allowed;
+}
+
+
 /* 좁은 화면: 로고 아래로 메뉴 줄바꿈 */
 @media (max-width: 768px) {
     .nav-bar {
@@ -67,6 +78,169 @@
 
     .nav-bar .nav-btn[style] {
         margin-left: 0 !important;
+    }
+}
+
+
+
+
+/* =========================================
+   메인 콘텐츠 css
+========================================= */
+
+
+/* 메인 컨테이너 */
+.home {
+    box-sizing: border-box;
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+
+/* 서비스 소개 */
+.home-hero {
+    padding: 40px 20px;
+
+    border: 1px solid #b7b7b7;
+    background-color: #f5f5f5;
+
+    text-align: center;
+}
+.home-title {
+    margin: 0 0 12px;
+
+    font-size: 28px;
+    color: #111111;
+}
+.home-subtitle {
+    margin: 0 0 24px;
+
+    line-height: 1.6;
+    color: #555555;
+}
+
+
+/* 추천 시작 버튼 */
+.home-start {
+    padding: 12px 24px;
+
+    border: 1px solid #555555;
+    border-radius: 0;
+    background-color: #b7b7b7;
+
+    color: #222222;
+    font-size: 16px;
+    cursor: pointer;
+}
+.home-start:hover {
+    background-color: #9f9f9f;
+    color: #111111;
+}
+
+
+/* 메인 섹션 */
+.home-section {
+    margin-top: 32px;
+}
+.home-section-title {
+    margin: 0 0 12px;
+
+    font-size: 20px;
+    color: #111111;
+}
+
+
+/* 이용 방법 */
+.home-steps {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+.home-step {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    padding: 16px;
+    border: 1px solid #b7b7b7;
+
+    line-height: 1.5;
+    color: #555555;
+}
+.home-step strong {
+    color: #222222;
+}
+
+
+/* 내 추천 기록 */
+.history-message {
+    margin: 0;
+    padding: 16px;
+
+    border: 1px solid #b7b7b7;
+    background-color: #f5f5f5;
+
+    color: #555555;
+}
+.history-login {
+    display: inline-block;
+
+    margin-top: 12px;
+    padding: 8px 16px;
+
+    border: 1px solid #555555;
+    background-color: #f5f5f5;
+
+    color: #222222;
+    text-decoration: none;
+}
+.history-login:hover {
+    background-color: #9f9f9f;
+}
+.history-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+.history-link {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+
+    margin-bottom: 8px;
+    padding: 12px 16px;
+
+    border: 1px solid #b7b7b7;
+
+    color: #222222;
+    text-decoration: none;
+}
+.history-link:hover {
+    background-color: #f5f5f5;
+}
+.history-count {
+    flex-shrink: 0;
+    color: #555555;
+}
+
+
+/* 좁은 화면: 이용 방법 세로 배치 */
+@media (max-width: 768px) {
+    .home {
+        margin-top: 20px;
+    }
+
+    .home-title {
+        font-size: 22px;
+    }
+
+    .home-steps {
+        grid-template-columns: 1fr;
     }
 }
 

@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     await requireLogin();
 
     const recommendationsContainer = document.getElementById('recommendations-container');
+    const analysisSection = document.querySelector('.analysis-section');
 
     // TMDB 이미지 기본 URL (API 명세서: posterPath는 TMDB 경로만 반환)
     const TMDB_IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/w500';
@@ -58,6 +59,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     };
 
     const saveCache = (data) => {
+        // 빈 결과는 다시 시도할 수 있도록 저장하지 않음
+        if (!data?.recommendations?.length) return;
+
         try {
             sessionStorage.setItem(CACHE_KEY, JSON.stringify(data));
         } catch {
@@ -179,9 +183,15 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     };
 
+    const hasResults = (data) => data?.recommendations?.length > 0;
+
     const render = (data) => {
         renderRecommendations(data.recommendations);
-        renderCharts(data.analysis);
+
+        // 추천과 분석을 모두 표시할 수 있을 때만 그래프 영역 표시
+        const canShowCharts = hasResults(data) && data.analysis && typeof Chart !== 'undefined';
+        analysisSection.hidden = !canShowCharts;
+        if (canShowCharts) renderCharts(data.analysis);
     };
 
     // GET /api/sessions/{sessionId}
@@ -198,7 +208,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // 새로고침 등으로 재방문한 경우 저장된 결과 사용
     const cached = loadCache();
-    if (cached) {
+    if (hasResults(cached)) {
         render(cached);
         return;
     }
@@ -231,6 +241,9 @@ document.addEventListener('DOMContentLoaded', async () => {
                     return;
                 case 'NOT_FOUND':
                     showMessage('존재하지 않거나 접근할 수 없는 세션입니다.');
+                    return;
+                case 'NETWORK_ERROR':
+                    showMessage(error.message);
                     return;
                 case 'UPSTREAM_ERROR':
                     showMessage('콘텐츠 정보를 가져오지 못했습니다. 잠시 후 다시 시도해주세요.');

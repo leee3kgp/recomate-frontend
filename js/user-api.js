@@ -4,7 +4,7 @@ import {
     refreshTokens
 } from "./auth-token.js";
 
-import { API_BASE_URL } from "./api-config.js";
+import { API_BASE_URL, NETWORK_ERROR_MESSAGE } from "./api-config.js";
 
 const LOGIN_PAGE = "login.html";
 
@@ -39,10 +39,14 @@ async function userApiRequest(path, options = {}) {
             );
         }
 
-        return fetch(`${API_BASE_URL}${path}`, {
-            ...options,
-            headers
-        });
+        try {
+            return await fetch(`${API_BASE_URL}${path}`, {
+                ...options,
+                headers
+            });
+        } catch {
+            throw new Error(NETWORK_ERROR_MESSAGE);
+        }
     }
 
     // 현재 ID Token 가져오기
