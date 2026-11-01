@@ -226,6 +226,13 @@ signupForm.addEventListener(
             return;
         }
 
+        // 닉네임 길이 검사
+        if ([...nickname].length > 20) {
+
+            alert("닉네임은 1~20자로 입력해주세요.");
+            return;
+        }
+
         // 이메일 검사
         if (!isValidEmail(email)) {
 
