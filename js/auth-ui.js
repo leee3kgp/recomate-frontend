@@ -37,7 +37,7 @@ function showLoggedOutUI() {
 // 로그인 상태 UI
 // =====================================
 
-function showLoggedInUI(user) {
+function showLoggedInUI() {
 
     isLoggedIn = true;
 
@@ -47,7 +47,6 @@ function showLoggedInUI(user) {
     authButton.style.pointerEvents = "auto";
 
     console.log("로그인 상태 유지 성공");
-    console.log("현재 사용자:", user.username);
 }
 
 // =====================================
@@ -82,7 +81,7 @@ async function checkAuthSession() {
         console.log("ID Token 확인 성공");
         console.log("Access Token 확인 성공");
 
-        showLoggedInUI(user);
+        showLoggedInUI();
 
     } catch (error) {
 
