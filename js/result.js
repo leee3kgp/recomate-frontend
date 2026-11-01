@@ -1,3 +1,5 @@
+import { getCurrentUser } from "aws-amplify/auth";
+
 import { requireLogin, apiFetch, ApiError } from "./api.js";
 import { GENRES } from "./genres.js";
 
@@ -42,7 +44,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // 추천은 세션당 1회만 생성 가능(409 RECOMMENDATION_EXISTS)하므로
     // 성공 응답을 저장해 두었다가 새로고침 시 재사용
-    const CACHE_KEY = `recomate:result:${sessionId}`;
+    // 사용자별로 저장해 같은 탭의 다른 계정에 보이지 않게 함
+    const { userId } = await getCurrentUser();
+    const CACHE_KEY = `recomate:result:${userId}:${sessionId}`;
 
     const loadCache = () => {
         try {

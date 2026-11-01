@@ -2,8 +2,7 @@ import "./cognito-config.js";
 
 import { fetchAuthSession, getCurrentUser } from "aws-amplify/auth";
 
-// 배포 시 .env.production 에 VITE_API_BASE_URL 지정 (개발 중에는 빈 값 + vite proxy)
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "";
+import { API_BASE_URL } from "./api-config.js";
 
 const LOGIN_PAGE = "login.html";
 

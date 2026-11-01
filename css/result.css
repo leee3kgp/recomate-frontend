@@ -224,6 +224,7 @@
 
 
 .chart-box {
+    min-width: 0; /* 화면이 좁아질 때 그래프도 함께 줄어들도록 */
     border: 1px solid #b7b7b7;
     background-color: #ffffff;
     padding: 20px;

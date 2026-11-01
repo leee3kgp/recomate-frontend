@@ -135,7 +135,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 console.error('세션 생성 API 에러:', error);
 
                 if (error instanceof ApiError && error.code === 'NICKNAME_REQUIRED') {
-                    showError('닉네임 정보가 없어 추천을 시작할 수 없습니다. 닉네임을 확인해주세요.');
+                    showError('닉네임 설정이 필요합니다. 프로필에서 닉네임을 저장한 뒤 다시 시도해주세요.');
                 } else {
                     showError(error.message || '세션 생성에 실패했습니다.');
                 }
