@@ -2,7 +2,7 @@ import "./cognito-config.js";
 
 import { fetchAuthSession, getCurrentUser } from "aws-amplify/auth";
 
-import { API_BASE_URL } from "./api-config.js";
+import { API_BASE_URL, NETWORK_ERROR_MESSAGE } from "./api-config.js";
 
 const LOGIN_PAGE = "login.html";
 
@@ -60,7 +60,16 @@ async function send(path, options, forceRefresh) {
     const headers = new Headers(options.headers || {});
     headers.set("Authorization", `Bearer ${idToken}`);
 
-    return fetch(`${API_BASE_URL}${path}`, { ...options, headers });
+    try {
+        return await fetch(`${API_BASE_URL}${path}`, { ...options, headers });
+    } catch (error) {
+        // 호출한 쪽이 지정한 시간 제한은 그대로 전달
+        if (error.name === "AbortError" || error.name === "TimeoutError") {
+            throw error;
+        }
+
+        throw new ApiError(0, "NETWORK_ERROR", NETWORK_ERROR_MESSAGE);
+    }
 }
 
 export async function apiFetch(path, options = {}) {
@@ -69,7 +78,12 @@ export async function apiFetch(path, options = {}) {
     if (response.status === 401) {
         try {
             response = await send(path, options, true);
-        } catch {
+        } catch (error) {
+            // 연결 문제는 로그아웃이 아니므로 안내만 표시
+            if (error instanceof ApiError) {
+                throw error;
+            }
+
             window.location.replace(LOGIN_PAGE);
             return new Promise(() => {});
         }
