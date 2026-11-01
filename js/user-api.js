@@ -4,12 +4,7 @@ import {
     refreshTokens
 } from "./auth-token.js";
 
-// =====================================
-// API Gateway 기본 주소
-// =====================================
-
-const API_BASE_URL =
-    "https://rdjkqhp2el.execute-api.ap-southeast-2.amazonaws.com/dev";
+import { API_BASE_URL } from "./api-config.js";
 
 // =====================================
 // 사용자 API 공통 요청 함수
