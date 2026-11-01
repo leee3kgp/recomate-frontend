@@ -14,8 +14,8 @@
     <nav class="nav-bar">
         <h1 class="logo">RecoMate</h1>
         <a class="nav-btn" href="index.html">홈</a>
-        <a class="nav-btn">요즘 대세 콘텐츠</a>
-        <a class="nav-btn" style="margin-left: auto;">검색</a>
+        <a class="nav-btn nav-btn-disabled" aria-disabled="true" title="준비 중입니다">요즘 대세 콘텐츠</a>
+        <a class="nav-btn nav-btn-disabled" aria-disabled="true" title="준비 중입니다" style="margin-left: auto;">검색</a>
         <a class="nav-btn" href="profile.html">프로필</a>
         <a class="nav-btn" id="authButton" href="login.html">로그인</a>
     </nav>
@@ -36,7 +36,7 @@
         </section>
 
         <!-- 취향 분석 차트 영역 추가 -->
-        <section class="analysis-section">
+        <section class="analysis-section" hidden>
             <h3 class="analysis-title">그룹 취향 분석 리포트</h3>
             <div class="charts-container">
                 <div class="chart-box">

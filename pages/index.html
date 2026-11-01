@@ -12,9 +12,9 @@
 
         <a class="nav-btn" href="index.html">홈</a>
 
-        <a class="nav-btn">요즘 대세 콘텐츠</a>
+        <a class="nav-btn nav-btn-disabled" aria-disabled="true" title="준비 중입니다">요즘 대세 콘텐츠</a>
 
-        <a class="nav-btn" style="margin-left: auto;">
+        <a class="nav-btn nav-btn-disabled" aria-disabled="true" title="준비 중입니다" style="margin-left: auto;">
             검색
         </a>
 
@@ -33,10 +33,41 @@
         </a>
     </nav>
 
-    <!-- 메인 버튼 -->
-    <button id="open-modal-btn">
-        같이 볼 콘텐츠 추천 받기
-    </button>
+    <main class="home">
+        <!-- 서비스 소개 -->
+        <section class="home-hero">
+            <h2 class="home-title">함께 볼 콘텐츠, 고민하지 말고 골라보세요</h2>
+            <p class="home-subtitle">참여자별 선호 장르를 모아 모두가 즐길 수 있는 영화·드라마 TOP 3를 추천합니다.</p>
+            <button id="open-modal-btn" class="home-start" type="button">
+                같이 볼 콘텐츠 추천 받기
+            </button>
+        </section>
+
+        <!-- 이용 방법 -->
+        <section class="home-section">
+            <h3 class="home-section-title">이용 방법</h3>
+            <ol class="home-steps">
+                <li class="home-step">
+                    <strong>1. 인원 선택</strong>
+                    <span>함께 볼 인원을 2~6명으로 정합니다.</span>
+                </li>
+                <li class="home-step">
+                    <strong>2. 장르 선택</strong>
+                    <span>참여자별로 좋아하는 장르를 고릅니다.</span>
+                </li>
+                <li class="home-step">
+                    <strong>3. TOP 3 확인</strong>
+                    <span>추천 콘텐츠와 취향 분석을 확인합니다.</span>
+                </li>
+            </ol>
+        </section>
+
+        <!-- 내 추천 기록 -->
+        <section class="home-section">
+            <h3 class="home-section-title">내 추천 기록</h3>
+            <div id="historyContent"></div>
+        </section>
+    </main>
 
     <!-- 모달 -->
     <div
@@ -95,6 +126,9 @@
 
     <!-- 기존 모달 기능 유지 -->
     <script type="module" src="../js/guest-modal.js"></script>
+
+    <!-- 내 추천 기록 -->
+    <script type="module" src="../js/home.js"></script>
 
     <!-- 로그인 상태 유지 -->
     <script
