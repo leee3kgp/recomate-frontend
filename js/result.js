@@ -1,7 +1,7 @@
 import { getCurrentUser } from "aws-amplify/auth";
 
 import { requireLogin, apiFetch, ApiError } from "./api.js";
-import { GENRES } from "./genres.js";
+import { loadGenres } from "./genres.js";
 
 document.addEventListener('DOMContentLoaded', async () => {
     await requireLogin();
@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     );
 
     // 장르 마스터 매핑 (코드 -> 한국어명)
-    const genreMap = (GENRES).reduce((acc, curr) => {
+    const genreMap = (await loadGenres()).reduce((acc, curr) => {
         acc[curr.code] = curr.name;
         return acc;
     }, {});
