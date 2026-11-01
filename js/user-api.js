@@ -6,6 +6,17 @@ import {
 
 import { API_BASE_URL } from "./api-config.js";
 
+const LOGIN_PAGE = "login.html";
+
+// 로그인이 만료되면 로그인 화면으로 이동
+function goToLogin() {
+
+    window.location.replace(LOGIN_PAGE);
+
+    // 이후 코드가 실행되지 않도록 대기
+    return new Promise(() => {});
+}
+
 // =====================================
 // 사용자 API 공통 요청 함수
 // =====================================
@@ -35,18 +46,34 @@ async function userApiRequest(path, options = {}) {
     }
 
     // 현재 ID Token 가져오기
-    const idToken = await getIdToken();
+    let idToken;
+
+    try {
+        idToken = await getIdToken();
+    } catch {
+        return goToLogin();
+    }
 
     let response = await sendRequest(idToken);
 
     // 인증 만료 시 토큰 갱신 후 재요청
     if (response.status === 401) {
 
-        const refreshed = await refreshTokens();
+        let refreshed;
+
+        try {
+            refreshed = await refreshTokens();
+        } catch {
+            return goToLogin();
+        }
 
         response = await sendRequest(
             refreshed.idToken
         );
+
+        if (response.status === 401) {
+            return goToLogin();
+        }
     }
 
     // 오류 처리
