@@ -1,10 +1,10 @@
 import { requireLogin, apiFetch, ApiError } from "./api.js";
-import { GENRES } from "./genres.js";
+import { GENRES, loadGenres } from "./genres.js";
 
 document.addEventListener('DOMContentLoaded', async () => {
     await requireLogin();
 
-    const genresList = GENRES;
+    let genresList = GENRES;
     const container = document.getElementById('participants-container');
     const countText = document.getElementById('participantCountText');
     const errorDiv = document.getElementById('error-message');
@@ -83,6 +83,16 @@ document.addEventListener('DOMContentLoaded', async () => {
         genres: [],
     }));
     renderParticipants();
+
+    // 기본 목록을 먼저 보여주고 서버 목록으로 갱신
+    loadGenres().then((genres) => {
+        genresList = genres;
+        const codes = new Set(genres.map((genre) => genre.code));
+        participants.forEach((participant) => {
+            participant.genres = participant.genres.filter((code) => codes.has(code));
+        });
+        renderParticipants();
+    });
 
     const showError = (message) => {
         if (!errorDiv) return;
