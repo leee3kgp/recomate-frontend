@@ -46,6 +46,31 @@
 }
 
 
+/* 좁은 화면: 로고 아래로 메뉴 줄바꿈 */
+@media (max-width: 768px) {
+    .nav-bar {
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .logo {
+        width: 100%;
+        padding: 0;
+        font-size: 28px;
+    }
+
+    .nav-btn {
+        padding: 6px;
+        font-size: 14px;
+        white-space: nowrap;
+    }
+
+    .nav-bar .nav-btn[style] {
+        margin-left: 0 !important;
+    }
+}
+
+
 
 
 /* =========================================
