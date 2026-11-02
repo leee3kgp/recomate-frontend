@@ -1,354 +1,812 @@
+
 /* =========================================
-   메인 화면 css
+   RecoMate - Dark Cinematic Theme
 ========================================= */
 
-
-/* RecoMate 로고 */
-.logo {
-    padding: 8px 20px;
-
-    font-size: 36px;
-    font-weight: 700;
-
-    color: #111111;
+:root {
+    --bg: #101014;
+    --surface: #1b1b24;
+    --surface-hover: #282433;
+    --purple: #9254e8;
+    --purple-hover: #a775f2;
+    --text: #ffffff;
+    --muted: #b8b5c2;
+    --border: #383442;
 }
 
+* {
+    box-sizing: border-box;
+}
 
-/* 네비게이션 바 */
-.nav-bar{
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    background: var(--bg);
+    color: var(--text);
+    font-family: Arial, "Noto Sans KR", sans-serif;
+}
+
+button,
+a {
+    -webkit-tap-highlight-color: transparent;
+}
+
+button {
+    font: inherit;
+}
+
+button:focus-visible,
+a:focus-visible {
+    outline: 2px solid #c9a7ff;
+    outline-offset: 3px;
+}
+
+/* =========================================
+   상단 네비게이션
+========================================= */
+
+.nav-bar {
+    position: relative;
+    z-index: 20;
     display: flex;
     align-items: center;
-
-    gap: 30px;
-
-    padding: 10px 20px;
+    gap: 32px;
+    width: 100%;
+    min-height: 76px;
+    padding: 12px 5%;
+    background: #08080d;
+    border-bottom: 1px solid #24212d;
 }
 
-
-/* 네비게이션 버튼 */
-.nav-btn {
-    padding: 8px;
-
-    border: 1px solid #555555;
-    border-radius: 0;
-    background-color: #f5f5f5;
-
-    color: #222222;
+.logo {
+    flex-shrink: 0;
+    color: #b48aff;
+    font-size: 32px;
+    font-weight: 800;
+    letter-spacing: -1.5px;
     text-decoration: none;
-    font-size: 16px;
+}
+
+.nav-links,
+.nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 22px;
+}
+
+.nav-actions {
+    margin-left: auto;
+}
+
+.nav-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 9px 4px;
+    border: 0;
+    border-radius: 6px;
+    background: transparent;
+    color: #e8e5ee;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    white-space: nowrap;
     cursor: pointer;
-}
-/* 네비게이션 버튼 마우스 올렸을 때 */
-.nav-btn:hover {
-    background-color: #9f9f9f;
-    border-color: #555555;
-    color: #111111;
+    transition: color 0.2s, background 0.2s;
 }
 
+.nav-btn:hover,
+.nav-active {
+    color: #c29cff;
+}
 
-/* 아직 준비 중인 메뉴 */
 .nav-btn-disabled,
 .nav-btn-disabled:hover {
-    background-color: #f5f5f5;
-    border-color: #b7b7b7;
-
-    color: #999999;
+    color: #77717f;
     cursor: not-allowed;
 }
 
-
-/* 좁은 화면: 로고 아래로 메뉴 줄바꿈 */
-@media (max-width: 768px) {
-    .nav-bar {
-        flex-wrap: wrap;
-        gap: 8px;
-    }
-
-    .logo {
-        width: 100%;
-        padding: 0;
-        font-size: 28px;
-    }
-
-    .nav-btn {
-        padding: 6px;
-        font-size: 14px;
-        white-space: nowrap;
-    }
-
-    .nav-bar .nav-btn[style] {
-        margin-left: 0 !important;
-    }
+.nav-login {
+    min-width: 88px;
+    padding: 11px 18px;
+    border: 1px solid #aa7bf2;
+    border-radius: 9px;
+    background: #583098;
+    color: white;
 }
 
-
-
+.nav-login:hover {
+    background: var(--purple);
+    color: white;
+}
 
 /* =========================================
-   메인 콘텐츠 css
+   메인 컨테이너
 ========================================= */
 
-
-/* 메인 컨테이너 */
 .home {
-    box-sizing: border-box;
-    max-width: 800px;
-    margin: 40px auto;
-    padding: 0 20px;
+    width: 100%;
+    margin: 0 auto;
+    padding-bottom: 70px;
 }
 
+/* =========================================
+   메인 영화 배너
+========================================= */
 
-/* 서비스 소개 */
 .home-hero {
-    padding: 40px 20px;
-
-    border: 1px solid #b7b7b7;
-    background-color: #f5f5f5;
-
-    text-align: center;
+    position: relative;
+    display: flex;
+    align-items: center;
+    min-height: 560px;
+    padding: 75px 5%;
+    overflow: hidden;
+    isolation: isolate;
+    background: #11111b;
 }
+
+.hero-background {
+    position: absolute;
+    inset: 0;
+    z-index: -3;
+
+    /*
+       현재는 외부 데모 이미지 사용.
+       실제 프로젝트에서는 추후 정식 이미지로 교체.
+    */
+    background-image:
+        url("https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?auto=format&fit=crop&w=1800&q=85");
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.hero-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    background:
+        linear-gradient(
+            90deg,
+            rgba(7, 7, 13, 0.98) 0%,
+            rgba(7, 7, 13, 0.88) 28%,
+            rgba(7, 7, 13, 0.42) 65%,
+            rgba(7, 7, 13, 0.2) 100%
+        ),
+        linear-gradient(
+            0deg,
+            #101014 0%,
+            transparent 38%
+        );
+}
+
+.hero-content {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 720px;
+}
+
+.hero-label {
+    margin: 0 0 22px;
+    color: #c39cff;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 3px;
+}
+
 .home-title {
-    margin: 0 0 12px;
-
-    font-size: 28px;
-    color: #111111;
+    margin: 0 0 22px;
+    color: white;
+    font-size: clamp(34px, 4.4vw, 64px);
+    font-weight: 800;
+    line-height: 1.25;
+    letter-spacing: -2px;
+    word-break: keep-all;
 }
+
+.home-title span {
+    color: #bb8aff;
+}
+
 .home-subtitle {
-    margin: 0 0 24px;
-
-    line-height: 1.6;
-    color: #555555;
+    margin: 0;
+    color: #e0dce8;
+    font-size: 17px;
+    line-height: 1.9;
+    word-break: keep-all;
 }
 
+.hero-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 14px;
+    margin-top: 34px;
+}
 
-/* 추천 시작 버튼 */
-.home-start {
-    padding: 12px 24px;
-
-    border: 1px solid #555555;
-    border-radius: 0;
-    background-color: #b7b7b7;
-
-    color: #222222;
-    font-size: 16px;
+.home-start,
+.home-info {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    min-height: 52px;
+    padding: 13px 22px;
+    border-radius: 9px;
+    font-size: 15px;
+    font-weight: 700;
+    text-decoration: none;
     cursor: pointer;
+    transition:
+        background 0.2s,
+        transform 0.2s;
 }
+
+.home-start {
+    border: 1px solid #a46bec;
+    background: linear-gradient(135deg, #7842dc, #a35eea);
+    color: white;
+}
+
 .home-start:hover {
-    background-color: #9f9f9f;
-    color: #111111;
+    background: #a775f2;
+    transform: translateY(-2px);
 }
 
+.home-info {
+    border: 1px solid #777180;
+    background: rgba(20, 20, 28, 0.72);
+    color: white;
+}
 
-/* 메인 섹션 */
+.home-info:hover {
+    background: rgba(75, 66, 91, 0.9);
+}
+
+/* =========================================
+   공통 콘텐츠 섹션
+========================================= */
+
 .home-section {
-    margin-top: 32px;
+    margin: 0 auto;
+    padding: 32px 5%;
 }
+
+.section-heading {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
 .home-section-title {
-    margin: 0 0 12px;
-
-    font-size: 20px;
-    color: #111111;
+    margin: 0;
+    color: white;
+    font-size: 25px;
+    font-weight: 800;
+    letter-spacing: -0.7px;
 }
 
+.section-description {
+    color: #a8a3b2;
+    font-size: 13px;
+}
 
-/* 이용 방법 */
+/* =========================================
+   영화 포스터 목록
+========================================= */
+
+.content-section {
+    position: relative;
+    margin-top: -12px;
+}
+
+.poster-row {
+    display: grid;
+    grid-auto-columns: minmax(165px, 1fr);
+    grid-auto-flow: column;
+    gap: 16px;
+    overflow-x: auto;
+    padding: 5px 2px 18px;
+    scrollbar-width: thin;
+    scrollbar-color: #625378 transparent;
+}
+
+.poster-card {
+    min-width: 0;
+    overflow: hidden;
+    border-radius: 10px;
+    background: #1b1b24;
+    transition:
+        transform 0.2s,
+        background 0.2s;
+}
+
+.poster-card:hover {
+    transform: translateY(-5px);
+    background: #292333;
+}
+
+.poster-image {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 2 / 3;
+    background-color: #30283f;
+    background-size: cover;
+    background-position: center;
+}
+
+/*
+   포스터 자리 표시용 스타일.
+   실제 TMDB 이미지 연결 전까지 그라데이션으로 표시.
+*/
+
+.poster-one {
+    background: linear-gradient(145deg, #1b3855, #080d1b 75%);
+}
+
+.poster-two {
+    background: linear-gradient(145deg, #6650a8, #202b69 75%);
+}
+
+.poster-three {
+    background: linear-gradient(145deg, #c57957, #33235b 75%);
+}
+
+.poster-four {
+    background: linear-gradient(145deg, #385b53, #121d24 75%);
+}
+
+.poster-five {
+    background: linear-gradient(145deg, #c17b43, #382023 75%);
+}
+
+.poster-image::after {
+    content: "RecoMate";
+    position: absolute;
+    bottom: 18px;
+    left: 10px;
+    right: 10px;
+    color: rgba(255, 255, 255, 0.72);
+    font-size: 20px;
+    font-weight: 800;
+    text-align: center;
+    letter-spacing: -0.5px;
+}
+
+.poster-card h3 {
+    margin: 14px 12px 5px;
+    color: white;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.poster-card p {
+    margin: 0 12px 15px;
+    color: #aaa4b5;
+    font-size: 13px;
+}
+
+.content-note {
+    margin: 7px 0 0;
+    color: #827d8c;
+    font-size: 12px;
+}
+
+/* =========================================
+   이용 방법
+========================================= */
+
+.how-section {
+    padding-top: 42px;
+}
+
 .home-steps {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 12px;
-
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
     margin: 0;
     padding: 0;
     list-style: none;
 }
+
 .home-step {
     display: flex;
     flex-direction: column;
-    gap: 8px;
-
-    padding: 16px;
-    border: 1px solid #b7b7b7;
-
-    line-height: 1.5;
-    color: #555555;
+    gap: 14px;
+    min-height: 205px;
+    padding: 25px;
+    border: 1px solid var(--border);
+    border-radius: 13px;
+    background: linear-gradient(145deg, #211b2d, #17171e);
+    transition: border-color 0.2s;
 }
+
+.home-step:hover {
+    border-color: #8c59cf;
+}
+
+.step-number {
+    color: #b78bff;
+    font-size: 27px;
+    font-weight: 800;
+}
+
 .home-step strong {
-    color: #222222;
+    color: white;
+    font-size: 19px;
 }
 
+.home-step p {
+    margin: 0;
+    color: #bcb6c8;
+    font-size: 14px;
+    line-height: 1.8;
+    word-break: keep-all;
+}
 
-/* 내 추천 기록 */
+/* =========================================
+   내 추천 기록
+========================================= */
+
+.history-section {
+    padding-top: 42px;
+}
+
+#historyContent {
+    color: #d4d0dd;
+}
+
 .history-message {
     margin: 0;
-    padding: 16px;
-
-    border: 1px solid #b7b7b7;
-    background-color: #f5f5f5;
-
-    color: #555555;
+    padding: 24px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: #1b1b24;
+    color: #bcb6c8;
+    line-height: 1.7;
 }
+
 .history-login {
     display: inline-block;
-
-    margin-top: 12px;
-    padding: 8px 16px;
-
-    border: 1px solid #555555;
-    background-color: #f5f5f5;
-
-    color: #222222;
+    margin-top: 14px;
+    padding: 11px 20px;
+    border: 1px solid #9254e8;
+    border-radius: 8px;
+    background: #6734ac;
+    color: white;
+    font-weight: 700;
     text-decoration: none;
 }
+
 .history-login:hover {
-    background-color: #9f9f9f;
+    background: #9254e8;
 }
+
 .history-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
     margin: 0;
     padding: 0;
     list-style: none;
 }
+
 .history-link {
     display: flex;
     justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
     gap: 12px;
-
-    margin-bottom: 8px;
-    padding: 12px 16px;
-
-    border: 1px solid #b7b7b7;
-
-    color: #222222;
+    padding: 18px 20px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: #1b1b24;
+    color: white;
     text-decoration: none;
+    transition: background 0.2s;
 }
+
 .history-link:hover {
-    background-color: #f5f5f5;
+    background: #30273d;
 }
+
 .history-count {
     flex-shrink: 0;
-    color: #555555;
+    color: #c7a3ff;
 }
 
+/* =========================================
+   인원 선택 모달
+========================================= */
 
-/* 좁은 화면: 이용 방법 세로 배치 */
-@media (max-width: 768px) {
-    .home {
-        margin-top: 20px;
+.count-modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.82);
+    backdrop-filter: blur(7px);
+}
+
+.count-modal-overlay.active {
+    display: flex;
+}
+
+.count-modal-content {
+    position: relative;
+    width: 100%;
+    max-width: 410px;
+    padding: 34px 30px;
+    border: 1px solid #4b405a;
+    border-radius: 16px;
+    background: #1b1b24;
+    box-shadow: 0 20px 70px rgba(0, 0, 0, 0.5);
+    color: white;
+    text-align: center;
+}
+
+.count-modal-title {
+    margin: 0 0 12px;
+    color: white;
+    font-size: 22px;
+    line-height: 1.5;
+    word-break: keep-all;
+}
+
+.count-modal-description {
+    margin: 0;
+    color: #aaa4b5;
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+.count-modal-counter {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 24px;
+    margin: 30px 0;
+}
+
+.count-modal-btn {
+    width: 45px;
+    height: 45px;
+    border: 1px solid #635473;
+    border-radius: 50%;
+    background: #30283c;
+    color: white;
+    font-size: 25px;
+    cursor: pointer;
+}
+
+.count-modal-btn:hover {
+    background: #6e3eb2;
+    border-color: #a46bec;
+}
+
+.count-modal-count {
+    min-width: 65px;
+    color: white;
+    font-size: 24px;
+    font-weight: 800;
+}
+
+.count-modal-submit {
+    width: 100%;
+    min-height: 48px;
+    padding: 12px;
+    border: 0;
+    border-radius: 9px;
+    background: #9254e8;
+    color: white;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.count-modal-submit:hover {
+    background: #a775f2;
+}
+
+.count-modal-close {
+    display: block;
+    margin: 17px auto 0;
+    padding: 8px 14px;
+    border: 0;
+    background: transparent;
+    color: #aaa4b5;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.count-modal-close:hover {
+    color: white;
+}
+
+/* =========================================
+   태블릿 반응형
+========================================= */
+
+@media (max-width: 900px) {
+    .nav-bar {
+        gap: 18px;
+        padding: 12px 4%;
+    }
+
+    .logo {
+        font-size: 27px;
+    }
+
+    .nav-links,
+    .nav-actions {
+        gap: 12px;
+    }
+
+    .home-hero {
+        min-height: 490px;
+    }
+
+    .home-subtitle {
+        font-size: 15px;
+    }
+
+    .poster-row {
+        grid-auto-columns: minmax(160px, 28%);
+    }
+
+    .home-steps {
+        gap: 12px;
+    }
+
+    .home-step {
+        padding: 20px;
+    }
+}
+
+/* =========================================
+   모바일 반응형
+========================================= */
+
+@media (max-width: 600px) {
+    .nav-bar {
+        flex-wrap: wrap;
+        gap: 12px;
+        min-height: 70px;
+        padding: 15px 5%;
+    }
+
+    .logo {
+        font-size: 27px;
+    }
+
+    .nav-links {
+        order: 3;
+        width: 100%;
+        gap: 18px;
+        overflow-x: auto;
+    }
+
+    .nav-actions {
+        margin-left: auto;
+        gap: 12px;
+    }
+
+    .nav-btn {
+        font-size: 12px;
+    }
+
+    .nav-login {
+        min-width: 66px;
+        padding: 9px 12px;
+    }
+
+    .home-hero {
+        min-height: 490px;
+        padding: 60px 5%;
+    }
+
+    .hero-background {
+        background-position: 60% center;
+    }
+
+    .hero-overlay {
+        background:
+            linear-gradient(
+                90deg,
+                rgba(7, 7, 13, 0.96),
+                rgba(7, 7, 13, 0.65)
+            ),
+            linear-gradient(
+                0deg,
+                #101014,
+                transparent 50%
+            );
+    }
+
+    .hero-label {
+        font-size: 10px;
+        letter-spacing: 2px;
     }
 
     .home-title {
-        font-size: 22px;
+        font-size: clamp(30px, 8vw, 42px);
+        letter-spacing: -1px;
+    }
+
+    .home-subtitle {
+        font-size: 13px;
+        line-height: 1.9;
+    }
+
+    .home-subtitle br {
+        display: none;
+    }
+
+    .hero-buttons {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .home-start,
+    .home-info {
+        width: 100%;
+        font-size: 13px;
+    }
+
+    .home-section {
+        padding: 27px 5%;
+    }
+
+    .home-section-title {
+        font-size: 21px;
+    }
+
+    .section-description {
+        font-size: 12px;
+    }
+
+    .poster-row {
+        grid-auto-columns: minmax(145px, 47%);
+        gap: 12px;
     }
 
     .home-steps {
         grid-template-columns: 1fr;
     }
+
+    .home-step {
+        min-height: 0;
+        padding: 20px;
+    }
+
+    .count-modal-content {
+        padding: 28px 20px;
+    }
+
+    .count-modal-title {
+        font-size: 19px;
+    }
 }
 
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
 
-
-
-/* =========================================
-   모달 css
-========================================= */
-
-
-/* 전체 화면을 어둡게 덮는 배경 */
-.count-modal-overlay {
-    display: none;
-    position: fixed;
-
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-
-    background-color: rgba(0, 0, 0, 0.5);
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-}
-/* 모달이 활성화되었을 때 표시 */
-.count-modal-overlay.active {
-    display: flex;
-}
-
-
-/* 모달 창 */
-.count-modal-content {
-    width: 320px;
-    padding: 30px;
-
-    background-color: #ffffff;
-    border-radius: 12px;
-        
-    text-align: center;
-    position: relative;
-}
-
-
-/* 인원수 선택 창 */
-.count-modal-counter {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    gap: 15px;
-    margin: 20px 0;
-}
-
-    
-/* 인원수 선택 버튼 */
-.count-modal-btn {
-    width: 36px;
-    height: 36px;
-
-    border: 1px solid #b7b7b7;
-    background-color: #f5f5f5;
-    border-radius: 50%;
-
-    color: #aaaaaa;
-    cursor: pointer;
-}
-/* 인원수 선택 버튼 마우스 올렸을 때 */
-.count-modal-btn:hover {
-    background-color: #b7b7b7;
-    border-color: #555555;
-    color: #555555;
-}
-
-
-/* 인원수 제출 버튼 */
-.count-modal-submit {
-    width: 100%;
-    padding: 8px;
-
-    border: 1px solid #555555;
-    border-radius: 0;
-    background-color: #b7b7b7;
-
-    color: #222222;
-    font-size: 16px;
-    cursor: pointer;
-}
-/* 인원수 제출 버튼 마우스 올렸을 때 */
-.count-modal-submit:hover {
-    background-color: #9f9f9f;
-    border-color: #555555;
-    color: #111111;
-}
-
-
-/* 모달 창 닫기 버튼 */
-.count-modal-close {
-    display: block;
-
-    margin-left: auto;
-
-    background: none;
-    border: none;
-
-    color: #aaaaaa;
-    font-size: 16px;
-    
-    cursor: pointer;
+    *,
+    *::before,
+    *::after {
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+    }
 }
