@@ -13,6 +13,8 @@ import {
     getAllGenres
 } from "./user-api.js";
 
+import { limitNicknameLength, NICKNAME_MAX_LENGTH } from "./nickname-input.js";
+
 // =====================================
 // HTML 요소 가져오기
 // =====================================
@@ -23,6 +25,8 @@ const userEmail = document.getElementById("userEmail");
 const userNickname = document.getElementById("userNickname");
 const nicknameForm = document.getElementById("nicknameForm");
 const saveNicknameBtn = document.getElementById("saveNicknameBtn");
+
+limitNicknameLength(userNickname);
 
 const genreList = document.getElementById("genreList");
 const saveGenresBtn = document.getElementById("saveGenresBtn");
@@ -135,7 +139,7 @@ function updateNicknameButton() {
 
     const valid =
         nickname.length > 0 &&
-        [...nickname].length <= 20;
+        [...nickname].length <= NICKNAME_MAX_LENGTH;
 
     saveNicknameBtn.disabled =
         !profileReady ||
@@ -239,7 +243,7 @@ nicknameForm.addEventListener("submit", async (event) => {
 
     if (
         nickname.length < 1 ||
-        [...nickname].length > 20
+        [...nickname].length > NICKNAME_MAX_LENGTH
     ) {
         flash(
             "nick-msg",

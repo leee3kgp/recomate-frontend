@@ -3,6 +3,8 @@ import "./cognito-config.js";
 
 import { signUp } from "aws-amplify/auth";
 
+import { limitNicknameLength, NICKNAME_MAX_LENGTH } from "./nickname-input.js";
+
 // ================================
 // HTML 요소
 // ================================
@@ -10,6 +12,7 @@ import { signUp } from "aws-amplify/auth";
 const signupForm = document.getElementById("signupForm");
 
 const nicknameInput = document.getElementById("nickname");
+limitNicknameLength(nicknameInput);
 const userIdInput = document.getElementById("userId");
 
 const passwordInput = document.getElementById("password");
@@ -227,7 +230,7 @@ signupForm.addEventListener(
         }
 
         // 닉네임 길이 검사
-        if ([...nickname].length > 20) {
+        if ([...nickname].length > NICKNAME_MAX_LENGTH) {
 
             alert("닉네임은 1~20자로 입력해주세요.");
             return;
