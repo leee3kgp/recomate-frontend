@@ -1,147 +1,201 @@
 
 /* =========================================
    RecoMate - 공통 배경
+   원본 recomate.html 시안 기준
 ========================================= */
+
+/* ---------- 배경 색상 애니메이션 변수 ---------- */
+
+@property --c0 {
+    syntax: '<color>';
+    inherits: true;
+    initial-value: #793988;
+}
+
+@property --c1 {
+    syntax: '<color>';
+    inherits: true;
+    initial-value: #8a426c;
+}
+
+@property --c2 {
+    syntax: '<color>';
+    inherits: true;
+    initial-value: #9e4d4b;
+}
+
+@property --c3 {
+    syntax: '<color>';
+    inherits: true;
+    initial-value: #b0582d;
+}
+
+@property --c4 {
+    syntax: '<color>';
+    inherits: true;
+    initial-value: #c16311;
+}
+
+/* ---------- 기본 배경 ---------- */
 
 body {
-    background: linear-gradient(
-        115deg,
-        #7154b6 0%,
-        #a879c8 35%,
-        #dca0bb 65%,
-        #f2b18b 100%
-    );
-    background-attachment: fixed;
-    background-repeat: no-repeat;
+    --c0: #793988;
+    --c1: #8a426c;
+    --c2: #9e4d4b;
+    --c3: #b0582d;
+    --c4: #c16311;
+
+    background: var(--bg, #141414);
+
+    transition:
+        --c0 .9s ease,
+        --c1 .9s ease,
+        --c2 .9s ease,
+        --c3 .9s ease,
+        --c4 .9s ease;
 }
 
-body::before {
-    content: "";
+/* ---------- 홈 화면 배경 색상 ---------- */
+
+body[data-mode="home"] {
+    --c0: #562c60;
+    --c1: #60324d;
+    --c2: #6e3938;
+    --c3: #7a4024;
+    --c4: #844712;
+}
+
+/* ---------- 배경 바깥 레이어 ---------- */
+
+.fx {
     position: fixed;
-    inset: 0;
-    z-index: -1;
+    z-index: 0;
     pointer-events: none;
-    background: radial-gradient(
-        ellipse at 20% 25%,
-        rgba(106, 68, 182, 0.22),
-        transparent 60%
+
+    top: var(--nav-h, 58px);
+    left: 0;
+    right: 0;
+
+    height: calc(100vh - var(--nav-h, 58px) + 150px);
+
+    transition: height .6s ease;
+
+    -webkit-mask-image: linear-gradient(
+        to bottom,
+        transparent 0,
+        rgba(0, 0, 0, .4) 26px,
+        #000 90px
+    );
+
+    mask-image: linear-gradient(
+        to bottom,
+        transparent 0,
+        rgba(0, 0, 0, .4) 26px,
+        #000 90px
     );
 }
 
-/* =========================================
-   홈 화면 전용 배경
-========================================= */
+/* ---------- 홈 화면 전용 높이 ---------- */
 
-body.home-page {
-    margin: 0;
-    min-height: 100vh;
-    background: #151515 !important;
-    isolation: isolate;
+body[data-mode="home"] .fx {
+    height: calc(58vh + 80px);
 }
 
-body.home-page::before {
-    content: none !important;
-}
+/* ---------- 블러 레이어 ---------- */
 
-/* =========================================
-   홈 화면 배경 레이어
-========================================= */
+.fxin {
+    position: absolute;
 
-.home-page .home-hero {
-    position: relative;
-    isolation: isolate;
+    top: 0;
+    left: -45px;
+    right: -45px;
+    bottom: 80px;
+
     overflow: hidden;
 
-    background:
-        linear-gradient(
-            to bottom,
-            #09090a 0%,
-            #111012 5%,
-            rgba(20, 16, 18, 0.25) 24%,
-            rgba(24, 17, 18, 0.08) 43%,
-            rgba(20, 17, 18, 0.12) 55%,
-            rgba(19, 17, 18, 0.82) 73%,
-            #151515 85%,
-            #151515 100%
-        ),
-        radial-gradient(
-            ellipse 76% 56% at 15% 39%,
-            rgba(151, 66, 105, 0.75) 0%,
-            rgba(111, 49, 88, 0.47) 52%,
-            transparent 90%
-        ),
-        radial-gradient(
-            ellipse 74% 58% at 76% 38%,
-            rgba(184, 80, 17, 0.95) 0%,
-            rgba(150, 65, 23, 0.65) 49%,
-            transparent 90%
-        ),
-        #151515 !important;
+    filter: blur(34px);
 }
 
-/* =========================================
-   은은한 배경 움직임
-========================================= */
+/* ---------- 움직이는 그라데이션 ---------- */
 
-.home-page .home-hero::before {
-    content: "";
+.fx i {
     position: absolute;
-    inset: -10%;
-    z-index: -1;
-    pointer-events: none;
 
-    background: radial-gradient(
-        ellipse 55% 50% at 18% 38%,
-        rgba(157, 69, 123, 0.22),
-        transparent 75%
+    top: -10%;
+    bottom: -10%;
+    left: 0;
+
+    width: 200%;
+
+    background: linear-gradient(
+        100deg,
+        var(--c0) 0%,
+        var(--c1) 12.5%,
+        var(--c2) 25%,
+        var(--c3) 37.5%,
+        var(--c4) 50%,
+        var(--c3) 62.5%,
+        var(--c2) 75%,
+        var(--c1) 87.5%,
+        var(--c0) 100%
     );
 
-    animation: recoPurple 18s ease-in-out infinite alternate;
+    animation: drift 13s ease-in-out infinite alternate;
+
+    will-change: transform;
 }
 
-.home-page .home-hero::after {
-    content: "";
-    position: absolute;
-    inset: -10%;
-    z-index: -1;
+@keyframes drift {
+    from {
+        transform: translate3d(0, 0, 0);
+    }
+
+    to {
+        transform: translate3d(-30%, 0, 0);
+    }
+}
+
+/* ---------- 배경 디더링 ---------- */
+
+.fxn {
+    position: fixed;
+    z-index: 0;
     pointer-events: none;
 
-    background: radial-gradient(
-        ellipse 55% 48% at 76% 38%,
-        rgba(211, 105, 26, 0.20),
-        transparent 75%
-    );
+    top: var(--nav-h, 58px);
+    left: 0;
+    right: 0;
+    bottom: 0;
 
-    animation: recoOrange 21s ease-in-out infinite alternate;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n' x='0' y='0' width='100%' height='100%'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='1 0 0 0 0  1 0 0 0 0  1 0 0 0 0  0 0 0 0 1'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+
+    mix-blend-mode: overlay;
+    opacity: .1;
 }
 
-@keyframes recoPurple {
-    0% {
-        transform: translate(-2%, 0%) scale(1);
-        opacity: 0.75;
-    }
+/* ---------- 인증 화면 전용 배경 ---------- */
 
-    100% {
-        transform: translate(3%, 2%) scale(1.05);
-        opacity: 1;
-    }
+body[data-mode="auth"] {
+    --nav-h: 0px;
 }
 
-@keyframes recoOrange {
-    0% {
-        transform: translate(2%, 0%) scale(1);
-        opacity: 0.8;
-    }
-
-    100% {
-        transform: translate(-3%, 2%) scale(1.06);
-        opacity: 1;
-    }
+body[data-mode="auth"] .nav-bar {
+    display: none;
 }
+
+body[data-mode="auth"] .fx {
+    -webkit-mask-image: none;
+    mask-image: none;
+}
+
+body[data-mode="auth"] .fxin {
+    top: -60px;
+}
+
+/* ---------- 접근성 ---------- */
 
 @media (prefers-reduced-motion: reduce) {
-    .home-page .home-hero::before,
-    .home-page .home-hero::after {
-        animation: none;
+    .fx i {
+        animation: none !important;
     }
 }

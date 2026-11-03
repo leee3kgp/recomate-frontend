@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#08080d">
+    <meta name="theme-color" content="#141414">
 
     <title>내 프로필 - RecoMate</title>
 
@@ -16,18 +16,285 @@
 
     <!-- 프로필 전용 CSS -->
     <link rel="stylesheet" href="../css/profile.css">
+
+    <style>
+        /* =========================================
+           프로필 - 원본 시안 기반 레이아웃
+        ========================================= */
+
+        body.profile-page {
+            min-height: 100vh;
+            background: var(--bg, #141414);
+            color: var(--text, #f2f2f2);
+        }
+
+        .profile-page .profile-container {
+            position: relative;
+            z-index: 1;
+
+            width: min(760px, calc(100% - 40px));
+            min-height: calc(100vh - var(--nav-h, 58px));
+
+            margin: 0 auto;
+            padding: 62px 0 90px;
+        }
+
+        /* 페이지 제목 */
+
+        .profile-page .profile-title {
+            margin: 0 0 32px;
+
+            background: var(--grad);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+
+            font-size: clamp(26px, 3vw, 36px);
+            font-weight: 700;
+            letter-spacing: -.5px;
+            text-align: center;
+        }
+
+        /* 프로필 카드 */
+
+        .profile-page .profile-section {
+            margin-bottom: 22px;
+            padding: 30px 32px;
+
+            background: rgba(20, 20, 20, .94);
+            border: 1px solid #303030;
+            border-radius: 12px;
+
+            box-shadow: 0 12px 35px rgba(0, 0, 0, .12);
+        }
+
+        .profile-page .profile-section h3 {
+            margin: 0 0 23px;
+
+            color: #f2f2f2;
+            font-size: 19px;
+            font-weight: 600;
+        }
+
+        .profile-page .profile-section p {
+            margin: 0 0 20px;
+
+            color: #aaa;
+            font-size: 13px;
+            line-height: 1.7;
+        }
+
+        /* 상태 메시지 */
+
+        .profile-page #profileMessage {
+            margin: 0 0 20px;
+
+            color: #bdbdbd;
+            font-size: 13px;
+            line-height: 1.6;
+            text-align: center;
+        }
+
+        .profile-page #profileMessage:empty {
+            display: none;
+        }
+
+        /* 입력 필드 */
+
+        .profile-page .profile-field {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+
+            margin-bottom: 20px;
+        }
+
+        .profile-page .profile-field label {
+            color: #bdbdbd;
+            font-size: 13px;
+            font-weight: 400;
+        }
+
+        .profile-page .profile-field input {
+            display: block;
+            width: 100%;
+            height: 44px;
+
+            padding: 0 14px;
+
+            background: #000;
+            color: #f2f2f2;
+
+            border: 1px solid #353535;
+            border-radius: 8px;
+            outline: none;
+
+            font-family: inherit;
+            font-size: 14px;
+
+            transition: border-color .15s;
+        }
+
+        .profile-page .profile-field input:focus {
+            border-color: #a64ab0;
+        }
+
+        .profile-page .profile-field input[readonly] {
+            background: #101010;
+            color: #888;
+            cursor: default;
+        }
+
+        /* 기본 버튼 */
+
+        .profile-page .profile-section button {
+            min-height: 42px;
+            padding: 0 22px;
+
+            background: var(--brand);
+            color: #fff;
+
+            border: 0;
+            border-radius: 8px;
+
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: 600;
+
+            cursor: pointer;
+            transition: filter .15s;
+        }
+
+        .profile-page .profile-section button:hover:not(:disabled) {
+            filter: brightness(1.12);
+        }
+
+        .profile-page .profile-section button:disabled {
+            opacity: .5;
+            cursor: not-allowed;
+        }
+
+        /* 닉네임 저장 */
+
+        .profile-page #nicknameForm {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .profile-page #nicknameForm .profile-field {
+            width: 100%;
+        }
+
+        /* 장르 목록 */
+
+        .profile-page #genreList {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 10px;
+
+            margin: 12px 0 24px;
+
+            color: #aaa;
+            font-size: 13px;
+        }
+
+        /* 장르 선택 요소가 JS에서 생성될 때 */
+
+        .profile-page #genreList label {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+
+            padding: 9px 13px;
+
+            background: #090909;
+            border: 1px solid #393939;
+            border-radius: 8px;
+
+            color: #ddd;
+            font-size: 13px;
+            cursor: pointer;
+        }
+
+        .profile-page #genreList label:hover {
+            border-color: #9650a5;
+        }
+
+        .profile-page #genreList input[type="checkbox"] {
+            accent-color: #9b3fb5;
+        }
+
+        /* 회원 탈퇴 */
+
+        .profile-page .danger-section {
+            border-color: #493033;
+        }
+
+        .profile-page .danger-section h3 {
+            color: #f2f2f2;
+        }
+
+        .profile-page .danger-section p {
+            color: #a9a0a0;
+        }
+
+        .profile-page #deleteAccountBtn {
+            background: #44262b;
+            border: 1px solid #7b3b44;
+            color: #ffb3ba;
+        }
+
+        .profile-page #deleteAccountBtn:hover:not(:disabled) {
+            background: #603139;
+            filter: none;
+        }
+
+        /* 반응형 */
+
+        @media (max-width: 600px) {
+            .profile-page .profile-container {
+                width: calc(100% - 28px);
+                padding: 36px 0 60px;
+            }
+
+            .profile-page .profile-title {
+                margin-bottom: 24px;
+            }
+
+            .profile-page .profile-section {
+                padding: 24px 20px;
+            }
+
+            .profile-page .profile-section button {
+                width: 100%;
+            }
+        }
+    </style>
 </head>
 
-<body>
+<body class="profile-page" data-mode="profile">
 
-    <!-- 공통 네비게이션 삽입 위치 -->
+    <!-- 공통 네비게이션 -->
     <div id="navbar-container"></div>
+
+    <!-- 원본 시안 배경 -->
+    <div class="fx" aria-hidden="true">
+        <div class="fxin">
+            <i></i>
+        </div>
+    </div>
+    <div class="fxn" aria-hidden="true"></div>
 
     <!-- 프로필 영역 -->
     <main class="profile-container">
 
-        <h2>내 프로필</h2>
+        <h2 class="profile-title">
+            내 프로필
+        </h2>
 
+        <!-- 사용자 정보 로딩 / 오류 메시지 -->
         <p
             id="profileMessage"
             role="status"
@@ -42,7 +309,6 @@
             <h3>기본 정보</h3>
 
             <div class="profile-field">
-
                 <label for="userEmail">
                     이메일
                 </label>
@@ -53,14 +319,12 @@
                     readonly
                     placeholder="이메일"
                 >
-
             </div>
 
             <!-- 닉네임 수정 -->
             <form id="nicknameForm">
 
                 <div class="profile-field">
-
                     <label for="userNickname">
                         닉네임
                     </label>
@@ -72,7 +336,6 @@
                         placeholder="닉네임을 입력하세요"
                         required
                     >
-
                 </div>
 
                 <button
@@ -129,13 +392,13 @@
 
     </main>
 
-    <!-- 공통 네비게이션 생성 후 인증 상태 확인 -->
+    <!-- 공통 네비게이션 및 인증 상태 -->
     <script type="module">
         import "../js/navbar.js";
         await import("../js/auth-ui.js");
     </script>
 
-    <!-- 기존 프로필 API 기능 -->
+    <!-- 기존 프로필 API 기능 유지 -->
     <script type="module" src="../js/profile.js"></script>
 
 </body>

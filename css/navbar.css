@@ -1,55 +1,55 @@
 
 /* =========================================
    RecoMate - 공통 네비게이션
+   원본 recomate.html 시안 기준
 ========================================= */
 
+/* ---------- 네비게이션 ---------- */
+
 .nav-bar {
-    position: relative;
+    position: sticky;
+    top: 0;
     z-index: 20;
 
     display: flex;
     align-items: center;
-    gap: 30px;
+    gap: 28px;
 
     width: 100%;
-    min-height: 76px;
-    padding: 12px 4%;
+    height: var(--nav-h, 58px);
+    padding: 0 clamp(16px, 4.3vw, 86px);
 
-    background: #08080a;
-    border-bottom: none;
+    background: linear-gradient(#000000, #141414);
+    border: 0;
 }
 
-/* =========================================
-   RecoMate 로고
-========================================= */
+/* ---------- RecoMate 로고 ---------- */
 
-.logo {
+.nav-bar .logo {
     flex-shrink: 0;
-    margin: 0;
 
-    background: linear-gradient(
-        100deg,
-        #b35ab9 0%,
-        #d16c86 52%,
-        #ec862d 100%
-    );
+    margin: 0;
+    padding: 0;
+
+    border: 0;
+    background: linear-gradient(90deg, #9b3fb5, #e57a14);
 
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
 
-    font-family: Arial, "Noto Sans KR", sans-serif;
-    font-size: 28px;
+    font-family: var(--font-main);
+    font-size: 25px;
     font-weight: 400;
-    letter-spacing: -0.8px;
+    letter-spacing: .5px;
     line-height: 1.3;
 
     text-decoration: none;
+    white-space: nowrap;
+    cursor: pointer;
 }
 
-/* =========================================
-   네비게이션 메뉴
-========================================= */
+/* ---------- 메뉴 배치 ---------- */
 
 .nav-links,
 .nav-actions {
@@ -60,172 +60,149 @@
 
 .nav-actions {
     margin-left: auto;
-    gap: 32px;
 }
 
-.nav-btn {
+/* ---------- 메뉴 버튼 ---------- */
+
+.nav-bar .nav-btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
 
-    padding: 9px 2px;
+    padding: 6px 0;
 
-    border: none;
+    border: 0;
     border-radius: 0;
 
-    background: transparent;
-    color: #f0eef0;
+    background: none;
+    color: var(--text, #f2f2f2);
 
-    font-family: Arial, "Noto Sans KR", sans-serif;
+    font-family: var(--font-main);
     font-size: 15px;
-    font-weight: 500;
+    font-weight: 400;
     line-height: 1.4;
 
     text-decoration: none;
     white-space: nowrap;
     cursor: pointer;
 
-    transition:
-        color 0.2s ease,
-        background 0.2s ease;
+    transition: opacity .15s ease;
 }
 
-.nav-btn:hover,
-.nav-active {
-    color: #ffffff;
+.nav-bar .nav-btn:hover {
+    opacity: .75;
 }
 
-/* =========================================
-   요즘 대세 콘텐츠 비활성화
-========================================= */
-
-.nav-btn-disabled,
-.nav-btn-disabled:hover,
-.nav-btn-disabled.nav-active {
-    color: #77717f !important;
-    background: transparent !important;
-    cursor: not-allowed;
-    text-decoration: none;
+.nav-bar .nav-active {
+    color: var(--text, #f2f2f2);
 }
 
-.nav-btn-disabled {
-    pointer-events: none;
+/* ---------- 준비 중인 메뉴 ---------- */
+
+.nav-bar .nav-btn-disabled {
+    color: var(--text, #f2f2f2);
+    opacity: 1;
+    cursor: default;
 }
 
-/* =========================================
-   로그인 / 로그아웃
-========================================= */
+.nav-bar .nav-btn-disabled:hover {
+    opacity: .75;
+}
 
-.nav-login {
+/* ---------- 로그인 / 로그아웃 ---------- */
+
+.nav-bar .nav-login {
     min-width: auto;
-    padding: 9px 2px;
+    padding: 6px 0;
 
-    border: none;
-    border-radius: 0;
+    border: 0;
+    background: none;
 
-    background: transparent;
-    color: #ffffff;
-
+    color: var(--text, #f2f2f2);
     font-size: 15px;
-    font-weight: 500;
+    font-weight: 400;
 }
 
-.nav-login:hover {
-    background: transparent;
-    color: #e6b7ef;
+.nav-bar .nav-login:hover {
+    opacity: .75;
 }
 
-/* =========================================
-   검색 아이콘
-========================================= */
+/* ---------- 검색 아이콘 ---------- */
 
-.nav-search-icon {
+.nav-bar .nav-search-icon {
     display: inline-flex;
     align-items: center;
     justify-content: center;
 
-    width: 24px;
-    height: 24px;
+    width: 22px;
+    height: 22px;
+    padding: 0;
 
-    color: #f0eef0;
+    border: 0;
+    background: none;
+
+    color: #ffffff;
+    cursor: pointer;
 }
 
-.nav-search-icon svg {
+.nav-bar .nav-search-icon svg {
+    display: block;
     width: 22px;
     height: 22px;
 
     fill: none;
     stroke: currentColor;
-    stroke-width: 1.8;
+    stroke-width: 1.6;
     stroke-linecap: round;
     stroke-linejoin: round;
 }
 
-.nav-search-icon.nav-btn-disabled {
-    color: #d0cad5 !important;
+.nav-bar .nav-search-icon:hover {
+    opacity: .75;
 }
 
-/* =========================================
-   태블릿 반응형
-========================================= */
+/* ---------- 태블릿 반응형 ---------- */
 
-@media (max-width: 900px) {
+@media (max-width: 860px) {
     .nav-bar {
-        gap: 20px;
-        padding: 12px 4%;
-    }
-
-    .logo {
-        font-size: 26px;
+        gap: 16px;
     }
 
     .nav-links,
     .nav-actions {
-        gap: 17px;
+        gap: 16px;
     }
 
-    .nav-btn,
-    .nav-login {
-        font-size: 14px;
+    .nav-links .nav-btn-disabled {
+        display: none;
     }
 }
 
-/* =========================================
-   모바일 반응형
-========================================= */
+/* ---------- 모바일 반응형 ---------- */
 
-@media (max-width: 600px) {
+@media (max-width: 560px) {
     .nav-bar {
-        flex-wrap: wrap;
         gap: 12px;
-
-        min-height: 70px;
-        padding: 15px 5%;
+        padding: 0 16px;
     }
 
-    .logo {
-        font-size: 25px;
+    .nav-bar .logo {
+        font-size: 22px;
     }
 
-    .nav-links {
-        order: 3;
-        width: 100%;
-        gap: 18px;
-        overflow-x: auto;
-    }
-
+    .nav-links,
     .nav-actions {
-        margin-left: auto;
-        gap: 14px;
+        gap: 12px;
     }
 
-    .nav-btn,
-    .nav-login {
+    .nav-bar .nav-btn,
+    .nav-bar .nav-login {
         font-size: 12px;
     }
 
-    .nav-login {
-        min-width: auto;
-        padding: 9px 2px;
+    .nav-bar .nav-search-icon,
+    .nav-bar .nav-search-icon svg {
+        width: 19px;
+        height: 19px;
     }
 }
