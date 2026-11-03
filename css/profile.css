@@ -19,8 +19,7 @@ body.profile-page {
     z-index: 1;
 
     min-height: calc(100vh - var(--nav-h, 58px));
-
-    padding: 42px 20px 80px;
+    padding: clamp(48px, 9vh, 100px) 20px 0;
 }
 
 .profile-page .view {
@@ -33,11 +32,11 @@ body.profile-page {
 ========================================= */
 
 .profile-page .panel.pfp {
-    width: min(875px, 100%);
-    min-height: 760px;
+    width: min(820px, 100%);
+    min-height: 0;
 
     margin: 0 auto;
-    padding: 34px 40px 60px;
+    padding: 28px 32px 44px;
 
     background: #141414;
     border: 1px solid #262626;
@@ -63,7 +62,7 @@ body.profile-page {
     margin: 0 0 4px;
 
     color: #f2f2f2;
-    font-size: 25px;
+    font-size: 26px;
     font-weight: 700;
     letter-spacing: -.4px;
 }
@@ -137,9 +136,9 @@ body.profile-page {
     display: block;
 
     width: 100%;
-    height: 44px;
+    height: 42px;
 
-    padding: 0 14px;
+    padding: 0 13px;
 
     background: #0b0b0b;
     color: #f2f2f2;
