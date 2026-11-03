@@ -1,17 +1,16 @@
 
 /* =========================================
-   RecoMate - 공통 그라데이션 배경
+   RecoMate - 공통 배경
 ========================================= */
 
 body {
-    background:
-        linear-gradient(
-            115deg,
-            #7154b6 0%,
-            #a879c8 35%,
-            #dca0bb 65%,
-            #f2b18b 100%
-        );
+    background: linear-gradient(
+        115deg,
+        #7154b6 0%,
+        #a879c8 35%,
+        #dca0bb 65%,
+        #f2b18b 100%
+    );
     background-attachment: fixed;
     background-repeat: no-repeat;
 }
@@ -22,11 +21,127 @@ body::before {
     inset: 0;
     z-index: -1;
     pointer-events: none;
+    background: radial-gradient(
+        ellipse at 20% 25%,
+        rgba(106, 68, 182, 0.22),
+        transparent 60%
+    );
+}
+
+/* =========================================
+   홈 화면 전용 배경
+========================================= */
+
+body.home-page {
+    margin: 0;
+    min-height: 100vh;
+    background: #151515 !important;
+    isolation: isolate;
+}
+
+body.home-page::before {
+    content: none !important;
+}
+
+/* =========================================
+   홈 화면 배경 레이어
+========================================= */
+
+.home-page .home-hero {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
 
     background:
+        linear-gradient(
+            to bottom,
+            #09090a 0%,
+            #111012 5%,
+            rgba(20, 16, 18, 0.25) 24%,
+            rgba(24, 17, 18, 0.08) 43%,
+            rgba(20, 17, 18, 0.12) 55%,
+            rgba(19, 17, 18, 0.82) 73%,
+            #151515 85%,
+            #151515 100%
+        ),
         radial-gradient(
-            ellipse at 20% 25%,
-            rgba(106, 68, 182, 0.22),
-            transparent 60%
-        );
+            ellipse 76% 56% at 15% 39%,
+            rgba(151, 66, 105, 0.75) 0%,
+            rgba(111, 49, 88, 0.47) 52%,
+            transparent 90%
+        ),
+        radial-gradient(
+            ellipse 74% 58% at 76% 38%,
+            rgba(184, 80, 17, 0.95) 0%,
+            rgba(150, 65, 23, 0.65) 49%,
+            transparent 90%
+        ),
+        #151515 !important;
+}
+
+/* =========================================
+   은은한 배경 움직임
+========================================= */
+
+.home-page .home-hero::before {
+    content: "";
+    position: absolute;
+    inset: -10%;
+    z-index: -1;
+    pointer-events: none;
+
+    background: radial-gradient(
+        ellipse 55% 50% at 18% 38%,
+        rgba(157, 69, 123, 0.22),
+        transparent 75%
+    );
+
+    animation: recoPurple 18s ease-in-out infinite alternate;
+}
+
+.home-page .home-hero::after {
+    content: "";
+    position: absolute;
+    inset: -10%;
+    z-index: -1;
+    pointer-events: none;
+
+    background: radial-gradient(
+        ellipse 55% 48% at 76% 38%,
+        rgba(211, 105, 26, 0.20),
+        transparent 75%
+    );
+
+    animation: recoOrange 21s ease-in-out infinite alternate;
+}
+
+@keyframes recoPurple {
+    0% {
+        transform: translate(-2%, 0%) scale(1);
+        opacity: 0.75;
+    }
+
+    100% {
+        transform: translate(3%, 2%) scale(1.05);
+        opacity: 1;
+    }
+}
+
+@keyframes recoOrange {
+    0% {
+        transform: translate(2%, 0%) scale(1);
+        opacity: 0.8;
+    }
+
+    100% {
+        transform: translate(-3%, 2%) scale(1.06);
+        opacity: 1;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .home-page .home-hero::before,
+    .home-page .home-hero::after {
+        animation: none;
+    }
 }

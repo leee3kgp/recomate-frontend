@@ -25,10 +25,14 @@ let isLoggedIn = false;
 
 function showLoggedOutUI() {
 
+    if (!authButton) return;
+
     isLoggedIn = false;
 
-    authButton.textContent = "로그인";
+    // 시안에 맞춰 sign-in 표시
+    authButton.textContent = "sign-in";
     authButton.href = "login.html";
+
     authButton.style.visibility = "visible";
     authButton.style.pointerEvents = "auto";
 }
@@ -39,10 +43,14 @@ function showLoggedOutUI() {
 
 function showLoggedInUI() {
 
+    if (!authButton) return;
+
     isLoggedIn = true;
 
-    authButton.textContent = "로그아웃";
+    // 로그인 상태에서는 로그아웃 표시
+    authButton.textContent = "sign-out";
     authButton.removeAttribute("href");
+
     authButton.style.visibility = "visible";
     authButton.style.pointerEvents = "auto";
 
@@ -57,8 +65,9 @@ async function checkAuthSession() {
 
     if (!authButton) return;
 
-    // 확인 중에는 버튼 숨기기
+    // 세션 확인 중 버튼 숨기기
     authButton.style.visibility = "hidden";
+    authButton.style.pointerEvents = "none";
 
     try {
 
@@ -99,23 +108,27 @@ if (authButton) {
 
     authButton.addEventListener("click", async (event) => {
 
+        // 로그아웃 상태에서는 로그인 페이지 이동
         if (!isLoggedIn) {
             return;
         }
 
         event.preventDefault();
 
+        // 중복 클릭 방지
         authButton.style.pointerEvents = "none";
-        authButton.textContent = "로그아웃 중...";
+        authButton.textContent = "signing out...";
 
         try {
 
+            // Cognito 로그아웃
             await signOut();
 
             console.log("로그아웃 성공");
 
             isLoggedIn = false;
 
+            // 로그인 페이지로 이동
             window.location.replace("login.html");
 
         } catch (error) {
@@ -124,7 +137,7 @@ if (authButton) {
 
             alert("로그아웃에 실패했습니다.");
 
-            authButton.textContent = "로그아웃";
+            authButton.textContent = "sign-out";
             authButton.style.pointerEvents = "auto";
         }
     });
