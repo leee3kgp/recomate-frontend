@@ -7,6 +7,8 @@ import {
     signOut
 } from "aws-amplify/auth";
 
+import { clearStoredResults } from "./auth-token.js";
+
 // =====================================
 // HTML 요소 가져오기
 // =====================================
@@ -115,7 +117,9 @@ if (authButton) {
 
         try {
 
-            // Cognito 로그아웃
+            // 이전 계정의 추천 결과 저장본 삭제 후 Cognito 로그아웃
+            clearStoredResults();
+
             await signOut();
 
             isLoggedIn = false;

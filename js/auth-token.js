@@ -106,10 +106,29 @@ export async function authFetch(url, options = {}) {
 }
 
 // ================================
+// 추천 결과 저장본 삭제
+// ================================
+
+// result.js가 recomate:result:{userId}:{sessionId} 키로 저장한 결과를 지움
+export function clearStoredResults() {
+
+    try {
+        Object.keys(sessionStorage)
+            .filter((key) => key.startsWith("recomate:result:"))
+            .forEach((key) => sessionStorage.removeItem(key));
+    } catch {
+        /* 저장소 접근 실패는 무시 */
+    }
+}
+
+// ================================
 // 로그아웃
 // ================================
 
 export async function logout() {
+
+    // 탈퇴로 계정이 먼저 삭제돼 signOut이 실패해도 저장본은 지움
+    clearStoredResults();
 
     await signOut();
 
