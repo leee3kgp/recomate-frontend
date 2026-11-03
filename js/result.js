@@ -3,7 +3,7 @@ import { getCurrentUser } from "aws-amplify/auth";
 import { requireLogin, apiFetch, ApiError } from "./api.js";
 import { loadGenres } from "./genres.js";
 
-document.addEventListener('DOMContentLoaded', async () => {
+async function initResultPage() {
     await requireLogin();
 
     const recommendationsContainer = document.getElementById('recommendations-container');
@@ -253,4 +253,11 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         showMessage(`오류가 발생했습니다: ${error.message}`);
     }
-});
+}
+
+// 스크립트가 문서 로드 뒤에 실행돼도 화면을 그리도록 처리
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initResultPage);
+} else {
+    initResultPage();
+}
