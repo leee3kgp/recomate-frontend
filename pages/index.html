@@ -4,47 +4,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#08080d">
+    <meta name="theme-color" content="#101014">
 
     <title>RecoMate | 함께 고르는 콘텐츠</title>
 
-    <!-- 공통 CSS -->
     <link rel="stylesheet" href="../css/common.css">
     <link rel="stylesheet" href="../css/navbar.css">
     <link rel="stylesheet" href="../css/background.css">
-
-    <!-- 메인 페이지 전용 CSS -->
     <link rel="stylesheet" href="../css/index.css">
 </head>
 
-<body>
+<body class="home-page">
 
-    <!-- 공통 네비게이션 삽입 위치 -->
+    <!-- 공통 네비게이션 -->
     <div id="navbar-container"></div>
 
     <main class="home">
 
-        <!-- 메인 배너 -->
         <section class="home-hero">
-
-            <div class="hero-background"></div>
-            <div class="hero-overlay"></div>
 
             <div class="hero-content">
 
-                <p class="hero-label">
-                    YOUR MOVIE, OUR CHOICE
-                </p>
-
                 <h1 class="home-title">
-                    오늘 뭐 볼지,<br>
-                    이제 <span>함께 결정하세요.</span>
+                    함께 볼 콘텐츠, 고민하지 말고 골라보세요
                 </h1>
 
                 <p class="home-subtitle">
-                    서로 다른 취향도 RecoMate에서는 하나의 추천으로.<br>
-                    2~6명의 취향을 분석해 모두가 즐길 수 있는<br>
-                    영화와 드라마 TOP 3를 추천해 드립니다.
+                    참여자별 선호 장르를 모아 모두가 즐길 수 있는
+                    영화, 드라마 TOP 3를 추천합니다.
                 </p>
 
                 <div class="hero-buttons">
@@ -54,146 +41,12 @@
                         class="home-start"
                         type="button"
                     >
-                        <span aria-hidden="true">▶</span>
-                        취향 맞추기 시작하기
+                        같이 볼 콘텐츠 추천받기
                     </button>
-
-                    <a
-                        class="home-info"
-                        href="#how-it-works"
-                    >
-                        <span aria-hidden="true">ⓘ</span>
-                        RecoMate 이용 방법
-                    </a>
 
                 </div>
 
             </div>
-
-        </section>
-
-        <!-- 추천 영화 포스터 -->
-        <section class="home-section content-section">
-
-            <div class="section-heading">
-
-                <h2 class="home-section-title">
-                    RecoMate 추천 영화
-                </h2>
-
-                <span class="section-description">
-                    함께 보고 싶은 작품을 찾아보세요
-                </span>
-
-            </div>
-
-            <div class="poster-row">
-
-                <article class="poster-card">
-                    <div class="poster-image poster-one"></div>
-                    <h3>인터스텔라</h3>
-                    <p>SF · 드라마</p>
-                </article>
-
-                <article class="poster-card">
-                    <div class="poster-image poster-two"></div>
-                    <h3>인사이드 아웃 2</h3>
-                    <p>애니메이션 · 가족</p>
-                </article>
-
-                <article class="poster-card">
-                    <div class="poster-image poster-three"></div>
-                    <h3>라라랜드</h3>
-                    <p>로맨스 · 음악</p>
-                </article>
-
-                <article class="poster-card">
-                    <div class="poster-image poster-four"></div>
-                    <h3>기생충</h3>
-                    <p>드라마 · 스릴러</p>
-                </article>
-
-                <article class="poster-card">
-                    <div class="poster-image poster-five"></div>
-                    <h3>듄</h3>
-                    <p>SF · 모험</p>
-                </article>
-
-            </div>
-
-            <p class="content-note">
-                영화 포스터 이미지 제공: TMDB
-            </p>
-
-        </section>
-
-        <!-- 이용 방법 -->
-        <section
-            class="home-section how-section"
-            id="how-it-works"
-        >
-
-            <div class="section-heading">
-
-                <h2 class="home-section-title">
-                    RecoMate 이용 방법
-                </h2>
-
-                <span class="section-description">
-                    세 단계로 완성하는 우리만의 추천
-                </span>
-
-            </div>
-
-            <ol class="home-steps">
-
-                <li class="home-step">
-                    <span class="step-number">01</span>
-                    <strong>인원 선택</strong>
-                    <p>
-                        함께 콘텐츠를 시청할 인원을
-                        2~6명 중에서 선택합니다.
-                    </p>
-                </li>
-
-                <li class="home-step">
-                    <span class="step-number">02</span>
-                    <strong>장르 선택</strong>
-                    <p>
-                        각 참여자가 좋아하는 영화와
-                        드라마 장르를 선택합니다.
-                    </p>
-                </li>
-
-                <li class="home-step">
-                    <span class="step-number">03</span>
-                    <strong>TOP 3 추천</strong>
-                    <p>
-                        모두의 취향을 반영한 추천 결과와
-                        취향 분석을 확인합니다.
-                    </p>
-                </li>
-
-            </ol>
-
-        </section>
-
-        <!-- 내 추천 기록 -->
-        <section class="home-section history-section">
-
-            <div class="section-heading">
-
-                <h2 class="home-section-title">
-                    내 추천 기록
-                </h2>
-
-                <span class="section-description">
-                    이전에 추천받은 콘텐츠를 확인하세요
-                </span>
-
-            </div>
-
-            <div id="historyContent"></div>
 
         </section>
 
@@ -204,12 +57,19 @@
         id="count-modal-overlay"
         class="count-modal-overlay"
     >
+        <div
+            class="count-modal-content"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="count-modal-title"
+        >
 
-        <div class="count-modal-content">
-
-            <h3 class="count-modal-title">
+            <h2
+                id="count-modal-title"
+                class="count-modal-title"
+            >
                 몇 명이서 함께 시청하시나요?
-            </h3>
+            </h2>
 
             <p class="count-modal-description">
                 함께 콘텐츠를 추천받을 인원을 선택해 주세요.
@@ -259,19 +119,19 @@
             </button>
 
         </div>
-
     </div>
 
-    <!-- 공통 네비게이션 생성 후 인증 기능 실행 -->
+    <!-- 공통 네비게이션 및 인증 -->
     <script type="module">
         import "../js/navbar.js";
         await import("../js/auth-ui.js");
     </script>
 
-    <!-- 기존 기능 유지 -->
-    <script type="module" src="../js/guest-modal.js"></script>
-    <script type="module" src="../js/home.js"></script>
-    <script src="../js/home-posters.js" defer></script>
+    <!-- 기존 인원 선택 기능 -->
+    <script
+        type="module"
+        src="../js/guest-modal.js"
+    ></script>
 
 </body>
 </html>

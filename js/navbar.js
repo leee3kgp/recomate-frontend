@@ -27,6 +27,7 @@ if (navbarContainer) {
 
             <div class="nav-links">
 
+                <!-- 홈 -->
                 <a
                     class="nav-btn ${isHome ? "nav-active" : ""}"
                     href="index.html"
@@ -35,6 +36,7 @@ if (navbarContainer) {
                     홈
                 </a>
 
+                <!-- 요즘 대세 콘텐츠 (비활성화) -->
                 <span
                     class="nav-btn nav-btn-disabled"
                     aria-disabled="true"
@@ -47,6 +49,7 @@ if (navbarContainer) {
 
             <div class="nav-actions">
 
+                <!-- 검색 기능 (비활성화) -->
                 <span
                     class="nav-search-icon nav-btn-disabled"
                     role="img"
@@ -58,11 +61,19 @@ if (navbarContainer) {
                         aria-hidden="true"
                         focusable="false"
                     >
-                        <circle cx="10.8" cy="10.8" r="6.8"></circle>
-                        <path d="M16 16L21 21"></path>
+                        <circle
+                            cx="10.8"
+                            cy="10.8"
+                            r="6.8"
+                        ></circle>
+
+                        <path
+                            d="M16 16L21 21"
+                        ></path>
                     </svg>
                 </span>
 
+                <!-- 프로필 -->
                 <a
                     class="nav-btn ${isProfile ? "nav-active" : ""}"
                     href="profile.html"
@@ -71,12 +82,13 @@ if (navbarContainer) {
                     프로필
                 </a>
 
+                <!-- 로그인 / 로그아웃 -->
                 <a
                     class="nav-btn nav-login"
                     id="authButton"
                     href="login.html"
                 >
-                    로그인
+                    sign-in
                 </a>
 
             </div>
