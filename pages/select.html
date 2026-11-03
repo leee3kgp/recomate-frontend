@@ -1,52 +1,67 @@
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#08080d">
+
     <title>RecoMate 취향 선택</title>
-    <link rel="stylesheet" href="../css/index.css">
+
+    <!-- 공통 CSS -->
+    <link rel="stylesheet" href="../css/common.css">
+    <link rel="stylesheet" href="../css/navbar.css">
+    <link rel="stylesheet" href="../css/background.css">
+
+    <!-- 장르 선택 전용 CSS -->
     <link rel="stylesheet" href="../css/select.css">
 </head>
-<body>
-    <nav class="nav-bar">
-        <h1 class="logo">RecoMate</h1>
-        <a class="nav-btn" href="index.html">홈</a>
-        <a class="nav-btn nav-btn-disabled" aria-disabled="true" title="준비 중입니다">요즘 대세 콘텐츠</a>
-        <a class="nav-btn nav-btn-disabled" aria-disabled="true" title="준비 중입니다" style="margin-left: auto;">검색</a>
-        <a class="nav-btn" href="profile.html">프로필</a>
-        <a class="nav-btn" id="authButton" href="login.html">로그인</a>
-    </nav>
 
-    <!-- 메인 컨테이너 -->
+<body>
+
+    <!-- 공통 네비게이션 삽입 위치 -->
+    <div id="navbar-container"></div>
+
+    <!-- 장르 선택 메인 컨테이너 -->
     <main class="select-container">
+
         <h2>선호하는 장르를 선택해주세요</h2>
 
-        <!-- 인원 수 표시 (모달에서 넘겨준 값) -->
+        <!-- 참여 인원 수 -->
         <div class="participant-count-wrapper">
-            <label for="participantCount">
-                참여 인원 수:
-            </label>
-            <span id="participantCountText" class="participant-count-text">
-                <!-- JS가 동적으로 인원수 표시 -->
-            </span>
+
+            <span>참여 인원 수:</span>
+
+            <span
+                id="participantCountText"
+                class="participant-count-text"
+            ></span>
+
         </div>
 
+        <!-- 장르 선택 폼 -->
         <form id="preference-form">
-            <!-- js가 동적으로 참여자 카드 표시 -->
+
             <div id="participants-container"></div>
 
-            <!-- 에러 메시지 출력 공간 -->
             <div id="error-message"></div>
 
-            <!-- 제출 버튼 -->
-            <button type="submit" id="submit-btn"> 추천받기 </button>
+            <button type="submit" id="submit-btn">
+                추천받기
+            </button>
+
         </form>
+
     </main>
 
-    <!-- 로그인 상태 관리 -->
-    <script type="module" src="../js/auth-ui.js"></script>
+    <!-- 공통 네비게이션 생성 후 인증 상태 확인 -->
+    <script type="module">
+        import "../js/navbar.js";
+        await import("../js/auth-ui.js");
+    </script>
 
-    <!-- DOM 조작 로직 파일 -->
+    <!-- 기존 장르 선택 및 API 기능 -->
     <script type="module" src="../js/select.js"></script>
+
 </body>
-</html>
+</html>
