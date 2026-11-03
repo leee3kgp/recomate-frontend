@@ -1,203 +1,291 @@
 
-/* =====================================
-   RecoMate 프로필 페이지
-===================================== */
+/* =========================================
+   RecoMate - 프로필 페이지
+   원본 시안 기반 다크 테마
+========================================= */
 
-/* 프로필 전체 영역 */
+/* ---------- 전체 화면 ---------- */
 
-.profile-container {
-    max-width: 800px;
-    margin: 60px auto;
-    padding: 0 24px 60px;
-    box-sizing: border-box;
+body.profile-page {
+    min-height: 100vh;
+    background: var(--bg, #141414);
+    color: var(--text, #f2f2f2);
 }
 
-.profile-container h2 {
-    font-size: 30px;
+/* ---------- 프로필 전체 영역 ---------- */
+
+.profile-page .profile-container {
+    position: relative;
+    z-index: 1;
+
+    width: min(760px, calc(100% - 40px));
+    max-width: 760px;
+
+    min-height: calc(100vh - var(--nav-h, 58px));
+
+    margin: 0 auto;
+    padding: 62px 0 90px;
+}
+
+/* ---------- 프로필 제목 ---------- */
+
+.profile-page .profile-container h2 {
+    margin: 0 0 32px;
+
+    background: var(--grad);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+
+    font-size: clamp(26px, 3vw, 36px);
     font-weight: 700;
-    margin-bottom: 30px;
+    letter-spacing: -0.5px;
+    text-align: center;
 }
 
-/* =====================================
-   안내 및 오류 메시지
-===================================== */
+/* ---------- 안내 및 오류 메시지 ---------- */
 
-#profileMessage {
-    font-size: 14px;
-    color: #666;
-    margin-bottom: 20px;
+.profile-page #profileMessage {
     min-height: 20px;
+    margin: 0 0 20px;
+
+    color: #bdbdbd;
+    font-size: 13px;
+    line-height: 1.6;
+    text-align: center;
 }
 
-#profileMessage:empty {
+.profile-page #profileMessage:empty {
     display: none;
 }
 
-/* =====================================
-   프로필 섹션
-===================================== */
+/* ---------- 프로필 섹션 ---------- */
 
-.profile-section {
-    background-color: #ffffff;
-    border: 1px solid #e5e5e5;
+.profile-page .profile-section {
+    margin-bottom: 22px;
+    padding: 30px 32px;
+
+    background: rgba(20, 20, 20, 0.94);
+    border: 1px solid #303030;
     border-radius: 12px;
-    padding: 28px;
-    margin-bottom: 24px;
-    color: #222;
-    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.04);
+
+    color: #f2f2f2;
+
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.12);
 }
 
-.profile-section h3 {
-    font-size: 20px;
-    margin: 0 0 20px;
+.profile-page .profile-section h3 {
+    margin: 0 0 23px;
+
+    color: #f2f2f2;
+    font-size: 19px;
     font-weight: 600;
 }
 
-.profile-section p {
-    font-size: 14px;
-    color: #666;
-    line-height: 1.6;
+.profile-page .profile-section p {
+    margin: 0 0 20px;
+
+    color: #aaaaaa;
+    font-size: 13px;
+    line-height: 1.7;
 }
 
-/* =====================================
-   사용자 정보 입력
-===================================== */
+/* ---------- 사용자 정보 입력 ---------- */
 
-.profile-field {
+.profile-page .profile-field {
     display: flex;
     flex-direction: column;
     gap: 8px;
+
     margin-bottom: 20px;
 }
 
-.profile-field label {
-    font-size: 14px;
-    font-weight: 600;
+.profile-page .profile-field label {
+    color: #bdbdbd;
+    font-size: 13px;
+    font-weight: 400;
 }
 
-.profile-field input {
+.profile-page .profile-field input {
+    display: block;
     width: 100%;
-    box-sizing: border-box;
-    padding: 12px 14px;
-    border: 1px solid #d6d6d6;
+    height: 44px;
+
+    padding: 0 14px;
+
+    background: #000000;
+    color: #f2f2f2;
+
+    border: 1px solid #353535;
     border-radius: 8px;
-    font-size: 15px;
     outline: none;
-    background-color: #ffffff;
-    color: #222;
+
+    font-family: inherit;
+    font-size: 14px;
+
+    transition: border-color 0.15s ease;
 }
 
-.profile-field input:focus {
-    border-color: #6750a4;
+.profile-page .profile-field input:focus {
+    border-color: #a64ab0;
+    box-shadow: 0 0 0 2px rgba(166, 74, 176, 0.15);
 }
 
-.profile-field input[readonly] {
-    background-color: #f5f5f5;
-    color: #777;
+.profile-page .profile-field input[readonly] {
+    background: #101010;
+    color: #888888;
+    cursor: default;
 }
 
-/* =====================================
-   공통 버튼
-===================================== */
+/* ---------- 공통 버튼 ---------- */
 
-.profile-section button {
-    padding: 12px 22px;
+.profile-page .profile-section button {
+    min-height: 42px;
+    padding: 0 22px;
+
+    background: var(--brand);
+    color: #ffffff;
+
     border: none;
     border-radius: 8px;
-    background-color: #6750a4;
-    color: white;
+
+    font-family: inherit;
     font-size: 14px;
     font-weight: 600;
+
     cursor: pointer;
-    transition: background-color 0.2s;
+
+    transition:
+        filter 0.15s ease,
+        opacity 0.15s ease;
 }
 
-.profile-section button:hover {
-    background-color: #513a8c;
+.profile-page .profile-section button:hover:not(:disabled) {
+    filter: brightness(1.12);
 }
 
-.profile-section button:disabled {
-    background-color: #aaa;
+.profile-page .profile-section button:disabled {
+    opacity: 0.5;
     cursor: not-allowed;
 }
 
-/* =====================================
-   선호 장르 선택
-===================================== */
+/* ---------- 닉네임 수정 ---------- */
 
-#genreList {
+.profile-page #nicknameForm {
     display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin: 20px 0;
-    min-height: 35px;
+    flex-direction: column;
+    align-items: flex-start;
 }
 
-.genre-item {
+.profile-page #nicknameForm .profile-field {
+    width: 100%;
+}
+
+/* ---------- 선호 장르 목록 ---------- */
+
+.profile-page #genreList {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+
+    min-height: 35px;
+    margin: 12px 0 24px;
+
+    color: #aaaaaa;
+    font-size: 13px;
+}
+
+/* ---------- 장르 선택 항목 ---------- */
+
+.profile-page .genre-item,
+.profile-page #genreList label {
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    padding: 10px 14px;
-    border: 1px solid #ddd;
+
+    padding: 9px 13px;
+
+    background: #090909;
+    color: #dddddd;
+
+    border: 1px solid #393939;
     border-radius: 8px;
-    background-color: #fafafa;
-    font-size: 14px;
+
+    font-size: 13px;
+    font-weight: 400;
+
+    cursor: pointer;
+
+    transition:
+        border-color 0.15s ease,
+        background-color 0.15s ease;
+}
+
+.profile-page .genre-item:hover,
+.profile-page #genreList label:hover {
+    border-color: #9650a5;
+}
+
+.profile-page .genre-item:has(input:checked),
+.profile-page #genreList label:has(input:checked) {
+    border-color: #9b3fb5;
+    background: rgba(123, 53, 147, 0.18);
+}
+
+.profile-page .genre-item input,
+.profile-page #genreList input[type="checkbox"] {
+    accent-color: #9b3fb5;
     cursor: pointer;
 }
 
-.genre-item:hover {
-    border-color: #6750a4;
+/* ---------- 회원 탈퇴 ---------- */
+
+.profile-page .danger-section {
+    border-color: #493033;
 }
 
-.genre-item input {
-    accent-color: #6750a4;
-    cursor: pointer;
+.profile-page .danger-section h3 {
+    color: #f2f2f2;
 }
 
-/* =====================================
-   회원 탈퇴
-===================================== */
-
-.danger-section {
-    border-color: #f1cccc;
+.profile-page .danger-section p {
+    color: #a9a0a0;
 }
 
-.danger-section h3 {
-    color: #c62828;
+.profile-page #deleteAccountBtn {
+    background: #44262b;
+    border: 1px solid #7b3b44;
+    color: #ffb3ba;
 }
 
-#deleteAccountBtn {
-    background-color: #d32f2f;
+.profile-page #deleteAccountBtn:hover:not(:disabled) {
+    background: #603139;
+    filter: none;
 }
 
-#deleteAccountBtn:hover {
-    background-color: #b71c1c;
-}
-
-/* =====================================
-   모바일 화면
-===================================== */
+/* ---------- 모바일 반응형 ---------- */
 
 @media (max-width: 600px) {
-
-    .profile-container {
-        margin: 30px auto;
-        padding: 0 16px 40px;
+    .profile-page .profile-container {
+        width: calc(100% - 28px);
+        padding: 36px 0 60px;
     }
 
-    .profile-container h2 {
+    .profile-page .profile-container h2 {
+        margin-bottom: 24px;
         font-size: 25px;
     }
 
-    .profile-section {
-        padding: 20px;
+    .profile-page .profile-section {
+        padding: 24px 20px;
     }
 
-    .profile-section h3 {
+    .profile-page .profile-section h3 {
         font-size: 18px;
     }
 
-    .profile-section button {
+    .profile-page .profile-section button {
         width: 100%;
     }
 }

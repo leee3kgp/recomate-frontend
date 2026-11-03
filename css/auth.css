@@ -1,17 +1,35 @@
 
 /* =========================================
    RecoMate - 인증 페이지 공통 CSS
+
+   적용 페이지
+   - login.html
+   - signup.html
+   - verify-email.html
 ========================================= */
+
+/* ---------- 인증 공통 변수 ---------- */
 
 :root {
     --auth-purple: #9b3fae;
     --auth-orange: #ed8015;
+
     --auth-card: #141414;
-    --auth-input: #050505;
+    --auth-input: #000000;
     --auth-border: #303030;
+
     --auth-text: #f5f5f5;
-    --auth-muted: #a5a5a5;
+    --auth-muted: #aaaaaa;
+
+    --auth-gradient: linear-gradient(
+        100deg,
+        #793988 0%,
+        #9e4d4b 52%,
+        #c16311 100%
+    );
 }
+
+/* ---------- 기본 설정 ---------- */
 
 *,
 *::before,
@@ -23,708 +41,266 @@ html {
     min-height: 100%;
 }
 
-body {
-    margin: 0;
+body.login-page,
+body.signup-page,
+body.verify-page {
     min-height: 100vh;
-    font-family: Arial, "Noto Sans KR", sans-serif;
+    margin: 0;
+
     color: var(--auth-text);
-    background:
-        linear-gradient(
-            105deg,
-            #874084 0%,
-            #a34d71 30%,
-            #c55f48 60%,
-            #ed8015 100%
-        );
-    background-attachment: fixed;
+    font-family: Inter, "Noto Sans KR", Arial, sans-serif;
+
+    overflow-x: hidden;
 }
 
-button,
-input {
+/* 배경은 background.css에서 관리 */
+
+body[data-mode="auth"] {
+    background-color: #141414;
+}
+
+/* ---------- 공통 폼 요소 ---------- */
+
+.login-page input,
+.signup-page input,
+.verify-page input,
+.login-page button,
+.signup-page button,
+.verify-page button {
     font: inherit;
 }
 
-button {
+.login-page button,
+.signup-page button,
+.verify-page button {
     cursor: pointer;
 }
 
-/* =========================================
-   로그인 / 회원가입 / 이메일 인증 공통
-========================================= */
+/* ---------- 인증 카드 ---------- */
 
-.login-container,
-.signup-container {
-    min-height: 100vh;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 60px 20px;
-    background: transparent;
-}
+.login-page .auth,
+.signup-page .auth,
+.verify-page .auth {
+    position: relative;
 
-.login-box,
-.signup-box {
-    width: 100%;
-    max-width: 430px;
-    padding: 38px 40px 34px;
-    border: 1px solid #292929;
-    border-radius: 11px;
     background: var(--auth-card);
-    box-shadow: 0 18px 55px rgba(0, 0, 0, 0.2);
     color: var(--auth-text);
+
+    border: 1px solid #292929;
+    border-radius: 10px;
 }
 
-/* =========================================
-   RecoMate 로고
-========================================= */
+/* ---------- 로고 ---------- */
 
-.logo,
-.signup-logo,
-.login-brand {
-    margin: 0;
-    color: #b65baf;
-    background: linear-gradient(
-        90deg,
-        #a641b7 0%,
-        #c45878 50%,
-        #ed8015 100%
-    );
-    background-clip: text;
+.login-page .brand,
+.signup-page .brand,
+.verify-page .brand {
+    text-align: center;
+}
+
+.login-page .brand a,
+.signup-page .brand a,
+.verify-page .brand a {
+    background: var(--auth-gradient);
+
     -webkit-background-clip: text;
+    background-clip: text;
+
     -webkit-text-fill-color: transparent;
-    font-weight: 500;
-    letter-spacing: -1px;
+    color: transparent;
+
     text-decoration: none;
 }
 
-.signup-logo {
-    margin-bottom: 15px;
-    text-align: center;
-    font-size: 36px;
-}
+/* ---------- 입력창 ---------- */
 
-/* =========================================
-   공통 입력창
-========================================= */
-
-.login-input,
-.form-control.login-input {
-    display: block;
+.login-page .field,
+.signup-page .field,
+.verify-page .field {
     width: 100%;
-    height: 46px;
-    padding: 0 14px;
+
+    background: var(--auth-input);
+    color: var(--auth-text);
+
     border: 1px solid var(--auth-border);
     border-radius: 8px;
-    background: var(--auth-input);
-    color: #ffffff;
-    font-size: 14px;
-    text-align: left;
-    box-shadow: none;
-    transition: border-color 0.2s;
+
+    outline: none;
 }
 
-.login-input::placeholder {
+.login-page .field::placeholder,
+.signup-page .field::placeholder,
+.verify-page .field::placeholder {
     color: #777777;
     opacity: 1;
 }
 
-.login-input:focus,
-.form-control.login-input:focus {
-    background: #050505;
-    color: #ffffff;
+.login-page .field:focus,
+.signup-page .field:focus,
+.verify-page .field:focus {
     border-color: #bd5b9a;
-    box-shadow: 0 0 0 1px rgba(189, 91, 154, 0.2);
-    outline: none;
 }
 
-/* =========================================
-   공통 버튼
-========================================= */
+/* ---------- 공통 버튼 ---------- */
 
-.login-button,
-.btn.login-button {
-    width: 100%;
-    height: 46px;
+.login-page .auth .btn,
+.signup-page .auth .btn,
+.verify-page .auth .btn {
+    background: var(--auth-gradient);
+    color: #ffffff;
+
     border: none;
     border-radius: 8px;
-    background: linear-gradient(
-        100deg,
-        #9b3fae 0%,
-        #c35a72 50%,
-        #ed8015 100%
-    );
-    color: #ffffff;
-    font-size: 15px;
-    font-weight: 700;
-    transition: filter 0.2s, transform 0.2s;
+
+    font-weight: 600;
 }
 
-.login-button:hover,
-.btn.login-button:hover {
-    color: #ffffff;
+.login-page .auth .btn:hover:not(:disabled),
+.signup-page .auth .btn:hover:not(:disabled),
+.verify-page .auth .btn:hover:not(:disabled) {
     filter: brightness(1.12);
-    transform: translateY(-1px);
 }
 
-.login-button:disabled,
-.btn.login-button:disabled {
-    background: #303030;
+.login-page .auth .btn:disabled,
+.signup-page .auth .btn:disabled,
+.verify-page .auth .btn:disabled {
+    background: #2a2a2a;
     color: #888888;
-    border: none;
-    cursor: not-allowed;
+
     opacity: 1;
-    transform: none;
+    cursor: not-allowed;
 }
 
-/* =========================================
-   공통 링크
-========================================= */
+/* ---------- 링크 ---------- */
 
-.signup-area {
-    margin-top: 20px;
-    text-align: right;
-}
-
-.signup-link {
+.login-page .text-link,
+.signup-page .text-link,
+.verify-page .text-link {
     color: #aaaaaa;
-    font-size: 13px;
     text-decoration: underline;
     text-underline-offset: 4px;
 }
 
-.signup-link:hover {
+.login-page .text-link:hover,
+.signup-page .text-link:hover,
+.verify-page .text-link:hover {
     color: #ffffff;
 }
 
-/* =========================================
-   로그인 페이지
-========================================= */
+/* ---------- 메시지 ---------- */
 
-body.login-page {
-    min-height: 100vh;
-    color: #ffffff;
-    background:
-        linear-gradient(
-            105deg,
-            #874084 0%,
-            #a34d71 30%,
-            #c55f48 60%,
-            #ed8015 100%
-        );
-    background-attachment: fixed;
-}
-
-/* 상단 헤더 */
-
-.login-page .login-header {
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: 10;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-    padding: 24px 3.5%;
-}
-
-.login-page .login-brand {
-    font-size: 25px;
-}
-
-.login-page .login-home-link {
-    padding: 9px 14px;
-    border-radius: 30px;
-    background: #141414;
-    color: #ffffff;
-    font-size: 13px;
-    text-decoration: none;
-}
-
-.login-page .login-home-link:hover {
-    background: #292929;
-}
-
-/* 로그인 배경 */
-
-.login-page .login-container {
-    position: relative;
-    min-height: 100vh;
-    padding: 90px 20px 50px;
-    background: transparent;
-    overflow: hidden;
-}
-
-/* 기존 영화 포스터 배경 숨김 */
-
-.login-page .login-backdrop,
-.login-page .login-backdrop-overlay,
-.login-page .login-poster-grid,
-.login-page .login-poster {
-    display: none;
-}
-
-/* 로그인 카드 */
-
-.login-page .login-box {
-    position: relative;
-    z-index: 2;
-    width: 100%;
-    max-width: 430px;
-    padding: 38px 40px 34px;
-    border: 1px solid #292929;
-    border-radius: 11px;
-    background: #141414;
-    box-shadow: 0 18px 55px rgba(0, 0, 0, 0.2);
-}
-
-/* 상단 영문 */
-
-.login-page .login-eyebrow {
-    margin: 0 0 10px;
-    color: #c38ac8;
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 2px;
-    text-align: center;
-}
-
-/* 로그인 제목 */
-
-.login-page .login-title {
-    margin: 0 0 12px;
-    color: #ffffff;
-    font-size: 25px;
-    font-weight: 700;
-    text-align: center;
-    line-height: 1.4;
-}
-
-/* 로그인 설명 */
-
-.login-page .login-description {
-    margin: 0 0 30px;
-    color: var(--auth-muted);
-    font-size: 13px;
-    text-align: center;
-    line-height: 1.7;
-}
-
-/* 입력 라벨 */
-
-.login-page .login-label {
-    display: block;
-    margin-bottom: 7px;
-    color: #bbbbbb;
-    font-size: 12px;
-    font-weight: 500;
-}
-
-/* 로그인 입력창 */
-
-.login-page .login-input {
-    height: 46px;
-    border-radius: 8px;
-    background: #050505;
-    border: 1px solid #303030;
-    color: #ffffff;
-}
-
-.login-page .login-input:focus {
-    background: #050505;
-    border-color: #bd5b9a;
-    box-shadow: 0 0 0 1px rgba(189, 91, 154, 0.2);
-}
-
-/* 로그인 메시지 */
-
-.login-page .login-message {
-    min-height: 20px;
-    margin: 10px 0 12px;
-    font-size: 12px;
-    text-align: center;
-}
-
-.login-page .login-message.error {
+.login-page .err,
+.signup-page .err,
+.verify-page .err {
     color: #ff8585;
-}
-
-.login-page .login-message.success {
-    color: #8de0ad;
-}
-
-/* 로그인 버튼 */
-
-.login-page .login-button {
-    margin-top: 15px;
-    height: 46px;
-    background: linear-gradient(
-        100deg,
-        #9b3fae,
-        #c35a72,
-        #ed8015
-    );
-    border: none;
-    border-radius: 8px;
-    color: #ffffff;
-}
-
-/* 회원가입 안내 */
-
-.login-page .login-divider {
-    margin-top: 20px;
-    color: #999999;
     font-size: 12px;
-    text-align: center;
 }
 
-.login-page .signup-area {
-    margin-top: 10px;
-    text-align: right;
-}
-
-.login-page .signup-link {
-    color: #aaaaaa;
-    font-size: 13px;
-}
-
-/* 하단 */
-
-.login-page .login-footer {
-    padding: 15px 20px;
-    background: #141414;
-    text-align: center;
-}
-
-.login-page .login-footer p {
-    margin: 4px 0;
-    color: #888888;
-    font-size: 11px;
-}
-
-/* =========================================
-   회원가입 페이지
-========================================= */
-
-.signup-container {
-    min-height: 100vh;
-    background: transparent;
-}
-
-.signup-box {
-    max-width: 430px;
-    padding: 35px 40px 32px;
-}
-
-/* 회원가입 로고 */
-
-.signup-box .signup-logo {
-    margin: 0 0 28px;
-    font-size: 36px;
-    font-weight: 500;
-}
-
-/* 회원가입 입력창 */
-
-.signup-box .login-input {
-    height: 45px;
-    background: #050505;
-    border: 1px solid #303030;
-    border-radius: 8px;
-    color: #ffffff;
-    font-size: 13px;
-    text-align: left;
-}
-
-.signup-box .login-input:focus {
-    background: #050505;
-    color: #ffffff;
-    border-color: #bd5b9a;
-}
-
-/* 비밀번호 조건 */
-
-.password-rules {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 7px 10px;
-    margin-top: 8px;
-    margin-bottom: 12px;
-    font-size: 11px;
-}
-
-.password-rule {
-    color: #888888;
-    white-space: nowrap;
-}
-
-.password-rule.valid {
+.login-page .err.success,
+.signup-page .err.success,
+.verify-page .err.success {
     color: #65c88b;
 }
 
-.password-rule.invalid {
+.login-page .err.error,
+.signup-page .err.error,
+.verify-page .err.error {
     color: #ff8585;
 }
 
-/* 비밀번호 경고 */
+/* 로그인 결과 */
 
-.password-warning {
-    min-height: 0;
-    margin-bottom: 10px;
+.login-page #loginMessage {
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+.login-page #loginMessage.error {
     color: #ff8585;
-    font-size: 12px;
-    text-align: left;
 }
 
-/* 비밀번호 일치 */
-
-.password-message {
-    min-height: 18px;
-    margin: 8px 0 10px;
-    color: #aaaaaa;
-    font-size: 12px;
-    text-align: left;
-}
-
-.password-message.success {
+.login-page #loginMessage.success {
     color: #65c88b;
-}
-
-.password-message.error {
-    color: #ff8585;
 }
 
 /* 회원가입 결과 */
 
-.signup-message {
-    min-height: 18px;
-    margin-bottom: 10px;
-    color: #aaaaaa;
+.signup-page .password-warning,
+.signup-page .password-message,
+.signup-page .signup-message {
     font-size: 12px;
-    text-align: center;
+    line-height: 1.5;
 }
 
-.signup-message.success {
-    color: #65c88b;
-}
-
-.signup-message.error {
+.signup-page .password-warning,
+.signup-page .password-message.error,
+.signup-page .signup-message.error {
     color: #ff8585;
 }
 
-/* 회원가입 버튼 */
-
-.signup-button,
-.signup-box .login-button {
-    margin-top: 20px;
-    height: 46px;
-    border: none;
-    border-radius: 8px;
-    background: linear-gradient(
-        100deg,
-        #9b3fae,
-        #c35a72,
-        #ed8015
-    );
-    color: #ffffff;
-    font-weight: 700;
+.signup-page .password-message.success,
+.signup-page .signup-message.success {
+    color: #65c88b;
 }
 
-.signup-box .login-button:disabled {
-    background: #303030;
+/* 비밀번호 조건 */
+
+.signup-page .password-rule {
     color: #888888;
 }
 
-/* 회원가입 하단 링크 */
-
-.signup-box .signup-area {
-    margin-top: 20px;
-    text-align: right;
-}
-
-/* =========================================
-   이메일 중복확인 관련 기존 스타일
-========================================= */
-
-.id-row {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 5px;
-}
-
-.id-input {
-    flex: 1;
-    min-width: 0;
-}
-
-.check-button {
-    flex-shrink: 0;
-    width: 100px;
-    height: 46px;
-    border: 1px solid #444444;
-    border-radius: 8px;
-    background: #292929;
-    color: #ffffff;
-    font-size: 13px;
-}
-
-.check-button:hover {
-    background: #383838;
-}
-
-.id-check-message {
-    min-height: 20px;
-    margin-bottom: 8px;
-    font-size: 12px;
-}
-
-.id-check-message.success {
+.signup-page .password-rule.valid {
     color: #65c88b;
 }
 
-.id-check-message.error {
+.signup-page .password-rule.invalid {
     color: #ff8585;
 }
 
-/* =========================================
-   이메일 인증 페이지
-========================================= */
+/* 이메일 인증 결과 */
 
-.signup-box h5 {
-    color: #ffffff;
-    font-size: 20px;
-    font-weight: 700;
+.verify-page #verifyMessage {
+    font-size: 12px;
+    line-height: 1.5;
 }
 
-.signup-box .text-secondary {
-    color: #aaaaaa !important;
-    font-size: 13px;
+.verify-page #verifyMessage.success {
+    color: #65c88b;
 }
 
-#verificationEmail {
-    color: #d5a1d7;
-    font-size: 13px;
-    overflow-wrap: anywhere;
+.verify-page #verifyMessage.error {
+    color: #ff8585;
 }
 
-#verificationCode {
-    text-align: center;
-    letter-spacing: 3px;
+/* ---------- 접근성 ---------- */
+
+.login-page button:focus-visible,
+.signup-page button:focus-visible,
+.verify-page button:focus-visible,
+.login-page a:focus-visible,
+.signup-page a:focus-visible,
+.verify-page a:focus-visible {
+    outline: 2px solid #d88be0;
+    outline-offset: 3px;
 }
 
-#resendButton {
-    height: 44px;
-    border: 1px solid #555555;
-    border-radius: 8px;
-    background: transparent;
-    color: #dddddd;
-    font-size: 13px;
-}
+/* ---------- 모바일 ---------- */
 
-#resendButton:hover {
-    background: #292929;
-    color: #ffffff;
-}
-
-.verify-description {
-    margin-bottom: 25px;
-    color: #aaaaaa;
-    font-size: 13px;
-    text-align: center;
-}
-
-.verify-description p {
-    margin: 0;
-}
-
-.verify-actions {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 20px;
-}
-
-.link-button {
-    padding: 0;
-    border: none;
-    background: none;
-    color: #aaaaaa;
-    font-size: 13px;
-}
-
-.link-button:hover {
-    color: #ffffff;
-    text-decoration: underline;
-}
-
-/* =========================================
-   반응형
-========================================= */
-
-@media (max-width: 576px) {
-
-    .login-container,
-    .signup-container {
-        padding: 85px 16px 35px;
-    }
-
-    .login-box,
-    .signup-box {
+@media (max-width: 560px) {
+    .login-page .auth,
+    .signup-page .auth,
+    .verify-page .auth {
         max-width: 100%;
-        padding: 30px 24px;
-    }
-
-    .signup-logo,
-    .signup-box .signup-logo {
-        font-size: 31px;
-    }
-
-    .login-page .login-header {
-        padding: 18px 20px;
-    }
-
-    .login-page .login-brand {
-        font-size: 24px;
-    }
-
-    .login-page .login-home-link {
-        font-size: 12px;
-    }
-
-    .login-page .login-container {
-        padding: 95px 16px 35px;
-    }
-
-    .login-page .login-box {
-        padding: 30px 24px;
-    }
-
-    .login-page .login-title {
-        font-size: 23px;
-    }
-
-    .password-rules {
-        gap: 6px 8px;
-        font-size: 10px;
-    }
-
-    .id-row {
-        gap: 7px;
-    }
-
-    .check-button {
-        width: 85px;
-        font-size: 12px;
     }
 }
+
+/* ---------- 모션 감소 설정 ---------- */
 
 @media (prefers-reduced-motion: reduce) {
-    *,
-    *::before,
-    *::after {
-        transition: none !important;
+    .login-page *,
+    .signup-page *,
+    .verify-page * {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
     }
 }

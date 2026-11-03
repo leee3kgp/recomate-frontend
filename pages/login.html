@@ -4,512 +4,399 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#151515">
+    <meta name="theme-color" content="#141414">
 
     <title>RecoMate | 로그인</title>
 
+    <link rel="stylesheet" href="../css/common.css">
+    <link rel="stylesheet" href="../css/background.css">
     <link rel="stylesheet" href="../css/auth.css">
 
     <style>
-        * {
-            box-sizing: border-box;
-        }
+        /* 원본 시안 로그인 화면 구조 */
 
-        html,
-        body {
-            margin: 0;
-            min-height: 100%;
-        }
-
-        body.login-page {
-            position: relative;
-            min-height: 100vh;
-            overflow-x: hidden;
-            background: #b85d65;
-            color: #ffffff;
-            font-family: Arial, "Noto Sans KR", sans-serif;
-        }
-
-        /* =====================================
-           시안과 동일한 계열의 움직이는 배경
-        ===================================== */
-
-        body.login-page::before {
-            content: "";
-            position: fixed;
-            inset: -15%;
-            z-index: 0;
-            pointer-events: none;
-
-            background:
-                radial-gradient(
-                    ellipse 65% 85% at 8% 48%,
-                    rgba(132, 54, 151, 0.95) 0%,
-                    rgba(153, 65, 136, 0.65) 48%,
-                    transparent 85%
-                ),
-                radial-gradient(
-                    ellipse 65% 90% at 88% 50%,
-                    rgba(241, 124, 13, 0.95) 0%,
-                    rgba(226, 112, 31, 0.65) 55%,
-                    transparent 90%
-                ),
-                linear-gradient(
-                    110deg,
-                    #90429b 0%,
-                    #b45682 38%,
-                    #c96758 65%,
-                    #e47b1c 100%
-                );
-
-            animation: gradientMove 14s ease-in-out infinite alternate;
-            will-change: transform;
-        }
-
-        @keyframes gradientMove {
-            0% {
-                transform: translateX(0%) scale(1);
-            }
-
-            50% {
-                transform: translateX(-5%) scale(1.04);
-            }
-
-            100% {
-                transform: translateX(5%) scale(1.08);
-            }
-        }
-
-        /* =====================================
-           로그인 화면 중앙 정렬
-        ===================================== */
-
-        .login-page .login-container {
+        .stage {
             position: relative;
             z-index: 1;
-
+            min-height: 100vh;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
-
-            width: 100%;
-            min-height: 100vh;
-            margin: 0;
-            padding: 35px 20px;
-
-            background: transparent;
+            padding: 56px 20px;
         }
 
-        /* =====================================
-           홈으로 돌아가기
-        ===================================== */
+        .view {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            animation: fade .45s ease both;
+        }
 
-        .login-page .home-back {
+        @keyframes fade {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+            to {
+                opacity: 1;
+                transform: none;
+            }
+        }
+
+        .back {
             position: fixed;
-            top: 34%;
-            left: 3.2%;
-            z-index: 10;
-
+            top: 22px;
+            left: 26px;
+            z-index: 5;
             display: inline-flex;
             align-items: center;
-            justify-content: center;
-
-            padding: 9px 14px;
-
-            border: none;
-            border-radius: 30px;
-
-            background: #151515;
-            color: #ffffff;
-
-            font-size: 14px;
-            text-decoration: none;
-            white-space: nowrap;
-        }
-
-        .login-page .home-back:hover {
-            background: #292929;
-            color: #ffffff;
-        }
-
-        /* =====================================
-           로그인 카드
-        ===================================== */
-
-        .login-page .login-box {
-            position: relative;
-            width: 100%;
-            max-width: 428px;
-
-            margin: 0;
-            padding: 34px 41px 30px;
-
-            border: 1px solid #292929;
-            border-radius: 11px;
-
+            gap: 6px;
             background: #141414;
-            color: #ffffff;
-
-            text-align: center;
-
-            box-shadow: 0 18px 45px rgba(0, 0, 0, 0.12);
+            color: #e8e8e8;
+            border: 1px solid #2c2c2c;
+            border-radius: 999px;
+            padding: 7px 14px 7px 10px;
+            font: 400 13px 'Inter', 'Noto Sans KR', sans-serif;
+            text-decoration: none;
+            cursor: pointer;
+            transition: border-color .15s;
         }
 
-        /* =====================================
-           로고 및 설명
-        ===================================== */
+        .back:hover {
+            border-color: #777;
+        }
 
-        .login-page .login-logo {
-            margin: 0;
+        .auth {
+            width: min(400px, 100%);
+            background: var(--panel);
+            border: 1px solid #262626;
+            border-radius: 10px;
+            padding: 34px clamp(22px, 9%, 38px) 28px;
+            box-shadow: 0 14px 50px rgba(0, 0, 0, .35);
+            text-align: left;
+            animation: cardUp .55s cubic-bezier(.2, .7, .2, 1) both;
+        }
 
-            background: linear-gradient(
-                100deg,
-                #a33caf 0%,
-                #c45583 48%,
-                #ed801a 100%
-            );
+        @keyframes cardUp {
+            from {
+                opacity: 0;
+                transform: translateY(18px);
+            }
+            to {
+                opacity: 1;
+                transform: none;
+            }
+        }
 
+        .brand {
+            margin: 0 0 8px;
+            text-align: center;
+            font-size: 34px;
+            font-weight: 400;
+            letter-spacing: .5px;
+            line-height: 1.2;
+        }
+
+        .brand a {
+            background: var(--brand);
             -webkit-background-clip: text;
             background-clip: text;
-            -webkit-text-fill-color: transparent;
-
-            font-size: 36px;
-            font-weight: 400;
-            line-height: 1.35;
-            letter-spacing: -1.1px;
+            color: transparent;
+            text-decoration: none;
         }
 
-        .login-page .login-description {
-            margin: 7px 0 27px;
-
-            color: #999999;
-            font-size: 13px;
-            font-weight: 400;
-            line-height: 1.6;
+        .tagline {
+            margin: 0 0 24px;
+            text-align: center;
+            font-size: 13.5px;
+            color: #a3a3a3;
         }
 
-        /* =====================================
-           로그인 입력창
-        ===================================== */
-
-        .login-page .input-group {
-            margin-bottom: 17px;
-            text-align: left;
+        .fg {
+            margin: 0 0 14px;
         }
 
-        .login-page .login-label {
+        .fg label {
             display: block;
-            margin-bottom: 7px;
-
-            color: #bcbcbc;
+            margin: 0 0 6px 2px;
             font-size: 12px;
-            font-weight: 400;
-            text-align: left;
+            color: #bdbdbd;
         }
 
-        .login-page .login-input {
-            display: block;
-            width: 100%;
-            height: 44px;
-
-            margin: 0;
-            padding: 0 14px;
-
-            border: 1px solid #393939;
-            border-radius: 9px;
-            outline: none;
-
-            background: #000000;
-            color: #ffffff;
-
-            font-size: 14px;
-        }
-
-        .login-page .login-input::placeholder {
-            color: #777777;
-        }
-
-        .login-page .login-input:focus {
-            border-color: #b35a9a;
-            box-shadow: 0 0 0 2px rgba(179, 90, 154, 0.15);
-        }
-
-        /* =====================================
-           비밀번호 표시 버튼
-        ===================================== */
-
-        .login-page .password-wrapper {
+        .pw {
             position: relative;
         }
 
-        .login-page .password-wrapper .login-input {
-            padding-right: 48px;
+        .field {
+            display: block;
+            width: 100%;
+            height: 42px;
+            padding: 0 13px;
+            color: #ececec;
+            outline: 0;
+            background: #000;
+            border: 1px solid #2c2c2c;
+            border-radius: var(--r);
+            font: 400 14px 'Inter', 'Noto Sans KR', sans-serif;
+            text-align: left;
+            transition: border-color .15s;
         }
 
-        .login-page .password-toggle {
+        .pw .field {
+            padding-right: 42px;
+        }
+
+        .field::placeholder {
+            color: #7d7d7d;
+        }
+
+        .field:hover {
+            border-color: #444;
+        }
+
+        .field:focus {
+            border-color: transparent;
+            background:
+                linear-gradient(#000, #000) padding-box,
+                var(--brand) border-box;
+        }
+
+        .eye {
             position: absolute;
+            right: 8px;
             top: 50%;
-            right: 12px;
             transform: translateY(-50%);
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            width: 24px;
-            height: 24px;
-
-            padding: 0;
-            border: none;
-            background: transparent;
-            color: #999999;
-
+            width: 30px;
+            height: 30px;
+            display: grid;
+            place-items: center;
+            background: none;
+            border: 0;
+            border-radius: 6px;
+            color: #8d8d8d;
             cursor: pointer;
         }
 
-        .login-page .password-toggle svg {
-            width: 19px;
-            height: 19px;
+        .eye:hover {
+            color: #fff;
+        }
+
+        .eye svg {
+            width: 18px;
+            height: 18px;
             fill: none;
             stroke: currentColor;
-            stroke-width: 1.7;
+            stroke-width: 1.8;
             stroke-linecap: round;
             stroke-linejoin: round;
         }
 
-        /* =====================================
-           로그인 버튼
-        ===================================== */
-
-        .login-page .login-button {
+        .btn {
             display: block;
             width: 100%;
-            height: 46px;
-
-            margin-top: 40px;
-            padding: 0;
-
-            border: none;
-            border-radius: 9px;
-
-            background: linear-gradient(
-                100deg,
-                #a13bac 0%,
-                #c45b7a 48%,
-                #ef8013 100%
-            );
-
-            color: #ffffff;
-            font-size: 15px;
-            font-weight: 700;
-
+            height: 42px;
+            margin-top: 4px;
+            border: 0;
+            border-radius: var(--r);
             cursor: pointer;
+            background: var(--brand);
+            color: #fff;
+            font: 600 15px 'Inter', 'Noto Sans KR', sans-serif;
+            transition: filter .15s, transform .1s;
         }
 
-        .login-page .login-button:hover {
-            filter: brightness(1.08);
+        .btn:hover:not(:disabled) {
+            filter: brightness(1.12);
         }
 
-        .login-page .login-button:disabled {
-            opacity: 0.65;
+        .btn:disabled {
+            background: #2a2a2a;
+            color: #8a8a8a;
             cursor: not-allowed;
         }
 
-        /* =====================================
-           로그인 메시지
-        ===================================== */
-
-        .login-page .login-message {
-            margin: 8px 0 0;
-            color: #ff9999;
-            font-size: 12px;
-            text-align: center;
+        .alt {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 14px;
         }
 
-        .login-page .login-message:empty {
-            display: none;
-        }
-
-        /* =====================================
-           회원가입
-        ===================================== */
-
-        .login-page .signup-area {
-            margin-top: 19px;
-            text-align: right;
-        }
-
-        .login-page .signup-link {
-            color: #aaaaaa;
-            font-size: 14px;
-            font-weight: 400;
+        .text-link {
+            background: none;
+            border: 0;
+            padding: 4px 0;
+            cursor: pointer;
+            color: #a8a8a8;
+            font-size: 13px;
             text-decoration: underline;
             text-underline-offset: 4px;
         }
 
-        .login-page .signup-link:hover {
-            color: #ffffff;
+        .text-link:hover {
+            color: #fff;
         }
 
-        /* =====================================
-           반응형
-        ===================================== */
-
-        @media (max-width: 600px) {
-            .login-page .login-container {
-                padding: 80px 18px 30px;
-            }
-
-            .login-page .login-box {
-                max-width: 428px;
-                padding: 32px 26px 28px;
-            }
-
-            .login-page .home-back {
-                top: 22px;
-                left: 18px;
-            }
-
-            .login-page .login-logo {
-                font-size: 33px;
-            }
+        .err {
+            min-height: 20px;
+            margin: 0 0 4px;
+            font-size: 13px;
+            color: #ff9c90;
+            text-align: center;
         }
 
-        @media (prefers-reduced-motion: reduce) {
-            body.login-page::before {
-                animation: none;
+        .err.ok {
+            color: #8fe0a8;
+        }
+
+        @media (max-width: 560px) {
+            .stage {
+                justify-content: flex-start;
+                padding: 70px 16px 24px;
+            }
+
+            .auth {
+                padding: 34px 22px 26px;
+            }
+
+            .brand {
+                font-size: 30px;
+            }
+
+            .back {
+                position: static;
+                margin: 0 0 12px;
+                align-self: flex-start;
             }
         }
     </style>
 </head>
 
-<body class="login-page">
+<body class="login-page" data-mode="auth">
 
-    <!-- 홈 버튼 -->
-    <a href="index.html" class="home-back">
-        ← 홈
-    </a>
+    <!-- 원본 시안 배경 -->
+    <div class="fx" aria-hidden="true">
+        <div class="fxin">
+            <i></i>
+        </div>
+    </div>
+    <div class="fxn" aria-hidden="true"></div>
 
-    <main class="login-container">
+    <main>
+        <section class="stage">
+            <div class="view">
 
-        <section class="login-box">
+                <!-- 홈으로 돌아가기 -->
+                <a href="index.html" class="back">
+                    ← 홈
+                </a>
 
-            <h1 class="login-logo">
-                RecoMate
-            </h1>
+                <!-- 로그인 카드 -->
+                <form class="auth" id="loginForm" novalidate>
 
-            <p class="login-description">
-                함께 볼 콘텐츠, 고민 없이
-            </p>
+                    <h1 class="brand">
+                        <a href="index.html">RecoMate</a>
+                    </h1>
 
-            <form id="loginForm">
+                    <p class="tagline">
+                        함께 볼 콘텐츠, 고민 없이
+                    </p>
 
-                <!-- 이메일 -->
-                <div class="input-group">
-
-                    <label for="userId" class="login-label">
-                        이메일
-                    </label>
-
-                    <input
-                        type="email"
-                        id="userId"
-                        class="login-input"
-                        placeholder="email"
-                        autocomplete="email"
-                        required
-                    >
-
-                </div>
-
-                <!-- 비밀번호 -->
-                <div class="input-group">
-
-                    <label for="password" class="login-label">
-                        비밀번호
-                    </label>
-
-                    <div class="password-wrapper">
+                    <!-- 이메일 -->
+                    <div class="fg">
+                        <label for="userId">이메일</label>
 
                         <input
-                            type="password"
-                            id="password"
-                            class="login-input"
-                            placeholder="password"
-                            autocomplete="current-password"
+                            class="field"
+                            id="userId"
+                            name="email"
+                            type="email"
+                            placeholder="email"
+                            autocomplete="username"
                             required
                         >
-
-                        <button
-                            type="button"
-                            class="password-toggle"
-                            id="passwordToggle"
-                            aria-label="비밀번호 표시"
-                            aria-pressed="false"
-                        >
-                            <svg viewBox="0 0 24 24" aria-hidden="true">
-                                <path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12Z"></path>
-                                <circle cx="12" cy="12" r="3"></circle>
-                            </svg>
-                        </button>
-
                     </div>
 
-                </div>
+                    <!-- 비밀번호 -->
+                    <div class="fg">
+                        <label for="password">비밀번호</label>
 
-                <!-- 로그인 결과 -->
-                <div
-                    id="loginMessage"
-                    class="login-message"
-                    role="status"
-                    aria-live="polite"
-                ></div>
+                        <div class="pw">
+                            <input
+                                class="field"
+                                id="password"
+                                name="password"
+                                type="password"
+                                placeholder="password"
+                                autocomplete="current-password"
+                                required
+                            >
 
-                <!-- 로그인 버튼 -->
-                <button
-                    type="submit"
-                    id="loginButton"
-                    class="login-button"
-                >
-                    login
-                </button>
+                            <button
+                                class="eye"
+                                id="passwordToggle"
+                                type="button"
+                                aria-pressed="false"
+                                aria-label="비밀번호 보기"
+                            >
+                                <svg viewBox="0 0 24 24" aria-hidden="true">
+                                    <path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"></path>
+                                    <circle cx="12" cy="12" r="3"></circle>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
 
-            </form>
+                    <!-- 로그인 결과 -->
+                    <p
+                        class="err"
+                        id="loginMessage"
+                        role="status"
+                        aria-live="polite"
+                    ></p>
 
-            <!-- 회원가입 -->
-            <div class="signup-area">
-                <a href="signup.html" class="signup-link">
-                    회원가입 하기
-                </a>
+                    <!-- 로그인 버튼 -->
+                    <button
+                        class="btn"
+                        id="loginButton"
+                        type="submit"
+                    >
+                        login
+                    </button>
+
+                    <!-- 회원가입 -->
+                    <div class="alt">
+                        <a href="signup.html" class="text-link">
+                            회원가입 하기
+                        </a>
+                    </div>
+
+                </form>
             </div>
-
         </section>
-
     </main>
 
-    <!-- 비밀번호 표시 기능 -->
+    <!-- 비밀번호 표시 -->
     <script>
         const passwordInput = document.getElementById("password");
         const passwordToggle = document.getElementById("passwordToggle");
 
         passwordToggle.addEventListener("click", () => {
-            const isPassword = passwordInput.type === "password";
+            const show = passwordInput.type === "password";
 
-            passwordInput.type = isPassword ? "text" : "password";
+            passwordInput.type = show ? "text" : "password";
 
-            passwordToggle.setAttribute(
-                "aria-pressed",
-                String(isPassword)
-            );
-
+            passwordToggle.setAttribute("aria-pressed", String(show));
             passwordToggle.setAttribute(
                 "aria-label",
-                isPassword ? "비밀번호 숨기기" : "비밀번호 표시"
+                show ? "비밀번호 숨기기" : "비밀번호 보기"
             );
         });
     </script>
 
-    <!-- 기존 Cognito 로그인 기능 유지 -->
+    <!-- 기존 AWS Cognito 로그인 유지 -->
     <script type="module" src="../js/login.js"></script>
 
 </body>

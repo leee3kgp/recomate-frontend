@@ -1,20 +1,56 @@
 
 /* =========================================
    RecoMate - 공통 기본 스타일
+   원본 recomate.html 시안 기준
 ========================================= */
 
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
+
+/* ---------- 원본 시안 공통 변수 ---------- */
+
 :root {
+    --bg: #141414;
+    --panel: #141414;
+    --card: #000000;
+    --line: #3a3a3a;
+    --text: #f2f2f2;
+    --sub: #b9a9a9;
+
+    --purple: #7b3593;
+    --orange: #c96a0b;
+
+    --nav-h: 58px;
+
+    --grad: linear-gradient(
+        100deg,
+        #793988 0%,
+        #9e4d4b 52%,
+        #c16311 100%
+    );
+
+    --brand: linear-gradient(
+        90deg,
+        #9b3fb5,
+        #e57a14
+    );
+
+    --r: 8px;
+
+    /* 기존 RecoMate 스타일 호환 변수 */
+
     --color-primary: #9254e8;
     --color-primary-hover: #a775f2;
 
-    --color-text: #ffffff;
-    --color-muted: #d9d3e1;
+    --color-text: #f2f2f2;
+    --color-muted: #b9a9a9;
 
-    --color-navbar: #08080d;
-    --color-border: rgba(255, 255, 255, 0.2);
+    --color-navbar: #141414;
+    --color-border: #3a3a3a;
 
-    --font-main: Arial, "Noto Sans KR", sans-serif;
+    --font-main: 'Inter', 'Noto Sans KR', system-ui, sans-serif;
 }
+
+/* ---------- 기본 초기화 ---------- */
 
 *,
 *::before,
@@ -22,22 +58,37 @@
     box-sizing: border-box;
 }
 
+html,
+body {
+    margin: 0;
+}
+
 html {
     scroll-behavior: smooth;
 }
 
 body {
-    margin: 0;
-    min-height: 100vh;
+    background: var(--bg);
+    color: var(--text);
+
     font-family: var(--font-main);
-    color: var(--color-text);
+
+    min-height: 100vh;
+
+    -webkit-font-smoothing: antialiased;
 }
 
-button,
+/* ---------- 입력 및 버튼 ---------- */
+
+button {
+    font-family: inherit;
+    color: inherit;
+}
+
 input,
 select,
 textarea {
-    font: inherit;
+    font-family: inherit;
 }
 
 button,
@@ -49,11 +100,15 @@ button {
     cursor: pointer;
 }
 
+/* ---------- 접근성 ---------- */
+
 button:focus-visible,
 a:focus-visible {
-    outline: 2px solid #c9a7ff;
+    outline: 3px solid #fff;
     outline-offset: 3px;
 }
+
+/* ---------- 애니메이션 접근성 ---------- */
 
 @media (prefers-reduced-motion: reduce) {
     html {
@@ -63,7 +118,8 @@ a:focus-visible {
     *,
     *::before,
     *::after {
-        transition-duration: 0.01ms !important;
-        animation-duration: 0.01ms !important;
+        animation-duration: .01ms !important;
+        animation-delay: 0s !important;
+        transition-duration: .01ms !important;
     }
 }

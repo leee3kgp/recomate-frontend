@@ -4,9 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#101014">
+    <meta name="theme-color" content="#141414">
 
     <title>RecoMate | 함께 고르는 콘텐츠</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="../css/common.css">
     <link rel="stylesheet" href="../css/navbar.css">
@@ -14,45 +18,50 @@
     <link rel="stylesheet" href="../css/index.css">
 </head>
 
-<body class="home-page">
+<body class="home-page" data-mode="home">
 
     <!-- 공통 네비게이션 -->
     <div id="navbar-container"></div>
 
-    <main class="home">
+    <!-- 원본 시안 배경 레이어 -->
+    <div class="fx" aria-hidden="true">
+        <div class="fxin">
+            <i></i>
+        </div>
+    </div>
+    <div class="fxn" aria-hidden="true"></div>
 
-        <section class="home-hero">
+    <main id="app">
 
-            <div class="hero-content">
+        <!-- 원본 시안 홈 화면 -->
+        <section class="stage hero">
+            <div class="view">
 
-                <h1 class="home-title">
+                <h2 class="title">
                     함께 볼 콘텐츠, 고민하지 말고 골라보세요
-                </h1>
+                </h2>
 
-                <p class="home-subtitle">
-                    참여자별 선호 장르를 모아 모두가 즐길 수 있는
-                    영화, 드라마 TOP 3를 추천합니다.
+                <p class="desc">
+                    참여자별 선호 장르를 모아 모두가 즐길 수 있는 영화, 드라마 TOP 3를 추천합니다.
                 </p>
 
-                <div class="hero-buttons">
-
-                    <button
-                        id="open-modal-btn"
-                        class="home-start"
-                        type="button"
-                    >
-                        같이 볼 콘텐츠 추천받기
-                    </button>
-
-                </div>
+                <button
+                    class="link-btn"
+                    id="open-modal-btn"
+                    type="button"
+                    style="margin-top:96px"
+                >
+                    같이 볼 콘텐츠 추천받기
+                </button>
 
             </div>
-
         </section>
+
+        <div class="home-rest"></div>
 
     </main>
 
-    <!-- 인원 선택 모달 -->
+    <!-- 기존 인원 선택 모달 유지 -->
     <div
         id="count-modal-overlay"
         class="count-modal-overlay"
