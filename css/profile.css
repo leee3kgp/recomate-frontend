@@ -1,7 +1,7 @@
 
 /* =========================================
    RecoMate - 프로필 페이지
-   원본 시안 기반 다크 테마
+   원본 recomate.html 시안 기준
 ========================================= */
 
 /* ---------- 전체 화면 ---------- */
@@ -12,108 +12,135 @@ body.profile-page {
     color: var(--text, #f2f2f2);
 }
 
-/* ---------- 프로필 전체 영역 ---------- */
+/* ---------- 전체 화면 배치 ---------- */
 
-.profile-page .profile-container {
+.profile-page .stage.top {
     position: relative;
     z-index: 1;
 
-    width: min(760px, calc(100% - 40px));
-    max-width: 760px;
-
     min-height: calc(100vh - var(--nav-h, 58px));
+    padding: clamp(48px, 9vh, 100px) 20px 0;
+}
+
+.profile-page .view {
+    width: 100%;
+    margin: 0 auto;
+}
+
+/* =========================================
+   원본 시안 외부 패널
+========================================= */
+
+.profile-page .panel.pfp {
+    width: min(820px, 100%);
+    min-height: 0;
 
     margin: 0 auto;
-    padding: 62px 0 90px;
+    padding: 28px 32px 44px;
+
+    background: #141414;
+    border: 1px solid #262626;
+    border-radius: 10px;
+}
+
+/* ---------- 프로필 전체 영역 ---------- */
+
+.profile-page .pf {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+
+    max-width: 560px;
+    width: 100%;
+
+    margin: 0 auto;
 }
 
 /* ---------- 프로필 제목 ---------- */
 
-.profile-page .profile-container h2 {
-    margin: 0 0 32px;
+.profile-page .pf h3 {
+    margin: 0 0 4px;
 
-    background: var(--grad);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-
-    font-size: clamp(26px, 3vw, 36px);
+    color: #f2f2f2;
+    font-size: 26px;
     font-weight: 700;
-    letter-spacing: -0.5px;
-    text-align: center;
+    letter-spacing: -.4px;
 }
 
 /* ---------- 안내 및 오류 메시지 ---------- */
 
 .profile-page #profileMessage {
-    min-height: 20px;
-    margin: 0 0 20px;
+    margin: 0;
 
-    color: #bdbdbd;
+    color: #a3a3a3;
     font-size: 13px;
     line-height: 1.6;
-    text-align: center;
 }
 
 .profile-page #profileMessage:empty {
     display: none;
 }
 
-/* ---------- 프로필 섹션 ---------- */
+/* =========================================
+   프로필 카드
+========================================= */
 
-.profile-page .profile-section {
-    margin-bottom: 22px;
-    padding: 30px 32px;
+.profile-page .pf-card {
+    background: #141414;
+    border: 1px solid #262626;
+    border-radius: 10px;
 
-    background: rgba(20, 20, 20, 0.94);
-    border: 1px solid #303030;
-    border-radius: 12px;
+    padding: 20px 22px 22px;
 
-    color: #f2f2f2;
-
-    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.12);
+    animation: cardUp .5s cubic-bezier(.2,.7,.2,1) both;
 }
 
-.profile-page .profile-section h3 {
-    margin: 0 0 23px;
-
-    color: #f2f2f2;
-    font-size: 19px;
-    font-weight: 600;
+.profile-page .pf-card:nth-of-type(2) {
+    animation-delay: .08s;
 }
 
-.profile-page .profile-section p {
-    margin: 0 0 20px;
-
-    color: #aaaaaa;
-    font-size: 13px;
-    line-height: 1.7;
+.profile-page .pf-card:nth-of-type(3) {
+    animation-delay: .16s;
 }
 
-/* ---------- 사용자 정보 입력 ---------- */
+.profile-page .pf-card h4 {
+    margin: 0 0 14px;
 
-.profile-page .profile-field {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-
-    margin-bottom: 20px;
+    font-size: 15.5px;
+    font-weight: 500;
+    color: #fff;
 }
 
-.profile-page .profile-field label {
-    color: #bdbdbd;
-    font-size: 13px;
-    font-weight: 400;
+.profile-page .pf-card p.desc {
+    margin: -6px 0 14px;
+
+    font-size: 12.5px;
+    color: #a3a3a3;
 }
 
-.profile-page .profile-field input {
+/* ---------- 입력 영역 ---------- */
+
+.profile-page .pf-card .fg {
+    margin-bottom: 16px;
+}
+
+.profile-page .fg label {
     display: block;
+    margin-bottom: 8px;
+
+    font-size: 13px;
+    color: #bdbdbd;
+}
+
+.profile-page .field {
+    display: block;
+
     width: 100%;
-    height: 44px;
+    height: 42px;
 
-    padding: 0 14px;
+    padding: 0 13px;
 
-    background: #000000;
+    background: #0b0b0b;
     color: #f2f2f2;
 
     border: 1px solid #353535;
@@ -123,169 +150,431 @@ body.profile-page {
     font-family: inherit;
     font-size: 14px;
 
-    transition: border-color 0.15s ease;
+    transition: border-color .15s;
 }
 
-.profile-page .profile-field input:focus {
+.profile-page .field:focus {
     border-color: #a64ab0;
-    box-shadow: 0 0 0 2px rgba(166, 74, 176, 0.15);
 }
 
-.profile-page .profile-field input[readonly] {
-    background: #101010;
-    color: #888888;
-    cursor: default;
+.profile-page .field[readonly] {
+    background: #0d0d0d;
+    color: #8d8d8d;
+
+    cursor: not-allowed;
+    border-color: #232323;
 }
 
-/* ---------- 공통 버튼 ---------- */
+/* ---------- 이메일 자물쇠 ---------- */
 
-.profile-page .profile-section button {
-    min-height: 42px;
-    padding: 0 22px;
+.profile-page .pw {
+    position: relative;
+}
 
-    background: var(--brand);
-    color: #ffffff;
+.profile-page .pw .field {
+    padding-right: 46px;
+}
 
-    border: none;
-    border-radius: 8px;
+.profile-page .lock {
+    position: absolute;
+
+    right: 16px;
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    width: 18px;
+    height: 18px;
+
+    color: #6d6d6d;
+    pointer-events: none;
+}
+
+/* =========================================
+   저장 버튼
+   원본 시안: 비활성화 시 회색
+========================================= */
+
+.profile-page .pf-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+
+    margin-top: 4px;
+}
+
+.profile-page .pf-row .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    width: auto;
+    min-width: 120px;
+    height: 38px;
+
+    margin: 0;
+    padding: 0 18px;
+
+    background: var(--grad);
+    color: #fff;
+    -webkit-text-fill-color: #fff;
+
+    border: 0;
+    border-radius: var(--r, 8px);
 
     font-family: inherit;
     font-size: 14px;
-    font-weight: 600;
+    font-weight: 500;
 
     cursor: pointer;
 
     transition:
-        filter 0.15s ease,
-        opacity 0.15s ease;
+        background .15s,
+        opacity .15s,
+        filter .15s;
 }
 
-.profile-page .profile-section button:hover:not(:disabled) {
-    filter: brightness(1.12);
+.profile-page .pf-row .btn:hover:not(:disabled) {
+    filter: brightness(1.1);
 }
 
-.profile-page .profile-section button:disabled {
-    opacity: 0.5;
+.profile-page .pf-row .btn:disabled {
+    background: #2a2a2a;
+    color: #8d8d8d;
+    -webkit-text-fill-color: #8d8d8d;
+
+    opacity: 1;
     cursor: not-allowed;
 }
 
-/* ---------- 닉네임 수정 ---------- */
+/* ---------- 저장 결과 메시지 ---------- */
 
-.profile-page #nicknameForm {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
+.profile-page .pf-msg {
+    font-size: 13px;
+    color: #8fe0a8;
+
+    opacity: 0;
+    transition: opacity .25s;
 }
 
-.profile-page #nicknameForm .profile-field {
-    width: 100%;
+.profile-page .pf-msg.on {
+    opacity: 1;
 }
 
-/* ---------- 선호 장르 목록 ---------- */
+.profile-page .pf-msg.bad {
+    color: #ff9c90;
+}
 
-.profile-page #genreList {
+/* =========================================
+   선호 장르
+========================================= */
+
+.profile-page .pf-card .chips {
     display: flex;
     flex-wrap: wrap;
-    align-items: center;
     gap: 10px;
 
-    min-height: 35px;
-    margin: 12px 0 24px;
-
-    color: #aaaaaa;
-    font-size: 13px;
+    min-height: 32px;
+    margin-bottom: 20px;
 }
 
-/* ---------- 장르 선택 항목 ---------- */
+/* ---------- 장르 칩 ---------- */
 
-.profile-page .genre-item,
-.profile-page #genreList label {
+.profile-page .pf-card .chip {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
+    justify-content: center;
 
-    padding: 9px 13px;
+    background: #0b0b0b;
+    border: 1px solid #2c2c2c;
+    border-radius: 999px;
 
-    background: #090909;
-    color: #dddddd;
-
-    border: 1px solid #393939;
-    border-radius: 8px;
-
-    font-size: 13px;
+    color: #e8e8e8;
+    font-size: 13.5px;
     font-weight: 400;
+
+    padding: 6px 15px;
 
     cursor: pointer;
 
     transition:
-        border-color 0.15s ease,
-        background-color 0.15s ease;
+        background .15s,
+        border-color .15s,
+        color .15s;
 }
 
-.profile-page .genre-item:hover,
-.profile-page #genreList label:hover {
+.profile-page .pf-card .chip:hover {
     border-color: #9650a5;
 }
 
-.profile-page .genre-item:has(input:checked),
-.profile-page #genreList label:has(input:checked) {
-    border-color: #9b3fb5;
-    background: rgba(123, 53, 147, 0.18);
+/* ---------- 장르 체크박스 숨기기 ---------- */
+
+.profile-page .pf-card .chip input[type="checkbox"] {
+    position: absolute;
+
+    width: 1px;
+    height: 1px;
+
+    opacity: 0;
+    pointer-events: none;
 }
 
-.profile-page .genre-item input,
-.profile-page #genreList input[type="checkbox"] {
-    accent-color: #9b3fb5;
+/* ---------- 선택된 장르 ---------- */
+
+.profile-page .pf-card .chip:has(input:checked) {
+    background: var(--grad);
+    border-color: transparent;
+    color: #fff;
+}
+
+.profile-page .pf-card .chip:focus-within {
+    outline: 2px solid #fff;
+    outline-offset: 3px;
+}
+
+/* ---------- 장르 로딩 스켈레톤 ---------- */
+
+.profile-page .sk {
+    display: inline-block;
+
+    width: 76px;
+    height: 32px;
+
+    border-radius: 999px;
+    background: #1f1f1f;
+
+    animation: pulse 1.1s ease-in-out infinite alternate;
+}
+
+@keyframes pulse {
+    from {
+        opacity: .45;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+/* =========================================
+   회원 탈퇴 영역
+========================================= */
+
+.profile-page .pf-danger {
+    background: #141414;
+    border: 1px solid #3a1f1f;
+    border-radius: 10px;
+
+    padding: 16px 22px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+
+    animation: cardUp .5s .24s cubic-bezier(.2,.7,.2,1) both;
+}
+
+.profile-page .pf-danger h4 {
+    margin: 0 0 3px;
+
+    font-size: 14.5px;
+    font-weight: 500;
+    color: #ff8d80;
+}
+
+.profile-page .pf-danger p {
+    margin: 0;
+
+    font-size: 12.5px;
+    color: #a3a3a3;
+    line-height: 1.5;
+}
+
+/* ---------- 회원 탈퇴 버튼 ---------- */
+
+.profile-page .btn-out {
+    height: 36px;
+    padding: 0 16px;
+
+    flex-shrink: 0;
+
+    background: none;
+    border: 1px solid #a04040;
+    border-radius: var(--r, 8px);
+
+    color: #ff8d80;
+
+    font: 500 13px 'Inter', 'Noto Sans KR', sans-serif;
+
+    cursor: pointer;
+    transition: background .15s;
+}
+
+.profile-page .btn-out:hover:not(:disabled) {
+    background: #2a1414;
+}
+
+.profile-page .btn-out:focus-visible {
+    outline: 3px solid #fff;
+    outline-offset: 3px;
+}
+
+.profile-page .btn-out:disabled {
+    opacity: .5;
+    cursor: not-allowed;
+}
+
+/* =========================================
+   회원 탈퇴 확인 모달
+========================================= */
+
+body.modal-open {
+    overflow: hidden;
+}
+
+.modal {
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+
+    display: grid;
+    place-items: center;
+
+    padding: 20px;
+
+    background: rgba(0,0,0,.72);
+
+    animation: fade .2s ease both;
+}
+
+.modal .box {
+    width: min(400px,100%);
+
+    background: #141414;
+    border: 1px solid #262626;
+    border-radius: 10px;
+
+    padding: 28px;
+    text-align: center;
+
+    animation: cardUp .3s ease both;
+}
+
+.modal h4 {
+    margin: 0 0 8px;
+
+    font-size: 17px;
+    font-weight: 500;
+    color: #fff;
+}
+
+.modal p {
+    margin: 0 0 20px;
+
+    font-size: 13.5px;
+    line-height: 1.55;
+    color: #a8a8a8;
+}
+
+.modal .two {
+    display: flex;
+    gap: 10px;
+}
+
+.modal .two > * {
+    flex: 1;
+    height: 40px;
+    margin: 0;
+
+    font-size: 14px;
+}
+
+/* ---------- 취소 버튼 ---------- */
+
+.modal .btn-gray {
+    background: #2a2a2a;
+    color: #e8e8e8;
+
+    border: 0;
+    border-radius: var(--r, 8px);
+
+    font: 500 14px 'Inter', 'Noto Sans KR', sans-serif;
+
     cursor: pointer;
 }
 
-/* ---------- 회원 탈퇴 ---------- */
+/* ---------- 탈퇴 확인 버튼 ---------- */
 
-.profile-page .danger-section {
-    border-color: #493033;
+.modal .btn-red {
+    background: #c0392b;
+    color: #fff;
+
+    border: 0;
+    border-radius: var(--r, 8px);
+
+    font: 600 14px 'Inter', 'Noto Sans KR', sans-serif;
+
+    cursor: pointer;
 }
 
-.profile-page .danger-section h3 {
-    color: #f2f2f2;
+.modal .two button:disabled {
+    opacity: .5;
+    cursor: not-allowed;
 }
 
-.profile-page .danger-section p {
-    color: #a9a0a0;
+.modal .modal-error:not([hidden]) {
+    color: #ff9c90;
+    font-size: 12.5px;
+    margin-bottom: 14px;
 }
 
-.profile-page #deleteAccountBtn {
-    background: #44262b;
-    border: 1px solid #7b3b44;
-    color: #ffb3ba;
-}
+/* =========================================
+   애니메이션
+========================================= */
 
-.profile-page #deleteAccountBtn:hover:not(:disabled) {
-    background: #603139;
-    filter: none;
-}
-
-/* ---------- 모바일 반응형 ---------- */
-
-@media (max-width: 600px) {
-    .profile-page .profile-container {
-        width: calc(100% - 28px);
-        padding: 36px 0 60px;
+@keyframes cardUp {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
     }
 
-    .profile-page .profile-container h2 {
-        margin-bottom: 24px;
-        font-size: 25px;
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fade {
+    from {
+        opacity: 0;
     }
 
-    .profile-page .profile-section {
-        padding: 24px 20px;
+    to {
+        opacity: 1;
+    }
+}
+
+/* =========================================
+   모바일 반응형
+========================================= */
+
+@media (max-width: 560px) {
+    .profile-page .stage.top {
+        padding: 28px 12px 40px;
     }
 
-    .profile-page .profile-section h3 {
-        font-size: 18px;
+    .profile-page .panel.pfp {
+        min-height: auto;
+        padding: 28px 16px 40px;
     }
 
-    .profile-page .profile-section button {
-        width: 100%;
+    .profile-page .pf-card {
+        padding: 22px 18px;
+    }
+
+    .profile-page .pf-danger {
+        flex-direction: column;
+        align-items: stretch;
     }
 }

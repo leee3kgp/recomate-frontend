@@ -9,269 +9,13 @@
 
     <title>내 프로필 - RecoMate</title>
 
-    <!-- 공통 CSS -->
+    <!-- 공통 스타일 -->
     <link rel="stylesheet" href="../css/common.css">
     <link rel="stylesheet" href="../css/navbar.css">
     <link rel="stylesheet" href="../css/background.css">
 
-    <!-- 프로필 전용 CSS -->
+    <!-- 프로필 전용 스타일 -->
     <link rel="stylesheet" href="../css/profile.css">
-
-    <style>
-        /* =========================================
-           프로필 - 원본 시안 기반 레이아웃
-        ========================================= */
-
-        body.profile-page {
-            min-height: 100vh;
-            background: var(--bg, #141414);
-            color: var(--text, #f2f2f2);
-        }
-
-        .profile-page .profile-container {
-            position: relative;
-            z-index: 1;
-
-            width: min(760px, calc(100% - 40px));
-            min-height: calc(100vh - var(--nav-h, 58px));
-
-            margin: 0 auto;
-            padding: 62px 0 90px;
-        }
-
-        /* 페이지 제목 */
-
-        .profile-page .profile-title {
-            margin: 0 0 32px;
-
-            background: var(--grad);
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-
-            font-size: clamp(26px, 3vw, 36px);
-            font-weight: 700;
-            letter-spacing: -.5px;
-            text-align: center;
-        }
-
-        /* 프로필 카드 */
-
-        .profile-page .profile-section {
-            margin-bottom: 22px;
-            padding: 30px 32px;
-
-            background: rgba(20, 20, 20, .94);
-            border: 1px solid #303030;
-            border-radius: 12px;
-
-            box-shadow: 0 12px 35px rgba(0, 0, 0, .12);
-        }
-
-        .profile-page .profile-section h3 {
-            margin: 0 0 23px;
-
-            color: #f2f2f2;
-            font-size: 19px;
-            font-weight: 600;
-        }
-
-        .profile-page .profile-section p {
-            margin: 0 0 20px;
-
-            color: #aaa;
-            font-size: 13px;
-            line-height: 1.7;
-        }
-
-        /* 상태 메시지 */
-
-        .profile-page #profileMessage {
-            margin: 0 0 20px;
-
-            color: #bdbdbd;
-            font-size: 13px;
-            line-height: 1.6;
-            text-align: center;
-        }
-
-        .profile-page #profileMessage:empty {
-            display: none;
-        }
-
-        /* 입력 필드 */
-
-        .profile-page .profile-field {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-
-            margin-bottom: 20px;
-        }
-
-        .profile-page .profile-field label {
-            color: #bdbdbd;
-            font-size: 13px;
-            font-weight: 400;
-        }
-
-        .profile-page .profile-field input {
-            display: block;
-            width: 100%;
-            height: 44px;
-
-            padding: 0 14px;
-
-            background: #000;
-            color: #f2f2f2;
-
-            border: 1px solid #353535;
-            border-radius: 8px;
-            outline: none;
-
-            font-family: inherit;
-            font-size: 14px;
-
-            transition: border-color .15s;
-        }
-
-        .profile-page .profile-field input:focus {
-            border-color: #a64ab0;
-        }
-
-        .profile-page .profile-field input[readonly] {
-            background: #101010;
-            color: #888;
-            cursor: default;
-        }
-
-        /* 기본 버튼 */
-
-        .profile-page .profile-section button {
-            min-height: 42px;
-            padding: 0 22px;
-
-            background: var(--brand);
-            color: #fff;
-
-            border: 0;
-            border-radius: 8px;
-
-            font-family: inherit;
-            font-size: 14px;
-            font-weight: 600;
-
-            cursor: pointer;
-            transition: filter .15s;
-        }
-
-        .profile-page .profile-section button:hover:not(:disabled) {
-            filter: brightness(1.12);
-        }
-
-        .profile-page .profile-section button:disabled {
-            opacity: .5;
-            cursor: not-allowed;
-        }
-
-        /* 닉네임 저장 */
-
-        .profile-page #nicknameForm {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-        }
-
-        .profile-page #nicknameForm .profile-field {
-            width: 100%;
-        }
-
-        /* 장르 목록 */
-
-        .profile-page #genreList {
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            gap: 10px;
-
-            margin: 12px 0 24px;
-
-            color: #aaa;
-            font-size: 13px;
-        }
-
-        /* 장르 선택 요소가 JS에서 생성될 때 */
-
-        .profile-page #genreList label {
-            display: inline-flex;
-            align-items: center;
-            gap: 7px;
-
-            padding: 9px 13px;
-
-            background: #090909;
-            border: 1px solid #393939;
-            border-radius: 8px;
-
-            color: #ddd;
-            font-size: 13px;
-            cursor: pointer;
-        }
-
-        .profile-page #genreList label:hover {
-            border-color: #9650a5;
-        }
-
-        .profile-page #genreList input[type="checkbox"] {
-            accent-color: #9b3fb5;
-        }
-
-        /* 회원 탈퇴 */
-
-        .profile-page .danger-section {
-            border-color: #493033;
-        }
-
-        .profile-page .danger-section h3 {
-            color: #f2f2f2;
-        }
-
-        .profile-page .danger-section p {
-            color: #a9a0a0;
-        }
-
-        .profile-page #deleteAccountBtn {
-            background: #44262b;
-            border: 1px solid #7b3b44;
-            color: #ffb3ba;
-        }
-
-        .profile-page #deleteAccountBtn:hover:not(:disabled) {
-            background: #603139;
-            filter: none;
-        }
-
-        /* 반응형 */
-
-        @media (max-width: 600px) {
-            .profile-page .profile-container {
-                width: calc(100% - 28px);
-                padding: 36px 0 60px;
-            }
-
-            .profile-page .profile-title {
-                margin-bottom: 24px;
-            }
-
-            .profile-page .profile-section {
-                padding: 24px 20px;
-            }
-
-            .profile-page .profile-section button {
-                width: 100%;
-            }
-        }
-    </style>
 </head>
 
 <body class="profile-page" data-mode="profile">
@@ -287,119 +31,183 @@
     </div>
     <div class="fxn" aria-hidden="true"></div>
 
-    <!-- 프로필 영역 -->
-    <main class="profile-container">
+    <!-- 원본 시안 프로필 구조 -->
+    <main class="stage top">
+        <div class="view">
+            <div class="panel pfp">
+                <div class="pf">
 
-        <h2 class="profile-title">
-            내 프로필
-        </h2>
+                    <!-- 페이지 제목 -->
+                    <h3>내 프로필</h3>
 
-        <!-- 사용자 정보 로딩 / 오류 메시지 -->
-        <p
-            id="profileMessage"
-            role="status"
-            aria-live="polite"
-        >
-            사용자 정보를 불러오는 중입니다.
-        </p>
-
-        <!-- 기본 정보 -->
-        <section class="profile-section">
-
-            <h3>기본 정보</h3>
-
-            <div class="profile-field">
-                <label for="userEmail">
-                    이메일
-                </label>
-
-                <input
-                    type="email"
-                    id="userEmail"
-                    readonly
-                    placeholder="이메일"
-                >
-            </div>
-
-            <!-- 닉네임 수정 -->
-            <form id="nicknameForm">
-
-                <div class="profile-field">
-                    <label for="userNickname">
-                        닉네임
-                    </label>
-
-                    <input
-                        type="text"
-                        id="userNickname"
-                        maxlength="20"
-                        placeholder="닉네임을 입력하세요"
-                        required
+                    <!-- 공통 상태 및 오류 메시지 -->
+                    <p
+                        id="profileMessage"
+                        role="status"
+                        aria-live="polite"
                     >
+                        사용자 정보를 불러오는 중입니다.
+                    </p>
+
+                    <!-- 기본 정보 카드 -->
+                    <section class="pf-card">
+                        <h4>기본 정보</h4>
+
+                        <!-- 이메일 -->
+                        <div class="fg">
+                            <label for="userEmail">
+                                이메일
+                            </label>
+
+                            <div class="pw">
+                                <input
+                                    class="field"
+                                    type="email"
+                                    id="userEmail"
+                                    readonly
+                                    placeholder="이메일"
+                                >
+
+                                <svg
+                                    class="lock"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="1.8"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    aria-hidden="true"
+                                >
+                                    <rect
+                                        x="5"
+                                        y="10"
+                                        width="14"
+                                        height="11"
+                                        rx="2"
+                                    ></rect>
+                                    <path
+                                        d="M8 10V7a4 4 0 0 1 8 0v3"
+                                    ></path>
+                                </svg>
+                            </div>
+                        </div>
+
+                        <!-- 닉네임 수정 -->
+                        <form id="nicknameForm">
+
+                            <div class="fg">
+                                <label for="userNickname">
+                                    닉네임
+                                </label>
+
+                                <input
+                                    class="field"
+                                    type="text"
+                                    id="userNickname"
+                                    maxlength="20"
+                                    placeholder="닉네임을 입력하세요"
+                                    required
+                                >
+                            </div>
+
+                            <!-- 저장 버튼 및 메시지 -->
+                            <div class="pf-row">
+
+                                <button
+                                    class="btn"
+                                    type="submit"
+                                    id="saveNicknameBtn"
+                                    disabled
+                                >
+                                    닉네임 저장
+                                </button>
+
+                                <span
+                                    class="pf-msg"
+                                    id="nick-msg"
+                                    role="status"
+                                    aria-live="polite"
+                                ></span>
+
+                            </div>
+                        </form>
+                    </section>
+
+                    <!-- 선호 장르 카드 -->
+                    <section class="pf-card">
+                        <h4>내 선호 장르</h4>
+
+                        <p class="desc">
+                            좋아하는 장르를 선택하고 저장하세요.
+                        </p>
+
+                        <div
+                            class="chips"
+                            id="genreList"
+                        >
+                            장르 정보를 불러오는 중입니다.
+                        </div>
+
+                        <!-- 저장 버튼 및 메시지 -->
+                        <div class="pf-row">
+
+                            <button
+                                class="btn"
+                                type="button"
+                                id="saveGenresBtn"
+                                disabled
+                            >
+                                선호 장르 저장
+                            </button>
+
+                            <span
+                                class="pf-msg"
+                                id="genre-msg"
+                                role="status"
+                                aria-live="polite"
+                            ></span>
+
+                        </div>
+                    </section>
+
+                    <!-- 회원 탈퇴 영역 -->
+                    <section class="pf-danger">
+
+                        <div>
+                            <h4>회원 탈퇴</h4>
+                            <p>
+                                회원 탈퇴 시 계정 및 관련 데이터가
+                                삭제될 수 있습니다.
+                            </p>
+                        </div>
+
+                        <button
+                            class="btn-out"
+                            type="button"
+                            id="deleteAccountBtn"
+                            disabled
+                        >
+                            회원 탈퇴
+                        </button>
+
+                    </section>
+
                 </div>
-
-                <button
-                    type="submit"
-                    id="saveNicknameBtn"
-                >
-                    닉네임 저장
-                </button>
-
-            </form>
-
-        </section>
-
-        <!-- 선호 장르 -->
-        <section class="profile-section">
-
-            <h3>내 선호 장르</h3>
-
-            <p>
-                좋아하는 장르를 선택하고 저장하세요.
-            </p>
-
-            <div id="genreList">
-                장르 정보를 불러오는 중입니다.
             </div>
-
-            <button
-                type="button"
-                id="saveGenresBtn"
-            >
-                선호 장르 저장
-            </button>
-
-        </section>
-
-        <!-- 회원 탈퇴 -->
-        <section class="profile-section danger-section">
-
-            <h3>회원 탈퇴</h3>
-
-            <p>
-                회원 탈퇴 시 계정 및 관련 데이터가
-                삭제될 수 있습니다.
-            </p>
-
-            <button
-                type="button"
-                id="deleteAccountBtn"
-            >
-                회원 탈퇴
-            </button>
-
-        </section>
-
+        </div>
     </main>
 
-    <!-- 공통 네비게이션 및 인증 상태 -->
+    <!-- 공통 네비게이션 및 인증 -->
     <script type="module">
         import "../js/navbar.js";
         await import("../js/auth-ui.js");
     </script>
 
-    <!-- 기존 프로필 API 기능 유지 -->
-    <script type="module" src="../js/profile.js"></script>
+    <!-- 기존 프로필 API 및 저장 메시지 -->
+    <script
+        type="module"
+        src="../js/profile.js"
+    ></script>
 
 </body>
 </html>
