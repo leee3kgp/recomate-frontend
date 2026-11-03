@@ -1,0 +1,32 @@
+
+/* =========================================
+   RecoMate - 공통 그라데이션 배경
+========================================= */
+
+body {
+    background:
+        linear-gradient(
+            115deg,
+            #7154b6 0%,
+            #a879c8 35%,
+            #dca0bb 65%,
+            #f2b18b 100%
+        );
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+}
+
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+
+    background:
+        radial-gradient(
+            ellipse at 20% 25%,
+            rgba(106, 68, 182, 0.22),
+            transparent 60%
+        );
+}

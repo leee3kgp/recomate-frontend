@@ -1,238 +1,369 @@
+
 /* =========================================
-   추천 결과 화면 css
+   RecoMate - 추천 결과 화면
 ========================================= */
 
-
 /* 전체 메인 컨테이너 */
+
 .result-container {
-    max-width: 900px;
-    margin: 40px auto;
+    width: 100%;
+    max-width: 1000px;
+    margin: 48px auto 80px;
     padding: 0 20px;
 }
 
+/* =========================================
+   결과 헤더
+========================================= */
 
-/* 헤더 영역 */
 .result-header {
     margin-bottom: 32px;
 }
+
 .result-header h2 {
-    font-size: 24px;
-    font-weight: bold;
-    color: #111111;
+    margin: 0 0 12px;
 
-    margin-bottom: 8px;
+    color: #ffffff;
+    font-size: 28px;
+    font-weight: 800;
+    line-height: 1.4;
 }
+
 .result-subtitle {
-    font-size: 14px;
-    color: #555555;
+    margin: 0;
+
+    color: #ffffff;
+    font-size: 15px;
+    line-height: 1.7;
 }
 
+/* =========================================
+   TOP 3 추천 카드
+========================================= */
 
-/* TOP 3 카드 그리드 */
 .recommendations-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+
+    gap: 22px;
     margin-bottom: 40px;
 }
-/* 모바일/작은 화면 대응 */
-@media (max-width: 768px) {
-    .recommendations-grid {
-        grid-template-columns: 1fr;
-    }
-}
 
-
-/* 추천 카드 박스 */
 .recommend-card {
     position: relative;
-    border: 1px solid #b7b7b7;
-    background-color: #ffffff;
 
     display: flex;
     flex-direction: column;
+
+    min-width: 0;
+    overflow: hidden;
+
+    border: 1px solid rgba(255, 255, 255, 0.45);
+    border-radius: 14px;
+
+    background: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 8px 30px rgba(67, 37, 91, 0.12);
+
+    transition:
+        transform 0.2s,
+        box-shadow 0.2s;
 }
-/* 1등 카드 강조 (임의로 설정) */
+
+.recommend-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 35px rgba(67, 37, 91, 0.2);
+}
+
+/* 1위 카드 강조 */
+
 .recommend-card.rank-1 {
-    border: 2px solid #111111;
-    background-color: #fafafa;
+    border: 2px solid #9254e8;
+    background: rgba(255, 255, 255, 0.95);
 }
 
+/* 순위 배지 */
 
-/* 순위 뱃지 */
 .rank-badge {
     position: absolute;
-    top: 10px;
-    left: 10px;
-    padding: 4px 10px;
-    background-color: #555555;
+    top: 12px;
+    left: 12px;
+    z-index: 2;
+
+    padding: 7px 12px;
+
+    border-radius: 7px;
+    background: #6840a4;
 
     color: #ffffff;
     font-size: 12px;
-    font-weight: bold;
-    z-index: 2;
+    font-weight: 800;
 }
-/* 1등 카드 강조 (임의로 설정) */
+
 .recommend-card.rank-1 .rank-badge {
-    background-color: #111111;
+    background: #9254e8;
 }
 
+/* 포스터 */
 
-/* 포스터 영역 (2:3 비율 유지) */
 .poster-wrapper {
     position: relative;
+
     width: 100%;
     padding-top: 145%;
 
-    background-color: #e5e5e5;
     overflow: hidden;
+    background: #e5e5e5;
 }
+
 .poster-img {
     position: absolute;
-    top: 0;
-    left: 0;
+    inset: 0;
+
     width: 100%;
     height: 100%;
+
     object-fit: cover;
 }
 
+/* =========================================
+   카드 내부 콘텐츠
+========================================= */
 
-/* 카드 내 컨텐츠 영역 */
 .card-content {
-    padding: 16px;
     display: flex;
     flex-direction: column;
     flex-grow: 1;
+
+    padding: 20px;
 }
-/* 콘텐츠 타입 태그 (영화 / TV) */
+
 .media-type-tag {
+    margin-bottom: 8px;
+
+    color: #765d87;
     font-size: 12px;
-    font-weight: bold;
-    color: #555555;
-    margin-bottom: 6px;
+    font-weight: 700;
 }
-/* 작품 제목 */
+
 .content-title {
-    margin: 0 0 12px 0;
+    margin: 0 0 16px;
+
+    color: #30243d;
     font-size: 18px;
-    font-weight: bold;
-    color: #111111;
-    line-height: 1.3;
+    font-weight: 800;
+    line-height: 1.4;
+    overflow-wrap: anywhere;
 }
-/* 장르 태그 컨테이너 */
+
 .genre-tags {
     display: flex;
     flex-wrap: wrap;
-    gap: 6px;
+
+    gap: 7px;
     margin-top: auto;
 }
-/* 장르 태그 */
+
 .genre-tag {
-    padding: 4px 8px;
-    border: 1px solid #b7b7b7;
-    background-color: #f5f5f5;
-    color: #222222;
+    padding: 6px 10px;
+
+    border: 1px solid #d9c7e8;
+    border-radius: 20px;
+
+    background: #f4ebfc;
+    color: #68458d;
+
     font-size: 12px;
+    font-weight: 600;
 }
 
+/* 추천 결과 없음 */
 
-/* 결과 없음 스타일 */
 .no-result {
     grid-column: 1 / -1;
-    text-align: center;
+
     padding: 40px;
-    color: #555555;
-    border: 1px solid #b7b7b7;
-    background-color: #f5f5f5;
-}
 
+    border: 1px solid rgba(255, 255, 255, 0.45);
+    border-radius: 14px;
 
-/* 하단 버튼 영역 */
-.result-actions {
-    margin-top: 30px;
-    display: flex;
-    justify-content: flex-end;
-    gap: 12px;
-}
+    background: rgba(255, 255, 255, 0.9);
+    color: #51445b;
 
-/* 주 버튼 */
-.primary-btn {
-    padding: 12px 20px;
-    font-size: 16px;
-    text-decoration: none;
-    cursor: pointer;
-    border: 1px solid #555555;
-    background-color: #b7b7b7;
-    color: #222222;
+    text-align: center;
 }
-/* 주 버튼 마우스 올렸을 때 */
-.primary-btn:hover {
-    background-color: #9f9f9f;
-    border-color: #555555;
-    color: #111111;
-}
-
-/* 보조 버튼 */
-.secondary-btn {
-    padding: 12px 20px;
-    font-size: 16px;
-    text-decoration: none;
-    cursor: pointer;
-    border: 1px solid #555555;
-    background-color: #f5f5f5;
-    color: #222222;
-}
-/* 보조 버튼 마우스 올렸을 때 */
-.secondary-btn:hover {
-    background-color: #9f9f9f;
-    border-color: #555555;
-    color: #111111;
-}
-
-
 
 /* =========================================
-   취향 분석 차트 대시보드 css
+   취향 분석 차트
 ========================================= */
-
-
 
 .analysis-section {
     margin-top: 50px;
     padding-top: 30px;
-    border-top: 1px solid #b7b7b7;
-}
-.analysis-title {
-    font-size: 20px;
-    font-weight: bold;
-    color: #111111;
-    margin-bottom: 20px;
+
+    border-top: 1px solid rgba(255, 255, 255, 0.5);
 }
 
-/* 차트 컨테이너 */
+.analysis-section[hidden] {
+    display: none;
+}
+
+.analysis-title {
+    margin: 0 0 24px;
+
+    color: #ffffff;
+    font-size: 23px;
+    font-weight: 800;
+}
+
 .charts-container {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+    gap: 22px;
 }
-/* 모바일/작은 화면 대응 */
-@media (max-width: 768px) {
-    .charts-container {
-        grid-template-columns: 1fr;
+
+.chart-box {
+    min-width: 0;
+    padding: 24px;
+
+    border: 1px solid rgba(255, 255, 255, 0.45);
+    border-radius: 14px;
+
+    background: rgba(255, 255, 255, 0.92);
+    box-shadow: 0 8px 30px rgba(67, 37, 91, 0.12);
+}
+
+.chart-box h4 {
+    margin: 0 0 20px;
+
+    color: #382746;
+    font-size: 17px;
+    font-weight: 800;
+    text-align: center;
+}
+
+/* =========================================
+   하단 버튼
+========================================= */
+
+.result-actions {
+    display: flex;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+
+    gap: 12px;
+    margin-top: 32px;
+}
+
+.primary-btn,
+.secondary-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 48px;
+    padding: 12px 22px;
+
+    border-radius: 9px;
+
+    font-size: 15px;
+    font-weight: 700;
+    text-decoration: none;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s,
+        transform 0.2s;
+}
+
+.primary-btn {
+    border: 1px solid #9254e8;
+    background: #7842dc;
+    color: #ffffff;
+}
+
+.primary-btn:hover {
+    background: #9254e8;
+    transform: translateY(-2px);
+}
+
+.secondary-btn {
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    background: rgba(255, 255, 255, 0.85);
+    color: #51356d;
+}
+
+.secondary-btn:hover {
+    background: #ffffff;
+    transform: translateY(-2px);
+}
+
+/* =========================================
+   태블릿 반응형
+========================================= */
+
+@media (max-width: 900px) {
+    .result-container {
+        max-width: 760px;
+    }
+
+    .recommendations-grid {
+        gap: 14px;
+    }
+
+    .card-content {
+        padding: 16px;
+    }
+
+    .chart-box {
+        padding: 18px;
     }
 }
 
+/* =========================================
+   모바일 반응형
+========================================= */
 
-.chart-box {
-    min-width: 0; /* 화면이 좁아질 때 그래프도 함께 줄어들도록 */
-    border: 1px solid #b7b7b7;
-    background-color: #ffffff;
-    padding: 20px;
-}
-.chart-box h4 {
-    font-size: 16px;
-    font-weight: bold;
-    color: #222222;
-    margin-bottom: 15px;
-    text-align: center;
+@media (max-width: 768px) {
+    .result-container {
+        margin: 32px auto 60px;
+        padding: 0 16px;
+    }
+
+    .result-header h2 {
+        font-size: 24px;
+    }
+
+    .result-subtitle {
+        font-size: 14px;
+    }
+
+    .recommendations-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .recommend-card {
+        max-width: 440px;
+        width: 100%;
+        margin: 0 auto;
+    }
+
+    .charts-container {
+        grid-template-columns: 1fr;
+    }
+
+    .analysis-title {
+        font-size: 21px;
+    }
+
+    .result-actions {
+        flex-direction: column;
+    }
+
+    .primary-btn,
+    .secondary-btn {
+        width: 100%;
+    }
 }

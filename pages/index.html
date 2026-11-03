@@ -4,62 +4,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#101014">
+    <meta name="theme-color" content="#08080d">
 
     <title>RecoMate | 함께 고르는 콘텐츠</title>
 
+    <!-- 공통 CSS -->
+    <link rel="stylesheet" href="../css/common.css">
+    <link rel="stylesheet" href="../css/navbar.css">
+    <link rel="stylesheet" href="../css/background.css">
+
+    <!-- 메인 페이지 전용 CSS -->
     <link rel="stylesheet" href="../css/index.css">
 </head>
 
 <body>
 
-    <!-- =====================================
-         상단 네비게이션
-    ===================================== -->
-    <nav class="nav-bar">
-
-        <!-- 로고 -->
-        <a class="logo" href="index.html">
-            RecoMate
-        </a>
-
-        <!-- 홈 메뉴 -->
-        <div class="nav-links">
-            <a
-                class="nav-btn nav-active"
-                href="index.html"
-            >
-                홈
-            </a>
-        </div>
-
-        <!-- 프로필 / 로그인·로그아웃 -->
-        <div class="nav-actions">
-
-            <a
-                class="nav-btn"
-                href="profile.html"
-            >
-                프로필
-            </a>
-
-            <a
-                class="nav-btn nav-login"
-                id="authButton"
-                href="login.html"
-            >
-                로그인
-            </a>
-
-        </div>
-
-    </nav>
+    <!-- 공통 네비게이션 삽입 위치 -->
+    <div id="navbar-container"></div>
 
     <main class="home">
 
-        <!-- =====================================
-             메인 영화 배너
-        ===================================== -->
+        <!-- 메인 배너 -->
         <section class="home-hero">
 
             <div class="hero-background"></div>
@@ -107,9 +72,7 @@
 
         </section>
 
-        <!-- =====================================
-             추천 영화 포스터
-        ===================================== -->
+        <!-- 추천 영화 포스터 -->
         <section class="home-section content-section">
 
             <div class="section-heading">
@@ -126,42 +89,32 @@
 
             <div class="poster-row">
 
-                <!-- 인터스텔라 -->
                 <article class="poster-card">
                     <div class="poster-image poster-one"></div>
-
                     <h3>인터스텔라</h3>
                     <p>SF · 드라마</p>
                 </article>
 
-                <!-- 인사이드 아웃 2 -->
                 <article class="poster-card">
                     <div class="poster-image poster-two"></div>
-
                     <h3>인사이드 아웃 2</h3>
                     <p>애니메이션 · 가족</p>
                 </article>
 
-                <!-- 라라랜드 -->
                 <article class="poster-card">
                     <div class="poster-image poster-three"></div>
-
                     <h3>라라랜드</h3>
                     <p>로맨스 · 음악</p>
                 </article>
 
-                <!-- 기생충 -->
                 <article class="poster-card">
                     <div class="poster-image poster-four"></div>
-
                     <h3>기생충</h3>
                     <p>드라마 · 스릴러</p>
                 </article>
 
-                <!-- 듄 -->
                 <article class="poster-card">
                     <div class="poster-image poster-five"></div>
-
                     <h3>듄</h3>
                     <p>SF · 모험</p>
                 </article>
@@ -174,9 +127,7 @@
 
         </section>
 
-        <!-- =====================================
-             RecoMate 이용 방법
-        ===================================== -->
+        <!-- 이용 방법 -->
         <section
             class="home-section how-section"
             id="how-it-works"
@@ -196,61 +147,38 @@
 
             <ol class="home-steps">
 
-                <!-- 1단계 -->
                 <li class="home-step">
-
-                    <span class="step-number">
-                        01
-                    </span>
-
+                    <span class="step-number">01</span>
                     <strong>인원 선택</strong>
-
                     <p>
                         함께 콘텐츠를 시청할 인원을
                         2~6명 중에서 선택합니다.
                     </p>
-
                 </li>
 
-                <!-- 2단계 -->
                 <li class="home-step">
-
-                    <span class="step-number">
-                        02
-                    </span>
-
+                    <span class="step-number">02</span>
                     <strong>장르 선택</strong>
-
                     <p>
                         각 참여자가 좋아하는 영화와
                         드라마 장르를 선택합니다.
                     </p>
-
                 </li>
 
-                <!-- 3단계 -->
                 <li class="home-step">
-
-                    <span class="step-number">
-                        03
-                    </span>
-
+                    <span class="step-number">03</span>
                     <strong>TOP 3 추천</strong>
-
                     <p>
                         모두의 취향을 반영한 추천 결과와
                         취향 분석을 확인합니다.
                     </p>
-
                 </li>
 
             </ol>
 
         </section>
 
-        <!-- =====================================
-             내 추천 기록
-        ===================================== -->
+        <!-- 내 추천 기록 -->
         <section class="home-section history-section">
 
             <div class="section-heading">
@@ -271,9 +199,7 @@
 
     </main>
 
-    <!-- =====================================
-         인원 선택 모달
-    ===================================== -->
+    <!-- 인원 선택 모달 -->
     <div
         id="count-modal-overlay"
         class="count-modal-overlay"
@@ -291,7 +217,6 @@
 
             <div class="count-modal-counter">
 
-                <!-- 인원 감소 -->
                 <button
                     type="button"
                     class="count-modal-btn"
@@ -300,7 +225,6 @@
                     -
                 </button>
 
-                <!-- 현재 인원 -->
                 <span
                     class="count-modal-count"
                     id="guest-count"
@@ -308,7 +232,6 @@
                     2명
                 </span>
 
-                <!-- 인원 증가 -->
                 <button
                     type="button"
                     class="count-modal-btn"
@@ -319,7 +242,6 @@
 
             </div>
 
-            <!-- 선택 완료 -->
             <button
                 type="button"
                 class="count-modal-submit"
@@ -328,7 +250,6 @@
                 선택 완료
             </button>
 
-            <!-- 닫기 -->
             <button
                 type="button"
                 class="count-modal-close"
@@ -341,33 +262,16 @@
 
     </div>
 
-    <!-- =====================================
-         기존 JavaScript 기능 유지
-    ===================================== -->
+    <!-- 공통 네비게이션 생성 후 인증 기능 실행 -->
+    <script type="module">
+        import "../js/navbar.js";
+        await import("../js/auth-ui.js");
+    </script>
 
-    <!-- 인원 선택 모달 -->
-    <script
-        type="module"
-        src="../js/guest-modal.js"
-    ></script>
-
-    <!-- 추천 기록 -->
-    <script
-        type="module"
-        src="../js/home.js"
-    ></script>
-
-    <!-- 로그인 / 로그아웃 상태 -->
-    <script
-        type="module"
-        src="../js/auth-ui.js"
-    ></script>
-
-    <!-- 영화 포스터 -->
-    <script
-        src="../js/home-posters.js"
-        defer
-    ></script>
+    <!-- 기존 기능 유지 -->
+    <script type="module" src="../js/guest-modal.js"></script>
+    <script type="module" src="../js/home.js"></script>
+    <script src="../js/home-posters.js" defer></script>
 
 </body>
 </html>

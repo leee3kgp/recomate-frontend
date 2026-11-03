@@ -5,63 +5,65 @@
     <meta charset="UTF-8">
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#08080d">
 
     <title>내 프로필 - RecoMate</title>
 
-    <link rel="stylesheet" href="../css/index.css">
+    <!-- 공통 CSS -->
+    <link rel="stylesheet" href="../css/common.css">
+    <link rel="stylesheet" href="../css/navbar.css">
+    <link rel="stylesheet" href="../css/background.css">
+
+    <!-- 프로필 전용 CSS -->
     <link rel="stylesheet" href="../css/profile.css">
 </head>
 
 <body>
-    <!-- 상단 메뉴 -->
-    <nav class="nav-bar">
-        <h1 class="logo">RecoMate</h1>
 
-        <a class="nav-btn" href="index.html">홈</a>
-        <a class="nav-btn nav-btn-disabled" aria-disabled="true" title="준비 중입니다">요즘 대세 콘텐츠</a>
-
-        <a class="nav-btn nav-btn-disabled" aria-disabled="true" title="준비 중입니다" style="margin-left: auto;">
-            검색
-        </a>
-
-        <a class="nav-btn" href="profile.html">
-            프로필
-        </a>
-
-        <a class="nav-btn"
-           id="authButton"
-           href="login.html">
-            로그인
-        </a>
-    </nav>
+    <!-- 공통 네비게이션 삽입 위치 -->
+    <div id="navbar-container"></div>
 
     <!-- 프로필 영역 -->
     <main class="profile-container">
 
         <h2>내 프로필</h2>
 
-        <p id="profileMessage" role="status"
-           aria-live="polite">
+        <p
+            id="profileMessage"
+            role="status"
+            aria-live="polite"
+        >
             사용자 정보를 불러오는 중입니다.
         </p>
 
-        <!-- 사용자 정보 -->
+        <!-- 기본 정보 -->
         <section class="profile-section">
+
             <h3>기본 정보</h3>
 
             <div class="profile-field">
-                <label for="userEmail">이메일</label>
+
+                <label for="userEmail">
+                    이메일
+                </label>
+
                 <input
                     type="email"
                     id="userEmail"
                     readonly
                     placeholder="이메일"
                 >
+
             </div>
 
+            <!-- 닉네임 수정 -->
             <form id="nicknameForm">
+
                 <div class="profile-field">
-                    <label for="userNickname">닉네임</label>
+
+                    <label for="userNickname">
+                        닉네임
+                    </label>
 
                     <input
                         type="text"
@@ -70,17 +72,23 @@
                         placeholder="닉네임을 입력하세요"
                         required
                     >
+
                 </div>
 
-                <button type="submit"
-                        id="saveNicknameBtn">
+                <button
+                    type="submit"
+                    id="saveNicknameBtn"
+                >
                     닉네임 저장
                 </button>
+
             </form>
+
         </section>
 
         <!-- 선호 장르 -->
         <section class="profile-section">
+
             <h3>내 선호 장르</h3>
 
             <p>
@@ -91,14 +99,18 @@
                 장르 정보를 불러오는 중입니다.
             </div>
 
-            <button type="button"
-                    id="saveGenresBtn">
+            <button
+                type="button"
+                id="saveGenresBtn"
+            >
                 선호 장르 저장
             </button>
+
         </section>
 
         <!-- 회원 탈퇴 -->
         <section class="profile-section danger-section">
+
             <h3>회원 탈퇴</h3>
 
             <p>
@@ -106,17 +118,25 @@
                 삭제될 수 있습니다.
             </p>
 
-            <button type="button"
-                    id="deleteAccountBtn">
+            <button
+                type="button"
+                id="deleteAccountBtn"
+            >
                 회원 탈퇴
             </button>
+
         </section>
+
     </main>
 
-    <!-- 로그인 상태 관리 -->
-    <script type="module" src="../js/auth-ui.js"></script>
+    <!-- 공통 네비게이션 생성 후 인증 상태 확인 -->
+    <script type="module">
+        import "../js/navbar.js";
+        await import("../js/auth-ui.js");
+    </script>
 
-    <!-- 프로필 API 연동 -->
+    <!-- 기존 프로필 API 기능 -->
     <script type="module" src="../js/profile.js"></script>
+
 </body>
 </html>
