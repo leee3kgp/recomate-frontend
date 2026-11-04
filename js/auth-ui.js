@@ -7,6 +7,8 @@ import {
     signOut
 } from "aws-amplify/auth";
 
+import { clearStoredResults } from "./auth-token.js";
+
 // =====================================
 // HTML 요소 가져오기
 // =====================================
@@ -53,8 +55,6 @@ function showLoggedInUI() {
 
     authButton.style.visibility = "visible";
     authButton.style.pointerEvents = "auto";
-
-    console.log("로그인 상태 유지 성공");
 }
 
 // =====================================
@@ -87,15 +87,11 @@ async function checkAuthSession() {
             throw new Error("유효한 로그인 세션 없음");
         }
 
-        console.log("ID Token 확인 성공");
-        console.log("Access Token 확인 성공");
-
         showLoggedInUI();
 
-    } catch (error) {
+    } catch {
 
-        console.log("로그인 세션 확인 실패:", error);
-
+        // 로그인하지 않은 정상 상태도 여기로 오므로 기록하지 않음
         showLoggedOutUI();
     }
 }
@@ -121,10 +117,10 @@ if (authButton) {
 
         try {
 
-            // Cognito 로그아웃
-            await signOut();
+            // 이전 계정의 추천 결과 저장본 삭제 후 Cognito 로그아웃
+            clearStoredResults();
 
-            console.log("로그아웃 성공");
+            await signOut();
 
             isLoggedIn = false;
 

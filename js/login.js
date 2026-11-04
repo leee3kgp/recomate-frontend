@@ -68,18 +68,13 @@ async function checkLoginSession() {
         // 기존 로그인 상태가 유효한 경우
         if (user && idToken && accessToken) {
 
-            console.log("기존 로그인 세션 확인 성공");
-            console.log("ID Token 존재:", true);
-            console.log("Access Token 존재:", true);
-
             showLoginSuccess();
 
             return true;
         }
 
-    } catch (error) {
-
-        console.log("기존 로그인 세션 없음");
+    } catch {
+        // 로그인하지 않은 상태이므로 로그인 화면을 그대로 둠
     }
 
     return false;
@@ -156,18 +151,6 @@ loginForm.addEventListener(
                         "JWT 토큰 발급 확인 실패"
                     );
                 }
-
-                console.log("Cognito 로그인 성공");
-
-                console.log(
-                    "ID Token 발급:",
-                    Boolean(idToken)
-                );
-
-                console.log(
-                    "Access Token 발급:",
-                    Boolean(accessToken)
-                );
 
                 showMessage(
                     "로그인에 성공했습니다.",
