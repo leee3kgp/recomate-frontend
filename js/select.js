@@ -1,5 +1,6 @@
 import { requireLogin, apiFetch, ApiError } from "./api.js";
 import { GENRES, loadGenres } from "./genres.js";
+import { isValidCount, getFlowCount } from "./flow-state.js";
 
 async function initSelectPage() {
     await requireLogin();
@@ -14,16 +15,15 @@ async function initSelectPage() {
     let isLoading = false;
     let participants = [];
 
-    // (?count=N) 읽기
+    // 인원 수: (?count=N) → 인원 선택 화면에서 저장한 값 → 기본값(2) 순서로 사용
     const getInitialCount = () => {
         const searchParams = new URLSearchParams(window.location.search);
-        const countParam = searchParams.get('count');
-        const parsedCount = parseInt(countParam, 10);
+        const parsedCount = parseInt(searchParams.get('count'), 10);
 
-        if (!isNaN(parsedCount) && parsedCount >= 2 && parsedCount <= 6) {
+        if (isValidCount(parsedCount)) {
             return parsedCount;
         }
-        return 2; // 기본값
+        return getFlowCount();
     };
 
     const participantCount = getInitialCount();
