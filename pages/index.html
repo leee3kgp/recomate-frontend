@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -15,10 +14,12 @@
     <link rel="stylesheet" href="../css/common.css">
     <link rel="stylesheet" href="../css/navbar.css">
     <link rel="stylesheet" href="../css/background.css">
-    <link rel="stylesheet" href="../css/index.css">
+
+    <!-- 홈 · 이용방법 · 인원 선택 (한 화면 안에서 단계 전환) -->
+    <link rel="stylesheet" href="../css/flow.css">
 </head>
 
-<body class="home-page" data-mode="home">
+<body class="flow-page" data-mode="home">
 
     <!-- 공통 네비게이션 -->
     <div id="navbar-container"></div>
@@ -31,116 +32,15 @@
     </div>
     <div class="fxn" aria-hidden="true"></div>
 
-    <main id="app">
+    <!-- 단계별 화면은 js/flow.js 가 이 안에 그림 -->
+    <main id="app"></main>
 
-        <!-- 원본 시안 홈 화면 -->
-        <section class="stage hero">
-            <div class="view">
-
-                <h2 class="title">
-                    함께 볼 콘텐츠, 고민하지 말고 골라보세요
-                </h2>
-
-                <p class="desc">
-                    참여자별 선호 장르를 모아 모두가 즐길 수 있는 영화, 드라마 TOP 3를 추천합니다.
-                </p>
-
-                <button
-                    class="link-btn"
-                    id="open-modal-btn"
-                    type="button"
-                    style="margin-top:96px"
-                >
-                    같이 볼 콘텐츠 추천받기
-                </button>
-
-            </div>
-        </section>
-
-        <div class="home-rest"></div>
-
-    </main>
-
-    <!-- 기존 인원 선택 모달 유지 -->
-    <div
-        id="count-modal-overlay"
-        class="count-modal-overlay"
-    >
-        <div
-            class="count-modal-content"
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="count-modal-title"
-        >
-
-            <h2
-                id="count-modal-title"
-                class="count-modal-title"
-            >
-                몇 명이서 함께 시청하시나요?
-            </h2>
-
-            <p class="count-modal-description">
-                함께 콘텐츠를 추천받을 인원을 선택해 주세요.
-            </p>
-
-            <div class="count-modal-counter">
-
-                <button
-                    type="button"
-                    class="count-modal-btn"
-                    id="minus-btn"
-                >
-                    -
-                </button>
-
-                <span
-                    class="count-modal-count"
-                    id="guest-count"
-                >
-                    2명
-                </span>
-
-                <button
-                    type="button"
-                    class="count-modal-btn"
-                    id="plus-btn"
-                >
-                    +
-                </button>
-
-            </div>
-
-            <button
-                type="button"
-                class="count-modal-submit"
-                id="submit-btn"
-            >
-                선택 완료
-            </button>
-
-            <button
-                type="button"
-                class="count-modal-close"
-                id="close-btn"
-            >
-                닫기
-            </button>
-
-        </div>
-    </div>
-
-    <!-- 공통 네비게이션 및 인증 -->
     <script type="module">
         import "../js/navbar.js";
         import "../js/auth-ui.js";
     </script>
 
-    <!-- 기존 인원 선택 기능 -->
-    <script
-        type="module"
-        src="../js/guest-modal.js"
-    ></script>
+    <script type="module" src="../js/flow.js"></script>
 
 </body>
 </html>
