@@ -65,6 +65,7 @@ body {
 
 html {
     scroll-behavior: smooth;
+    overflow-y: scroll; /* 콘텐츠가 짧아도 스크롤바 영역을 항상 유지하여 깜빡임 방지 */
 }
 
 body {
