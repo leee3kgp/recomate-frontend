@@ -1,6 +1,6 @@
 
 /* =========================================
-   RecoMate - 추천 흐름 화면 (홈 · 이용방법 · 인원 선택)
+   RecoMate - 추천 흐름 화면 (홈 · 이용방법 · 인원 선택 · 차례 안내 · 장르 선택 · 로딩)
    원본 recomate.html 시안 기준
 ========================================= */
 
@@ -231,6 +231,132 @@
     height: 22px;
 }
 
+/* ---------- 차례 안내 ---------- */
+
+.flow-page .turn {
+    width: 100%;
+    background: none;
+    border: 0;
+    cursor: pointer;
+    padding: 60px 0;
+    color: inherit;
+    font: inherit;
+}
+
+.flow-page .turn small {
+    display: block;
+    margin-top: 20px;
+    font-size: 15px;
+    color: rgba(255, 255, 255, .62);
+    font-weight: 300;
+}
+
+.flow-page .turn:focus-visible {
+    outline: 3px solid #fff;
+    outline-offset: 4px;
+    border-radius: 8px;
+}
+
+/* ---------- 장르 선택 ---------- */
+
+.flow-page .group {
+    margin-bottom: 24px;
+}
+
+.flow-page .group h4 {
+    margin: 0 0 6px;
+    font-weight: 400;
+    font-size: 17px;
+}
+
+.flow-page .group p {
+    margin: 0 0 12px;
+    font-size: 13px;
+    color: #8d8d8d;
+}
+
+.flow-page .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.flow-page .chip {
+    background: var(--card, #000000);
+    border: 1px solid var(--line, #3a3a3a);
+    border-radius: 999px;
+    padding: 7px 16px;
+    font-size: 14px;
+    color: inherit;
+    cursor: pointer;
+    transition: background .15s, border-color .15s, transform .1s;
+}
+
+.flow-page .chip:hover:not(:disabled) {
+    border-color: #8a8a8a;
+}
+
+.flow-page .chip:active:not(:disabled) {
+    transform: scale(.97);
+}
+
+.flow-page .chip[aria-pressed="true"] {
+    background: var(--grad);
+    border-color: transparent;
+    color: #fff;
+    font-weight: 500;
+}
+
+/* '별로 안 끌리는 콘텐츠' 선택 칩은 붉은 톤 */
+.flow-page .chip[aria-pressed="true"].neg {
+    background: #5a2323;
+    border-color: #a04040;
+}
+
+.flow-page .chip:disabled {
+    opacity: .3;
+    cursor: not-allowed;
+}
+
+.flow-page .chip:focus-visible {
+    outline: 3px solid #fff;
+    outline-offset: 4px;
+    border-radius: 8px;
+}
+
+/* ---------- 로딩 ---------- */
+
+/* 제목이 글자 그라데이션(투명 글자)이라 점은 색을 직접 지정 */
+.flow-page .dots span {
+    display: inline-block;
+    animation: flow-blink 1.2s infinite both;
+    color: #e4e4e4;
+    -webkit-text-fill-color: #e4e4e4;
+}
+
+.flow-page .dots span:nth-child(2) { animation-delay: .15s; }
+.flow-page .dots span:nth-child(3) { animation-delay: .3s; }
+.flow-page .dots span:nth-child(4) { animation-delay: .45s; }
+.flow-page .dots span:nth-child(5) { animation-delay: .6s; }
+
+@keyframes flow-blink {
+    0%, 80%, 100% { opacity: .15; }
+    40% { opacity: 1; }
+}
+
+/* 세션 생성 실패 시 안내 */
+.flow-page .actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px 28px;
+    margin-top: 36px;
+}
+
+.flow-page .actions .link-btn {
+    margin-top: 0;
+}
+
 /* ---------- 반응형 ---------- */
 
 @media (max-width: 860px) {
@@ -259,6 +385,11 @@
 @media (prefers-reduced-motion: reduce) {
     .flow-page .view {
         animation: none;
+    }
+
+    .flow-page .dots span {
+        animation: none;
+        opacity: .6;
     }
 
     .flow-page .step-card,

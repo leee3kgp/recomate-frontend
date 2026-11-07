@@ -47,3 +47,40 @@ export function setFlowCount(count) {
         /* 저장 실패는 무시 (URL 쿼리로도 인원 수를 전달함) */
     }
 }
+
+// ---------- 참여자별 장르 선택 진행 상태 ----------
+// 차례 안내 → 장르 선택을 반복하는 동안의 현재 참여자(idx)와 선택값(picks)
+// 새로고침해도 이어서 진행할 수 있도록 sessionStorage 에 함께 저장
+
+// picks: [{ index: 1, genres: [] }, ...]  (POST /api/sessions 의 participants 형식과 동일)
+export function getFlowPicks() {
+    const { idx, picks } = loadFlow();
+
+    if (!Array.isArray(picks) || !picks.length || !Number.isInteger(idx)) {
+        return null;
+    }
+
+    return { idx, picks };
+}
+
+export function setFlowPicks(idx, picks) {
+    try {
+        sessionStorage.setItem(
+            FLOW_KEY,
+            JSON.stringify({ ...loadFlow(), idx, picks })
+        );
+    } catch {
+        /* 저장 실패 시에는 새로고침하면 인원 선택부터 다시 시작 */
+    }
+}
+
+// 인원 수는 남기고 선택 진행 상태만 삭제
+export function clearFlowPicks() {
+    try {
+        const { idx, picks, ...rest } = loadFlow();
+
+        sessionStorage.setItem(FLOW_KEY, JSON.stringify(rest));
+    } catch {
+        /* 무시 */
+    }
+}

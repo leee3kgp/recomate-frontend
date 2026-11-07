@@ -2,6 +2,7 @@ import { getCurrentUser } from "aws-amplify/auth";
 
 import { requireLogin, apiFetch, ApiError } from "./api.js";
 import { loadGenres } from "./genres.js";
+import { setFlowCount } from "./flow-state.js";
 
 async function initResultPage() {
     await requireLogin();
@@ -35,12 +36,13 @@ async function initResultPage() {
         return;
     }
 
-    // 다시 추천받기: 같은 인원수로 선택 화면 열기
+    // 다시 추천받기: 같은 인원수를 채워 둔 인원 선택 화면(index.html#count) 열기
     const countParam = parseInt(new URLSearchParams(window.location.search).get('count'), 10);
     const retryBtn = document.querySelector('.result-actions .primary-btn');
 
     if (retryBtn && countParam >= 2 && countParam <= 6) {
-        retryBtn.href = `select.html?count=${countParam}`;
+        setFlowCount(countParam);
+        retryBtn.href = 'index.html#count';
     }
 
     // 추천은 세션당 1회만 생성 가능(409 RECOMMENDATION_EXISTS)하므로
