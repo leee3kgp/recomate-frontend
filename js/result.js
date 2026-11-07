@@ -1,14 +1,21 @@
 import { getCurrentUser } from "aws-amplify/auth";
 
-import { requireLogin, apiFetch, ApiError } from "./api.js";
+import { requireLogin, apiFetch, publicFetch, ApiError } from "./api.js";
 import { loadGenres } from "./genres.js";
 import { setFlowCount } from "./flow-state.js";
+import {
+    GUEST_REQUEST_KEY,
+    GUEST_RESULT_KEY,
+    GUEST_EXCLUDED_KEY,
+    GUEST_EXCLUDED_LIMIT
+} from "./guest-storage.js";
 
 // =====================================
 // 추천 결과 화면
 //   기본(#)   : TOP 3 추천 카드 + "이미 봤어요"
 //   #report   : 그룹 취향 분석 리포트 (Chart.js)
 // 두 화면은 같은 페이지 안에서 해시로 전환
+// ?guest=1 이면 비회원 결과: 로그인 없이 받고 서버에는 아무것도 저장하지 않음
 // =====================================
 
 // 시안 색상 (css/common.css 의 --grad 와 같은 계열)
@@ -17,7 +24,12 @@ const BAR_BOTTOM = '#7b3593';
 const CHART_FONT = "'Inter', 'Noto Sans KR', sans-serif";
 
 async function initResultPage() {
-    await requireLogin();
+    const params = new URLSearchParams(window.location.search);
+    const isGuest = params.get('guest') === '1';
+
+    if (!isGuest) {
+        await requireLogin();
+    }
 
     const app = document.getElementById('app');
 
@@ -30,17 +42,17 @@ async function initResultPage() {
         return acc;
     }, {});
 
-    // URL 쿼리 스트링에서 sessionId 추출
-    const sessionId = new URLSearchParams(window.location.search).get('sessionId');
+    // URL 쿼리 스트링에서 sessionId 추출 (비회원은 세션이 없음)
+    const sessionId = params.get('sessionId');
 
-    if (!sessionId) {
+    if (!isGuest && !sessionId) {
         alert('유효하지 않은 접근입니다. 세션 ID가 없습니다.');
         window.location.href = 'index.html';
         return;
     }
 
     // 다시 추천받기: 같은 인원수를 채워 둔 인원 선택 화면(index.html#count) 열기
-    const countParam = parseInt(new URLSearchParams(window.location.search).get('count'), 10);
+    const countParam = parseInt(params.get('count'), 10);
 
     if (countParam >= 2 && countParam <= 6) {
         setFlowCount(countParam);
@@ -49,9 +61,10 @@ async function initResultPage() {
     // 추천은 세션당 1회만 생성 가능(409 RECOMMENDATION_EXISTS)하므로
     // 성공 응답을 저장해 두었다가 새로고침 시 재사용
     // 사용자별로 저장해 같은 탭의 다른 계정에 보이지 않게 함
-    const { userId } = await getCurrentUser();
-    const CACHE_KEY = `recomate:result:${userId}:${sessionId}`;
-    const EXCLUDED_KEY = `recomate:excluded:${userId}:${sessionId}`;
+    // 비회원은 다시 부르면 TMDB를 또 호출하므로 같은 방식으로 이 탭에만 저장
+    const userId = isGuest ? null : (await getCurrentUser()).userId;
+    const CACHE_KEY = isGuest ? GUEST_RESULT_KEY : `recomate:result:${userId}:${sessionId}`;
+    const EXCLUDED_KEY = `recomate:excluded:${userId}:${sessionId}`; // 회원 전용
 
     const loadCache = () => {
         try {
@@ -83,12 +96,31 @@ async function initResultPage() {
     let excluding = false;      // "이미 봤어요" 제외 요청 진행 중 (중복 요청 방지)
     let seenError = '';         // 제외 요청 실패 안내
 
+    // 비회원 "이미 봤어요" 목록 [{ tmdbId, mediaType }]
+    // 서버에 기록하지 않고 이 탭에만 두며, 비회원 추천 요청마다 excluded 로 다시 보냄
+    const loadGuestExcluded = () => {
+        try {
+            const list = JSON.parse(sessionStorage.getItem(GUEST_EXCLUDED_KEY));
+            return Array.isArray(list) ? list : [];
+        } catch {
+            return [];
+        }
+    };
+
+    let guestExcluded = isGuest ? loadGuestExcluded() : [];
+
     // 지금까지 제외한 작품 수 (안내 문구용, 새로고침해도 유지)
-    let excludedCount = Number(sessionStorage.getItem(EXCLUDED_KEY)) || 0;
+    let excludedCount = isGuest
+        ? guestExcluded.length
+        : Number(sessionStorage.getItem(EXCLUDED_KEY)) || 0;
 
     const saveExcludedCount = () => {
         try {
-            sessionStorage.setItem(EXCLUDED_KEY, String(excludedCount));
+            if (isGuest) {
+                sessionStorage.setItem(GUEST_EXCLUDED_KEY, JSON.stringify(guestExcluded));
+            } else {
+                sessionStorage.setItem(EXCLUDED_KEY, String(excludedCount));
+            }
         } catch {
             /* 저장 실패는 무시 */
         }
@@ -223,6 +255,7 @@ async function initResultPage() {
                     <div class="panel wide">
                         <h3 tabindex="-1">그룹 맞춤 추천 결과</h3>
                         <p class="lead" id="result-lead">모든 참여자의 취향을 종합 분석하여 선정된 TOP 3 콘텐츠입니다</p>
+                        <p class="re-note guest-note" id="guest-note"${isGuest ? '' : ' hidden'}>로그인하지 않아 이 결과는 저장되지 않아요. <a href="login.html">로그인</a>하면 추천 기록이 남아요.</p>
                         <p class="re-note" id="seen-note" role="status" hidden></p>
                         <p class="re-note error" id="seen-error" role="alert" hidden></p>
                         <div id="recommendations-container"></div>
@@ -546,7 +579,44 @@ async function initResultPage() {
         show(saved, keepPosition);
     };
 
-    // POST /api/sessions/{sessionId}/exclusions
+    // POST /api/guest/recommendations
+    // 비회원 추천: 장르 선택 화면이 저장한 요청에 "이미 봤어요" 목록을 붙여 호출 (서버 저장 없음)
+    const requestGuest = async (excluded) => {
+        let payload = null;
+        try {
+            payload = JSON.parse(sessionStorage.getItem(GUEST_REQUEST_KEY));
+        } catch {
+            payload = null;
+        }
+
+        if (!payload?.participants?.length) {
+            throw new ApiError(0, 'GUEST_REQUEST_MISSING', '선택한 장르 정보가 없습니다. 처음부터 다시 선택해 주세요.');
+        }
+
+        const result = await publicFetch('/api/guest/recommendations', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ ...payload, excluded })
+        });
+
+        return {
+            recommendations: result.recommendations || [],
+            analysis: result.analysis || null
+        };
+    };
+
+    const guestErrorMessage = (error) => {
+        // API Gateway 호출 제한 (비회원 경로는 회원보다 낮음)
+        if (error instanceof ApiError && error.status === 429) {
+            return '요청이 많아 잠시 후 다시 시도해주세요.';
+        }
+        if (error instanceof ApiError && error.code === 'UPSTREAM_ERROR') {
+            return '콘텐츠 정보를 가져오지 못했습니다. 잠시 후 다시 시도해주세요.';
+        }
+        return error.message || '추천을 불러오지 못했습니다. 잠시 후 다시 시도해주세요.';
+    };
+
+    // POST /api/sessions/{sessionId}/exclusions (비회원은 POST /api/guest/recommendations)
     // "이미 봤어요": 작품 1개를 제외하고 다음 후보로 채운 새 결과를 받아 화면과 저장본을 교체
     // (제외 취소 API는 없으므로 한 번 누르면 되돌릴 수 없음)
     const excludeItem = async (button) => {
@@ -557,6 +627,13 @@ async function initResultPage() {
 
         if (!Number.isFinite(tmdbId) || !mediaType) return;
 
+        // 비회원 제외 목록은 서버가 받는 최대 개수까지만
+        if (isGuest && guestExcluded.length >= GUEST_EXCLUDED_LIMIT) {
+            seenError = '더 이상 제외할 수 없어요. 처음부터 다시 선택해 보세요.';
+            render(true);
+            return;
+        }
+
         excluding = true;
         seenError = '';
 
@@ -565,21 +642,29 @@ async function initResultPage() {
         button.textContent = '제외하는 중...';
 
         try {
-            const result = await apiFetch(
-                `/api/sessions/${encodeURIComponent(sessionId)}/exclusions`,
-                {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ tmdbId, mediaType })
-                }
-            );
+            const seen = { tmdbId, mediaType };
+            const result = isGuest
+                ? await requestGuest([...guestExcluded, seen])
+                : await apiFetch(
+                    `/api/sessions/${encodeURIComponent(sessionId)}/exclusions`,
+                    {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(seen)
+                    }
+                );
 
             const next = {
                 recommendations: result.recommendations || [],
                 analysis: result.analysis || null
             };
 
-            excludedCount += 1;
+            if (isGuest) {
+                guestExcluded = [...guestExcluded, seen];
+                excludedCount = guestExcluded.length;
+            } else {
+                excludedCount += 1;
+            }
             saveExcludedCount();
             replaceCache(next);
 
@@ -590,7 +675,9 @@ async function initResultPage() {
             console.error('제외 API 에러:', error);
             excluding = false;
 
-            if (error instanceof ApiError && error.code === 'VALIDATION_ERROR') {
+            if (isGuest) {
+                seenError = guestErrorMessage(error);
+            } else if (error instanceof ApiError && error.code === 'VALIDATION_ERROR') {
                 // 화면의 결과가 서버와 어긋난 경우: 서버에 저장된 최신 결과로 다시 표시
                 try {
                     seenError = '추천 결과가 바뀌어 최신 결과로 다시 불러왔어요.';
@@ -615,6 +702,21 @@ async function initResultPage() {
     const cached = loadCache();
     if (hasResults(cached)) {
         show(cached);
+        return;
+    }
+
+    if (isGuest) {
+        showMessage('추천 결과를 불러오는 중입니다...', true);
+
+        try {
+            const result = await requestGuest(guestExcluded);
+
+            saveCache(result);
+            show(result);
+        } catch (error) {
+            console.error('비회원 추천 API 에러:', error);
+            showMessage(guestErrorMessage(error));
+        }
         return;
     }
 

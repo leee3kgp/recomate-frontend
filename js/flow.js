@@ -4,10 +4,12 @@
 // - 시안처럼 페이지 이동 없이 #app 안의 화면만 교체
 // - 주소 해시(#guide, #count, #turn, #pick, #loading)로 단계를 표시
 // - 결과 화면(result.html)은 별도 페이지: 세션 생성 성공 후 이동
+//   (비회원은 세션 없이 result.html?guest=1 로 이동해 비회원 추천 API 사용)
 // =====================================
 
-import { requireLogin, apiFetch, ApiError } from "./api.js";
+import { isLoggedIn, apiFetch, ApiError } from "./api.js";
 import { GENRES, loadGenres } from "./genres.js";
+import { GUEST_REQUEST_KEY, GUEST_RESULT_KEY, GUEST_EXCLUDED_KEY } from "./guest-storage.js";
 import {
     MIN_PARTICIPANTS,
     MAX_PARTICIPANTS,
@@ -303,7 +305,7 @@ function render() {
     window.scrollTo(0, 0);
 }
 
-// ---------- 세션 생성 (기존 select.js 로직 유지) ----------
+// ---------- 세션 생성 (기존 select.js 로직 유지, 비회원은 결과 화면으로 바로 이동) ----------
 
 async function submitSession() {
     if (submitting) return; // 이중 제출 방지
@@ -327,6 +329,25 @@ async function submitSession() {
     let redirecting = false;
 
     try {
+        // 비회원: 세션을 만들지 않고 선택 내용만 이 탭에 저장, 결과 화면이 비회원 추천 API 호출
+        if (!(await isLoggedIn())) {
+            try {
+                sessionStorage.setItem(GUEST_REQUEST_KEY, JSON.stringify(requestPayload));
+                sessionStorage.removeItem(GUEST_RESULT_KEY);
+                sessionStorage.removeItem(GUEST_EXCLUDED_KEY);
+            } catch {
+                submitError = "브라우저 저장소를 사용할 수 없어 추천을 진행할 수 없습니다. 로그인 후 이용해주세요.";
+                return;
+            }
+
+            redirecting = true;
+            const participantCount = picks.length;
+
+            clearFlowPicks();
+            window.location.href = `result.html?guest=1&count=${participantCount}`;
+            return;
+        }
+
         // POST /api/sessions → 201 { sessionId, ... }
         const data = await apiFetch("/api/sessions", {
             method: "POST",
@@ -359,14 +380,12 @@ async function submitSession() {
     }
 }
 
-// 인원 선택 완료 → 로그인 확인 후 첫 번째 참여자 차례로
+// 인원 선택 완료 → 첫 번째 참여자 차례로 (비회원도 진행 가능)
 async function startSelection() {
     if (starting) return;
     starting = true;
 
     try {
-        await requireLogin(); // 미로그인 시 로그인 페이지로 이동
-
         setFlowCount(count);
         idx = 0;
         picks = Array.from({ length: count }, (_, i) => ({ index: i + 1, genres: [], like: [], dislike: [] }));
