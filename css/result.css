@@ -180,6 +180,18 @@
     color: #c9b27a;
 }
 
+/* 비회원 결과: 저장되지 않음 안내와 로그인 링크 */
+.flow-page .re-note.guest-note {
+    color: #b9a9a9;
+}
+
+.flow-page .re-note.guest-note a {
+    color: #f2f2f2;
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
 /* 불러오는 중 / 오류 / 결과 없음 */
 .flow-page .empty {
     padding: 60px 0;

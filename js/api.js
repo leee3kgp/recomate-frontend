@@ -25,6 +25,17 @@ export async function requireLogin() {
     }
 }
 
+// 비회원도 쓰는 화면(장르 선택·결과)에서 로그인 여부만 확인
+export async function isLoggedIn() {
+    try {
+        await getCurrentUser();
+        const session = await fetchAuthSession();
+        return Boolean(session.tokens?.idToken);
+    } catch {
+        return false;
+    }
+}
+
 async function getIdToken(forceRefresh = false) {
     const session = await fetchAuthSession({ forceRefresh });
     const idToken = session.tokens?.idToken?.toString();
@@ -60,8 +71,12 @@ async function send(path, options, forceRefresh) {
     const headers = new Headers(options.headers || {});
     headers.set("Authorization", `Bearer ${idToken}`);
 
+    return request(path, { ...options, headers });
+}
+
+async function request(path, options) {
     try {
-        return await fetch(`${API_BASE_URL}${path}`, { ...options, headers });
+        return await fetch(`${API_BASE_URL}${path}`, options);
     } catch (error) {
         // 호출한 쪽이 지정한 시간 제한은 그대로 전달
         if (error.name === "AbortError" || error.name === "TimeoutError") {
@@ -94,6 +109,19 @@ export async function apiFetch(path, options = {}) {
         }
     }
 
+    return readJson(response);
+}
+
+// ================================
+// 로그인 없이 부르는 공개 API (장르 목록, 비회원 추천)
+// - 토큰을 보내지 않음. 에러 형식은 apiFetch와 같음
+// ================================
+
+export async function publicFetch(path, options = {}) {
+    return readJson(await request(path, options));
+}
+
+async function readJson(response) {
     if (!response.ok) {
         // 게이트웨이 오류(502 등)는 JSON이 아닐 수 있음
         let code = "UNKNOWN_ERROR";

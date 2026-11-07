@@ -1,4 +1,4 @@
-import { apiFetch } from "./api.js";
+import { publicFetch } from "./api.js";
 
 // API 응답을 기다리는 최대 시간
 const LOAD_TIMEOUT_MS = 3000;
@@ -22,7 +22,8 @@ export const GENRES = [
 // 서버 목록을 가져오고, 실패하거나 늦으면 기본 목록 사용
 export async function loadGenres() {
     try {
-        const data = await apiFetch('/api/genres', {
+        // 공개 API라 비회원도 서버 목록을 받음
+        const data = await publicFetch('/api/genres', {
             signal: AbortSignal.timeout(LOAD_TIMEOUT_MS)
         });
 
