@@ -1,105 +1,44 @@
-
 <!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#08080d">
+    <meta name="theme-color" content="#141414">
 
-    <title>RecoMate 추천 결과</title>
+    <title>RecoMate | 추천 결과</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
 
     <!-- 공통 CSS -->
     <link rel="stylesheet" href="../css/common.css">
     <link rel="stylesheet" href="../css/navbar.css">
     <link rel="stylesheet" href="../css/background.css">
 
-    <!-- 추천 결과 전용 CSS -->
+    <!-- 시안 공통 레이아웃(.stage / .panel / .link-btn) + 추천 결과 전용 CSS -->
+    <link rel="stylesheet" href="../css/flow.css">
     <link rel="stylesheet" href="../css/result.css">
 
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
 </head>
 
-<body>
+<body class="flow-page" data-mode="flow">
 
-    <!-- 공통 네비게이션 삽입 위치 -->
+    <!-- 공통 네비게이션 -->
     <div id="navbar-container"></div>
 
-    <!-- 추천 결과 메인 -->
-    <main class="result-container">
-
-        <!-- 결과 헤더 -->
-        <section class="result-header">
-
-            <h2>그룹 맞춤 추천 결과</h2>
-
-            <p class="result-subtitle">
-                모든 참여자의 취향을 종합 분석하여 선정된 TOP 3 콘텐츠입니다.
-            </p>
-
-        </section>
-
-        <!-- TOP 3 추천 카드 -->
-        <section class="recommendations-section">
-
-            <div
-                id="recommendations-container"
-                class="recommendations-grid"
-            >
-                <!-- JS에서 추천 결과 생성 -->
-            </div>
-
-        </section>
-
-        <!-- 그룹 취향 분석 -->
-        <section class="analysis-section" hidden>
-
-            <h3 class="analysis-title">
-                그룹 취향 분석 리포트
-            </h3>
-
-            <div class="charts-container">
-
-                <div class="chart-box">
-
-                    <h4>장르 선호도 분포</h4>
-
-                    <canvas id="genreChart"></canvas>
-
-                </div>
-
-                <div class="chart-box">
-
-                    <h4>참여자별 취향 일치율</h4>
-
-                    <canvas id="matchChart"></canvas>
-
-                </div>
-
-            </div>
-
-        </section>
-
-        <!-- 하단 버튼 -->
-        <div class="result-actions">
-
-            <a
-                href="index.html"
-                class="secondary-btn"
-            >
-                홈으로 가기
-            </a>
-
-            <a
-                href="index.html#count"
-                class="primary-btn"
-            >
-                다시 추천받기
-            </a>
-
+    <!-- 원본 시안 배경 레이어 -->
+    <div class="fx" aria-hidden="true">
+        <div class="fxin">
+            <i></i>
         </div>
+    </div>
+    <div class="fxn" aria-hidden="true"></div>
 
-    </main>
+    <!-- TOP 3 결과(기본) / 취향 분석 리포트(#report) 화면은 js/result.js 가 이 안에 그림 -->
+    <main id="app"></main>
 
     <!-- 공통 네비게이션 생성 후 인증 상태 확인 -->
     <script type="module">
@@ -107,7 +46,6 @@
         import "../js/auth-ui.js";
     </script>
 
-    <!-- 기존 추천 결과 및 차트 기능 -->
     <script type="module" src="../js/result.js"></script>
 
 </body>

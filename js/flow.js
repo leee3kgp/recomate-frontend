@@ -26,8 +26,10 @@ const TYPES = [
     { code: "tv", name: "드라마" }
 ];
 
-// POST /api/sessions 의 참여자별 콘텐츠 종류 선호 필드명
+// 콘텐츠 종류 선호(시청하고 싶은 / 별로 안 끌리는)를 세션 생성 요청에 포함할지 여부
+// (명세에 없는 필드를 서버가 거부하면 세션 생성이 실패할 수 있음)
 // TODO: 백엔드 업데이트 후 수정 필요. 선택하지 않은 경우에는 필드를 보내지 않음
+const SEND_MEDIA_PREFERENCE = false;
 const PAYLOAD_LIKE_FIELD = "likeMediaTypes";
 const PAYLOAD_DISLIKE_FIELD = "dislikeMediaTypes";
 
@@ -311,14 +313,14 @@ async function submitSession() {
 
     go("loading", { replace: true });
 
-    // 콘텐츠 종류 선호는 선택한 경우에만 보냄 (미선택이면 기존 요청 형식과 동일)
+    // 기본은 명세 그대로 { index, genres }. 종류 선호는 SEND_MEDIA_PREFERENCE 가 켜져 있고, 선택한 경우에만 추가
     const requestPayload = {
         participantCount: picks.length,
         participants: picks.map(({ index, genres, like, dislike }) => ({
             index,
             genres,
-            ...(like.length && { [PAYLOAD_LIKE_FIELD]: like }),
-            ...(dislike.length && { [PAYLOAD_DISLIKE_FIELD]: dislike })
+            ...(SEND_MEDIA_PREFERENCE && like.length && { [PAYLOAD_LIKE_FIELD]: like }),
+            ...(SEND_MEDIA_PREFERENCE && dislike.length && { [PAYLOAD_DISLIKE_FIELD]: dislike })
         }))
     };
 
