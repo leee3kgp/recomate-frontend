@@ -3,37 +3,62 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
     <meta name="theme-color" content="#141414">
 
     <title>RecoMate | 이메일 인증</title>
 
+    <!-- 공통 글꼴 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+    <link
+        href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap"
+        rel="stylesheet"
+    >
+
+    <!-- 공통 디자인 시스템 -->
     <link rel="stylesheet" href="../css/common.css">
+    <link rel="stylesheet" href="../css/toast.css">
+
+    <!-- 기존 인증 화면 디자인 -->
     <link rel="stylesheet" href="../css/background.css">
     <link rel="stylesheet" href="../css/auth.css">
 
     <style>
         /* =========================================
-           이메일 인증 화면 - 원본 시안 스타일
+           RecoMate 이메일 인증
+           Issue #45
         ========================================= */
 
         .stage {
             position: relative;
             z-index: 1;
+
             min-height: 100vh;
+
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
+
             padding: 40px 20px;
         }
 
         .view {
-            width: 100%;
             display: flex;
             flex-direction: column;
             align-items: center;
-            animation: fade .45s ease both;
+
+            width: 100%;
+
+            animation: fade 0.45s ease both;
         }
 
         @keyframes fade {
@@ -48,7 +73,7 @@
             }
         }
 
-        /* 홈으로 돌아가기 */
+        /* ---------- 홈 버튼 ---------- */
 
         .back {
             position: fixed;
@@ -68,26 +93,32 @@
             border: 1px solid #2c2c2c;
             border-radius: 999px;
 
+            font-family: var(--font-main);
             font-size: 13px;
             text-decoration: none;
+
+            transition: border-color 150ms ease;
         }
 
         .back:hover {
             border-color: #777;
         }
 
-        /* 인증 카드 */
+        /* ---------- 인증 카드 ---------- */
 
         .auth {
             width: min(400px, 100%);
+
             padding: 34px clamp(22px, 9%, 38px) 30px;
 
-            background: var(--panel, #141414);
+            background: var(--panel);
             border: 1px solid #262626;
             border-radius: 10px;
 
-            box-shadow: 0 14px 50px rgba(0, 0, 0, .35);
-            animation: cardUp .55s cubic-bezier(.2, .7, .2, 1) both;
+            box-shadow: 0 14px 50px rgba(0, 0, 0, 0.35);
+
+            animation: cardUp 0.55s
+                cubic-bezier(0.2, 0.7, 0.2, 1) both;
         }
 
         @keyframes cardUp {
@@ -102,27 +133,29 @@
             }
         }
 
-        /* RecoMate 로고 */
+        /* ---------- 로고 ---------- */
 
         .brand {
             margin: 0;
-            text-align: center;
 
+            text-align: center;
             font-size: 34px;
             font-weight: 400;
-            letter-spacing: .5px;
+            letter-spacing: 0.5px;
             line-height: 1.2;
         }
 
         .brand a {
             background: var(--brand);
+
             -webkit-background-clip: text;
             background-clip: text;
+
             color: transparent;
             text-decoration: none;
         }
 
-        /* 회원가입 진행 단계 */
+        /* ---------- 진행 단계 ---------- */
 
         .steps {
             display: flex;
@@ -136,6 +169,7 @@
         .step-line {
             width: 27px;
             height: 4px;
+
             border-radius: 999px;
             background: #343434;
         }
@@ -146,14 +180,16 @@
 
         .step-label {
             margin-left: 5px;
+
             color: #999;
             font-size: 12px;
         }
 
-        /* 인증 제목 */
+        /* ---------- 인증 제목 ---------- */
 
         .verify-title {
             margin: 0 0 9px;
+
             color: #fff;
 
             font-size: 20px;
@@ -161,12 +197,13 @@
             text-align: center;
         }
 
-        /* 이메일 인증 안내 */
+        /* ---------- 이메일 안내 ---------- */
 
         .verify-info {
             margin: 0 0 26px;
 
             color: #aaa;
+
             font-size: 13px;
             line-height: 1.6;
             text-align: center;
@@ -178,7 +215,7 @@
             overflow-wrap: anywhere;
         }
 
-        /* 6자리 인증번호 입력 */
+        /* ---------- 6자리 인증번호 ---------- */
 
         .code-group {
             display: flex;
@@ -202,7 +239,7 @@
             background: #000;
             color: #fff;
 
-            font-family: inherit;
+            font-family: var(--font-main);
             font-size: 22px;
             font-weight: 600;
             text-align: center;
@@ -210,28 +247,32 @@
 
         .code-box:focus {
             border-color: #bc5ca6;
-            box-shadow: 0 0 0 2px rgba(188, 92, 166, .15);
+            box-shadow:
+                0 0 0 2px rgba(188, 92, 166, 0.15);
         }
 
-        /* 기존 Cognito JS와 연결되는 실제 입력 */
+        /* ---------- Cognito 연동 입력 ---------- */
 
         #verificationCode {
             position: absolute;
+
             width: 1px;
             height: 1px;
             padding: 0;
+
             border: 0;
             opacity: 0;
             pointer-events: none;
         }
 
-        /* 인증 결과 메시지 */
+        /* ---------- 인증 결과 ---------- */
 
         .verify-message {
             min-height: 18px;
             margin: 0 0 8px;
 
             color: #aaa;
+
             font-size: 12px;
             text-align: center;
         }
@@ -244,44 +285,48 @@
             color: #ff7777;
         }
 
-        /* 인증 버튼 */
+        /* ---------- 인증 완료 버튼 ---------- */
 
-        .btn {
-            display: block;
+        .auth .btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
             width: 100%;
             height: 42px;
 
             margin: 0;
-            padding: 0;
+            padding: 0 16px;
 
             border: 0;
-            border-radius: var(--r, 8px);
+            border-radius: var(--r);
 
             background: var(--brand);
             color: #fff;
 
-            font-family: inherit;
+            font-family: var(--font-main);
             font-size: 15px;
             font-weight: 600;
 
             cursor: pointer;
-            transition: filter .15s;
+            transition: filter 150ms ease;
         }
 
-        .btn:hover:not(:disabled) {
+        .auth .btn:hover:not(:disabled) {
             filter: brightness(1.12);
         }
 
-        .btn:disabled {
+        .auth .btn:disabled {
             background: #2a2a2a;
             color: #8a8a8a;
             cursor: not-allowed;
         }
 
-        /* 인증번호 재발송 */
+        /* ---------- 인증번호 재발송 ---------- */
 
         .resend-button {
             display: block;
+
             margin: 18px auto 0;
             padding: 4px 8px;
 
@@ -289,10 +334,11 @@
             background: transparent;
 
             color: #999;
-            font-family: inherit;
-            font-size: 13px;
 
+            font-family: var(--font-main);
+            font-size: 13px;
             text-align: center;
+
             cursor: pointer;
         }
 
@@ -305,7 +351,7 @@
             cursor: default;
         }
 
-        /* 모바일 반응형 */
+        /* ---------- 모바일 ---------- */
 
         @media (max-width: 560px) {
             .stage {
@@ -336,17 +382,27 @@
                 font-size: 20px;
             }
         }
+
+        /* ---------- 모션 접근성 ---------- */
+
+        @media (prefers-reduced-motion: reduce) {
+            .view,
+            .auth {
+                animation: none;
+            }
+        }
     </style>
 </head>
 
 <body class="verify-page" data-mode="auth">
 
-    <!-- 원본 시안 배경 -->
+    <!-- 기존 그라데이션 배경 -->
     <div class="fx" aria-hidden="true">
         <div class="fxin">
             <i></i>
         </div>
     </div>
+
     <div class="fxn" aria-hidden="true"></div>
 
     <main>
@@ -362,36 +418,41 @@
                 <section class="auth">
 
                     <h1 class="brand">
-                        <a href="index.html">RecoMate</a>
+                        <a href="index.html">
+                            RecoMate
+                        </a>
                     </h1>
 
-                    <!-- 진행 단계 2 / 2 -->
-                    <div class="steps" aria-label="회원가입 2단계 / 2단계">
+                    <!-- 회원가입 2단계 -->
+                    <div
+                        class="steps"
+                        aria-label="회원가입 2단계 / 2단계"
+                    >
                         <span class="step-line active"></span>
                         <span class="step-line active"></span>
                         <span class="step-label">2 / 2</span>
                     </div>
 
-                    <!-- 이메일 인증 제목 -->
                     <h2 class="verify-title">
                         이메일 인증
                     </h2>
 
-                    <!-- 인증 안내 -->
                     <p class="verify-info">
                         <span
                             id="verificationEmail"
                             class="verify-email-text"
-                        ></span>로 발송된<br>
+                        ></span>로 발송된
                         인증번호를 입력하세요
                     </p>
 
-                    <!-- 이메일 인증 폼 -->
+                    <!-- 인증 폼 -->
                     <form id="verifyForm">
 
-                        <!-- 6자리 인증번호 -->
-                        <div class="code-group" id="verifyCodeGroup">
-
+                        <!-- 6자리 인증번호 입력 -->
+                        <div
+                            class="code-group"
+                            id="verifyCodeGroup"
+                        >
                             <input
                                 class="code-box verify-code-box"
                                 type="text"
@@ -439,10 +500,9 @@
                                 maxlength="1"
                                 aria-label="인증번호 여섯 번째 자리"
                             >
-
                         </div>
 
-                        <!-- 기존 Cognito 인증용 입력 -->
+                        <!-- 기존 Cognito 연동 입력 -->
                         <input
                             type="text"
                             id="verificationCode"
@@ -455,7 +515,7 @@
                             aria-label="전체 인증번호"
                         >
 
-                        <!-- 인증 결과 -->
+                        <!-- 인증 결과 메시지 -->
                         <div
                             id="verifyMessage"
                             class="verify-message"
@@ -489,7 +549,7 @@
         </section>
     </main>
 
-    <!-- 인증번호 입력 UI 연동 -->
+    <!-- 6자리 인증번호 UI 연동 -->
     <script>
         const codeBoxes = Array.from(
             document.querySelectorAll(".verify-code-box")
@@ -503,7 +563,7 @@
 
         function updateVerificationCode() {
             const code = codeBoxes
-                .map(box => box.value)
+                .map((box) => box.value)
                 .join("");
 
             verificationCode.value = code;
@@ -517,18 +577,23 @@
 
         codeBoxes.forEach((box, index) => {
 
+            // 숫자 입력 및 자동 이동
             box.addEventListener("input", () => {
                 const digits = box.value.replace(/\D/g, "");
 
                 box.value = digits.slice(-1);
 
-                if (box.value && index < codeBoxes.length - 1) {
+                if (
+                    box.value &&
+                    index < codeBoxes.length - 1
+                ) {
                     codeBoxes[index + 1].focus();
                 }
 
                 updateVerificationCode();
             });
 
+            // 백스페이스 / 방향키 이동
             box.addEventListener("keydown", (event) => {
 
                 if (
@@ -539,7 +604,10 @@
                     codeBoxes[index - 1].focus();
                 }
 
-                if (event.key === "ArrowLeft" && index > 0) {
+                if (
+                    event.key === "ArrowLeft" &&
+                    index > 0
+                ) {
                     event.preventDefault();
                     codeBoxes[index - 1].focus();
                 }
@@ -553,6 +621,7 @@
                 }
             });
 
+            // 인증번호 전체 붙여넣기
             box.addEventListener("paste", (event) => {
                 event.preventDefault();
 
@@ -578,6 +647,7 @@
             });
         });
 
+        // Cognito 입력값이 변경되면 화면에 반영
         verificationCode.addEventListener("input", () => {
             const digits = verificationCode.value
                 .replace(/\D/g, "")
@@ -591,7 +661,7 @@
         });
     </script>
 
-    <!-- 기존 AWS Cognito 이메일 인증 기능 -->
+    <!-- 기존 AWS Cognito 이메일 인증 -->
     <script
         type="module"
         src="../js/verify-email.js"
