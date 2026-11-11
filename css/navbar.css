@@ -1,15 +1,15 @@
 
 /* =========================================
    RecoMate - 공통 네비게이션
-   원본 recomate.html 시안 기준
+   Issue #45
 ========================================= */
 
-/* ---------- 네비게이션 ---------- */
+/* ---------- 기본 네비게이션 ---------- */
 
 .nav-bar {
     position: sticky;
     top: 0;
-    z-index: 20;
+    z-index: 100;
 
     display: flex;
     align-items: center;
@@ -23,33 +23,29 @@
     border: 0;
 }
 
-/* ---------- RecoMate 로고 ---------- */
+/* ---------- 로고 ---------- */
 
 .nav-bar .logo {
     flex-shrink: 0;
-
     margin: 0;
     padding: 0;
 
-    border: 0;
-    background: linear-gradient(90deg, #9b3fb5, #e57a14);
-
-    -webkit-background-clip: text;
+    background: var(--brand);
     background-clip: text;
+    -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 
     font-family: var(--font-main);
     font-size: 25px;
     font-weight: 400;
-    letter-spacing: .5px;
+    letter-spacing: 0.5px;
     line-height: 1.3;
 
     text-decoration: none;
     white-space: nowrap;
-    cursor: pointer;
 }
 
-/* ---------- 메뉴 배치 ---------- */
+/* ---------- 메뉴 영역 ---------- */
 
 .nav-links,
 .nav-actions {
@@ -72,10 +68,8 @@
     padding: 6px 0;
 
     border: 0;
-    border-radius: 0;
-
-    background: none;
-    color: var(--text, #f2f2f2);
+    background: transparent;
+    color: var(--text);
 
     font-family: var(--font-main);
     font-size: 15px;
@@ -84,29 +78,28 @@
 
     text-decoration: none;
     white-space: nowrap;
-    cursor: pointer;
 
-    transition: opacity .15s ease;
+    transition: opacity 150ms ease;
 }
 
 .nav-bar .nav-btn:hover {
-    opacity: .75;
+    opacity: 0.75;
 }
 
 .nav-bar .nav-active {
-    color: var(--text, #f2f2f2);
+    color: var(--text);
 }
 
 /* ---------- 준비 중인 메뉴 ---------- */
 
 .nav-bar .nav-btn-disabled {
-    color: var(--text, #f2f2f2);
-    opacity: 1;
+    color: var(--text);
+    opacity: 0.7;
     cursor: default;
 }
 
 .nav-bar .nav-btn-disabled:hover {
-    opacity: .75;
+    opacity: 0.7;
 }
 
 /* ---------- 로그인 / 로그아웃 ---------- */
@@ -115,16 +108,11 @@
     min-width: auto;
     padding: 6px 0;
 
-    border: 0;
-    background: none;
+    background: transparent;
+    color: var(--text);
 
-    color: var(--text, #f2f2f2);
     font-size: 15px;
     font-weight: 400;
-}
-
-.nav-bar .nav-login:hover {
-    opacity: .75;
 }
 
 /* ---------- 검색 아이콘 ---------- */
@@ -138,11 +126,7 @@
     height: 22px;
     padding: 0;
 
-    border: 0;
-    background: none;
-
     color: #ffffff;
-    cursor: pointer;
 }
 
 .nav-bar .nav-search-icon svg {
@@ -157,11 +141,45 @@
     stroke-linejoin: round;
 }
 
-.nav-bar .nav-search-icon:hover {
-    opacity: .75;
+/* ---------- 모바일 메뉴 버튼 ---------- */
+
+.nav-menu-toggle {
+    display: none;
+    align-items: center;
+    justify-content: center;
+
+    width: 38px;
+    height: 38px;
+    padding: 7px;
+
+    margin-left: auto;
+
+    border: 1px solid var(--line);
+    border-radius: 8px;
+
+    background: #222222;
+    color: var(--text);
+
+    cursor: pointer;
 }
 
-/* ---------- 태블릿 반응형 ---------- */
+.nav-menu-toggle svg {
+    width: 22px;
+    height: 22px;
+
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+}
+
+/* ---------- 모바일 메뉴 패널 ---------- */
+
+.nav-mobile-panel {
+    display: none;
+}
+
+/* ---------- 태블릿 ---------- */
 
 @media (max-width: 860px) {
     .nav-bar {
@@ -178,7 +196,7 @@
     }
 }
 
-/* ---------- 모바일 반응형 ---------- */
+/* ---------- 모바일 ---------- */
 
 @media (max-width: 560px) {
     .nav-bar {
@@ -192,17 +210,76 @@
 
     .nav-links,
     .nav-actions {
-        gap: 12px;
+        display: none;
     }
 
-    .nav-bar .nav-btn,
-    .nav-bar .nav-login {
-        font-size: 12px;
+    .nav-menu-toggle {
+        display: inline-flex;
     }
 
-    .nav-bar .nav-search-icon,
-    .nav-bar .nav-search-icon svg {
-        width: 19px;
-        height: 19px;
+    .nav-mobile-panel {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+
+        display: none;
+        flex-direction: column;
+        gap: 0;
+
+        padding: 8px 16px 16px;
+
+        background: #181818;
+        border-bottom: 1px solid var(--line);
+
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
+    }
+
+    .nav-mobile-panel.is-open {
+        display: flex;
+    }
+
+    .nav-mobile-panel .nav-btn {
+        display: flex;
+        justify-content: flex-start;
+
+        width: 100%;
+        min-height: 44px;
+        padding: 10px 12px;
+
+        border-radius: 6px;
+
+        font-size: 14px;
+    }
+
+    .nav-mobile-panel .nav-btn:hover {
+        background: rgba(255, 255, 255, 0.06);
+    }
+
+    .nav-mobile-panel .nav-active {
+        background: rgba(123, 53, 147, 0.15);
+    }
+
+    .nav-mobile-panel .nav-btn-disabled {
+        opacity: 0.5;
+    }
+
+    .nav-mobile-panel .nav-login {
+        font-size: 14px;
+    }
+
+    .nav-mobile-panel .nav-mobile-divider {
+        height: 1px;
+        margin: 6px 0;
+
+        background: var(--line);
+    }
+}
+
+/* ---------- 모션 접근성 ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+    .nav-bar .nav-btn {
+        transition: none;
     }
 }

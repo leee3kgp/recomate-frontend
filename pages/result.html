@@ -1,27 +1,97 @@
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
     <meta name="theme-color" content="#141414">
 
     <title>RecoMate | 추천 결과</title>
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <!-- 공통 글꼴 -->
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+    <link
+        href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap"
+        rel="stylesheet"
+    >
 
-    <!-- 공통 CSS -->
+    <!-- 공통 디자인 시스템 -->
     <link rel="stylesheet" href="../css/common.css">
     <link rel="stylesheet" href="../css/navbar.css">
+    <link rel="stylesheet" href="../css/footer.css">
+    <link rel="stylesheet" href="../css/toast.css">
+
+    <!-- 기존 배경 -->
     <link rel="stylesheet" href="../css/background.css">
 
-    <!-- 시안 공통 레이아웃(.stage / .panel / .link-btn) + 추천 결과 전용 CSS -->
+    <!-- 기존 추천 진행 / 결과 디자인 -->
     <link rel="stylesheet" href="../css/flow.css">
     <link rel="stylesheet" href="../css/result.css">
 
-    <!-- Chart.js -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+    <!-- Chart.js: 기존 버전 유지 -->
+    <script
+        src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"
+    ></script>
+
+    <style>
+        /* =========================================
+           RecoMate 추천 결과
+           Issue #45 공통 디자인 연결
+        ========================================= */
+
+        .flow-page[data-mode="flow"] {
+            min-height: 100vh;
+        }
+
+        /* 추천 결과 및 취향 분석 영역 */
+        .flow-page[data-mode="flow"] #app {
+            position: relative;
+            z-index: 1;
+
+            min-height: calc(
+                100vh - var(--nav-h, 58px)
+            );
+        }
+
+        /* 기존 결과 화면의 버튼과 입력 요소에 공통 글꼴 적용 */
+        .flow-page[data-mode="flow"] button,
+        .flow-page[data-mode="flow"] input,
+        .flow-page[data-mode="flow"] select,
+        .flow-page[data-mode="flow"] textarea {
+            font-family: var(--font-main);
+        }
+
+        /* 키보드 접근성 */
+        .flow-page[data-mode="flow"] button:focus-visible,
+        .flow-page[data-mode="flow"] a:focus-visible {
+            outline: 2px solid #e57a14;
+            outline-offset: 3px;
+        }
+
+        /* 공통 푸터 */
+        .flow-page[data-mode="flow"] #site-footer {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* 작은 화면에서 결과 콘텐츠 넘침 방지 */
+        @media (max-width: 560px) {
+            .flow-page[data-mode="flow"] #app {
+                min-width: 0;
+            }
+        }
+    </style>
 </head>
 
 <body class="flow-page" data-mode="flow">
@@ -29,24 +99,38 @@
     <!-- 공통 네비게이션 -->
     <div id="navbar-container"></div>
 
-    <!-- 원본 시안 배경 레이어 -->
+    <!-- 기존 그라데이션 배경 -->
     <div class="fx" aria-hidden="true">
         <div class="fxin">
             <i></i>
         </div>
     </div>
+
     <div class="fxn" aria-hidden="true"></div>
 
-    <!-- TOP 3 결과(기본) / 취향 분석 리포트(#report) 화면은 js/result.js 가 이 안에 그림 -->
+    <!--
+        기존 TOP 3 추천 결과 및 취향 분석 리포트
+
+        js/result.js에서 이 영역에
+        추천 결과와 차트를 렌더링함
+    -->
     <main id="app"></main>
 
-    <!-- 공통 네비게이션 생성 후 인증 상태 확인 -->
+    <!-- 공통 푸터 -->
+    <footer id="site-footer"></footer>
+
+    <!-- 공통 네비게이션 / 인증 / 푸터 -->
     <script type="module">
         import "../js/navbar.js";
         import "../js/auth-ui.js";
+        import "../js/footer.js";
     </script>
 
-    <script type="module" src="../js/result.js"></script>
+    <!-- 기존 추천 결과 API 및 차트 기능 -->
+    <script
+        type="module"
+        src="../js/result.js"
+    ></script>
 
 </body>
 </html>

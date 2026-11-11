@@ -1,0 +1,92 @@
+
+/* =========================================
+   RecoMate - 공통 푸터
+   Issue #45
+   제공된 styles.css 시안 기준
+========================================= */
+
+.site-footer {
+    width: 100%;
+
+    padding: 32px 0 40px;
+
+    background: #0b0b0b;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+
+    color: #8d8d8d;
+    font-family: var(--font-main);
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+.site-footer .container {
+    width: min(100% - 32px, 1160px);
+    margin-inline: auto;
+
+    display: grid;
+    gap: 16px;
+}
+
+/* ---------- 푸터 링크 ---------- */
+
+.footer-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 18px;
+}
+
+.footer-links a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.footer-links a:hover {
+    color: #f2f2f2;
+}
+
+.footer-links b {
+    color: #c9c4c4;
+}
+
+/* ---------- 서비스 정보 ---------- */
+
+.footer-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 16px;
+    align-items: center;
+}
+
+/* ---------- 안내 문구 ---------- */
+
+.footer-note {
+    font-size: 12px;
+    line-height: 1.7;
+}
+
+/* ---------- 크레딧 ---------- */
+
+.footer-credit {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+}
+
+.footer-credit > a {
+    flex: none;
+}
+
+.footer-credit img {
+    width: 96px;
+    height: auto;
+    margin-top: 4px;
+}
+
+/* ---------- 모바일 ---------- */
+
+@media (max-width: 600px) {
+    .footer-credit {
+        flex-direction: column;
+        gap: 8px;
+    }
+}
