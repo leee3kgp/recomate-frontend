@@ -11,7 +11,6 @@
 
     <title>RecoMate | 회원가입</title>
 
-    <!-- 공통 글꼴 -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link
         rel="preconnect"
@@ -23,41 +22,33 @@
         rel="stylesheet"
     >
 
-    <!-- 공통 디자인 시스템 -->
     <link rel="stylesheet" href="../css/common.css">
     <link rel="stylesheet" href="../css/toast.css">
-
-    <!-- 기존 인증 화면 디자인 -->
     <link rel="stylesheet" href="../css/background.css">
     <link rel="stylesheet" href="../css/auth.css">
 
     <style>
         /* =========================================
            RecoMate 회원가입
-           Issue #45
+           기존 디자인 + 필수 약관 동의
         ========================================= */
 
         .stage {
             position: relative;
             z-index: 1;
-
             min-height: 100vh;
-
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-
             padding: 40px 20px;
         }
 
         .view {
             width: 100%;
-
             display: flex;
             flex-direction: column;
             align-items: center;
-
             animation: fade 0.45s ease both;
         }
 
@@ -73,30 +64,24 @@
             }
         }
 
-        /* ---------- 홈 버튼 ---------- */
+        /* 홈 버튼 */
 
         .back {
             position: fixed;
             top: 22px;
             left: 26px;
             z-index: 5;
-
             display: inline-flex;
             align-items: center;
             gap: 6px;
-
             padding: 7px 14px 7px 10px;
-
             background: #141414;
             color: #e8e8e8;
-
             border: 1px solid #2c2c2c;
             border-radius: 999px;
-
             font-family: var(--font-main);
             font-size: 13px;
             text-decoration: none;
-
             transition: border-color 150ms ease;
         }
 
@@ -104,19 +89,15 @@
             border-color: #777;
         }
 
-        /* ---------- 회원가입 카드 ---------- */
+        /* 회원가입 카드 */
 
         .auth {
             width: min(400px, 100%);
-
             padding: 28px clamp(22px, 9%, 38px) 24px;
-
             background: var(--panel);
             border: 1px solid #262626;
             border-radius: 10px;
-
             box-shadow: 0 14px 50px rgba(0, 0, 0, 0.35);
-
             animation: cardUp 0.55s
                 cubic-bezier(0.2, 0.7, 0.2, 1) both;
         }
@@ -133,11 +114,10 @@
             }
         }
 
-        /* ---------- 로고 ---------- */
+        /* 로고 */
 
         .brand {
             margin: 0;
-
             text-align: center;
             font-size: 34px;
             font-weight: 400;
@@ -147,29 +127,25 @@
 
         .brand a {
             background: var(--brand);
-
             -webkit-background-clip: text;
             background-clip: text;
-
             color: transparent;
             text-decoration: none;
         }
 
-        /* ---------- 진행 단계 ---------- */
+        /* 진행 단계 */
 
         .steps {
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 9px;
-
             margin: 10px 0 22px;
         }
 
         .step-line {
             width: 27px;
             height: 4px;
-
             border-radius: 999px;
             background: #343434;
         }
@@ -180,12 +156,11 @@
 
         .step-label {
             margin-left: 5px;
-
             color: #999;
             font-size: 12px;
         }
 
-        /* ---------- 입력 그룹 ---------- */
+        /* 입력 그룹 */
 
         .fg {
             margin-bottom: 13px;
@@ -194,7 +169,6 @@
         .fg label {
             display: block;
             margin: 0 0 6px 2px;
-
             color: #bdbdbd;
             font-size: 12px;
             font-weight: 400;
@@ -202,22 +176,16 @@
 
         .field {
             display: block;
-
             width: 100%;
             height: 42px;
-
             padding: 0 13px;
-
             background: #000;
             color: #ececec;
-
             border: 1px solid #2c2c2c;
             border-radius: var(--r);
             outline: none;
-
             font-family: var(--font-main);
             font-size: 14px;
-
             transition: border-color 150ms ease;
         }
 
@@ -231,13 +199,12 @@
 
         .field:focus {
             border-color: transparent;
-
             background:
                 linear-gradient(#000, #000) padding-box,
                 var(--brand) border-box;
         }
 
-        /* ---------- 비밀번호 입력 ---------- */
+        /* 비밀번호 */
 
         .pw {
             position: relative;
@@ -251,21 +218,15 @@
             position: absolute;
             right: 8px;
             top: 50%;
-
             transform: translateY(-50%);
-
             display: grid;
             place-items: center;
-
             width: 30px;
             height: 30px;
-
             padding: 0;
-
             background: none;
             border: 0;
             border-radius: 6px;
-
             color: #8d8d8d;
             cursor: pointer;
         }
@@ -277,7 +238,6 @@
         .eye svg {
             width: 18px;
             height: 18px;
-
             fill: none;
             stroke: currentColor;
             stroke-width: 1.8;
@@ -285,13 +245,12 @@
             stroke-linejoin: round;
         }
 
-        /* ---------- 비밀번호 조건 ---------- */
+        /* 비밀번호 조건 */
 
         .password-rules {
             display: flex;
             flex-wrap: wrap;
             gap: 5px 9px;
-
             margin-top: 8px;
             font-size: 11px;
         }
@@ -313,7 +272,6 @@
         .password-message,
         .signup-message {
             margin: 0;
-
             font-size: 12px;
             line-height: 1.5;
         }
@@ -339,29 +297,110 @@
             text-align: center;
         }
 
-        /* ---------- 회원가입 버튼 ---------- */
+        /* =========================================
+           약관 동의 영역
+        ========================================= */
+
+        .agreement {
+            margin-top: 20px;
+            padding-top: 16px;
+            border-top: 1px solid #303030;
+        }
+
+        .agreement-all {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #292929;
+        }
+
+        .agreement-all label {
+            color: #eee;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .agreement-items {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            padding-top: 14px;
+        }
+
+        .agreement-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+        }
+
+        .agreement-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            min-width: 0;
+            color: #bdbdbd;
+            font-size: 12px;
+            cursor: pointer;
+        }
+
+        .agreement input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+            margin: 0;
+            flex-shrink: 0;
+            accent-color: #ad548c;
+            cursor: pointer;
+        }
+
+        .agreement-required {
+            color: #e0a4d9;
+            font-size: 11px;
+        }
+
+        .agreement-link {
+            flex-shrink: 0;
+            color: #999;
+            font-size: 11px;
+            text-decoration: underline;
+            text-underline-offset: 3px;
+        }
+
+        .agreement-link:hover {
+            color: #fff;
+        }
+
+        .agreement-message {
+            min-height: 0;
+            margin: 0;
+            color: #ef8181;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        .agreement-message:not(:empty) {
+            margin-top: 10px;
+        }
+
+        /* 회원가입 버튼 */
 
         .auth .btn {
             display: flex;
             align-items: center;
             justify-content: center;
-
             width: 100%;
             height: 42px;
-
             margin-top: 18px;
             padding: 0 16px;
-
             border: 0;
             border-radius: var(--r);
-
             background: var(--brand);
             color: #fff;
-
             font-family: var(--font-main);
             font-size: 15px;
             font-weight: 600;
-
             cursor: pointer;
             transition: filter 150ms ease;
         }
@@ -376,7 +415,7 @@
             cursor: not-allowed;
         }
 
-        /* ---------- 로그인 링크 ---------- */
+        /* 로그인 링크 */
 
         .alt {
             display: flex;
@@ -387,7 +426,6 @@
         .text-link {
             color: #a8a8a8;
             font-size: 13px;
-
             text-decoration: underline;
             text-underline-offset: 4px;
         }
@@ -396,7 +434,7 @@
             color: #fff;
         }
 
-        /* ---------- 모바일 ---------- */
+        /* 모바일 */
 
         @media (max-width: 560px) {
             .stage {
@@ -423,8 +461,6 @@
             }
         }
 
-        /* ---------- 모션 접근성 ---------- */
-
         @media (prefers-reduced-motion: reduce) {
             .view,
             .auth {
@@ -436,7 +472,6 @@
 
 <body class="signup-page" data-mode="auth">
 
-    <!-- 기존 그라데이션 배경 -->
     <div class="fx" aria-hidden="true">
         <div class="fxin">
             <i></i>
@@ -449,12 +484,10 @@
         <section class="stage">
             <div class="view">
 
-                <!-- 홈으로 돌아가기 -->
                 <a href="index.html" class="back">
                     ← 홈
                 </a>
 
-                <!-- 회원가입 카드 -->
                 <section class="auth">
 
                     <h1 class="brand">
@@ -463,7 +496,6 @@
                         </a>
                     </h1>
 
-                    <!-- 진행 단계 -->
                     <div
                         class="steps"
                         aria-label="회원가입 1단계 / 2단계"
@@ -535,52 +567,30 @@
                                     aria-label="비밀번호 표시"
                                     aria-pressed="false"
                                 >
-                                    <svg
-                                        viewBox="0 0 24 24"
-                                        aria-hidden="true"
-                                    >
-                                        <path
-                                            d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12z"
-                                        ></path>
-                                        <circle
-                                            cx="12"
-                                            cy="12"
-                                            r="3"
-                                        ></circle>
+                                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                                        <path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12z"></path>
+                                        <circle cx="12" cy="12" r="3"></circle>
                                     </svg>
                                 </button>
                             </div>
 
-                            <!-- 비밀번호 조건 -->
                             <div
                                 class="password-rules"
                                 id="passwordRules"
                             >
-                                <span
-                                    id="ruleLength"
-                                    class="password-rule"
-                                >
+                                <span id="ruleLength" class="password-rule">
                                     ○ 12자 이상
                                 </span>
 
-                                <span
-                                    id="ruleLowercase"
-                                    class="password-rule"
-                                >
+                                <span id="ruleLowercase" class="password-rule">
                                     ○ 소문자 포함
                                 </span>
 
-                                <span
-                                    id="ruleNumber"
-                                    class="password-rule"
-                                >
+                                <span id="ruleNumber" class="password-rule">
                                     ○ 숫자 포함
                                 </span>
 
-                                <span
-                                    id="ruleSpecial"
-                                    class="password-rule"
-                                >
+                                <span id="ruleSpecial" class="password-rule">
                                     ○ 특수문자 포함
                                 </span>
                             </div>
@@ -617,18 +627,9 @@
                                     aria-label="비밀번호 확인 표시"
                                     aria-pressed="false"
                                 >
-                                    <svg
-                                        viewBox="0 0 24 24"
-                                        aria-hidden="true"
-                                    >
-                                        <path
-                                            d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12z"
-                                        ></path>
-                                        <circle
-                                            cx="12"
-                                            cy="12"
-                                            r="3"
-                                        ></circle>
+                                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                                        <path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12z"></path>
+                                        <circle cx="12" cy="12" r="3"></circle>
                                     </svg>
                                 </button>
                             </div>
@@ -638,6 +639,91 @@
                                 class="password-message"
                                 aria-live="polite"
                             ></div>
+                        </div>
+
+                        <!-- 약관 동의 -->
+                        <div class="agreement">
+
+                            <div class="agreement-all">
+                                <input
+                                    type="checkbox"
+                                    id="agreeAll"
+                                >
+
+                                <label for="agreeAll">
+                                    전체 동의
+                                </label>
+                            </div>
+
+                            <div class="agreement-items">
+
+                                <div class="agreement-row">
+                                    <label
+                                        class="agreement-label"
+                                        for="agreeTerms"
+                                    >
+                                        <input
+                                            type="checkbox"
+                                            id="agreeTerms"
+                                            name="agreeTerms"
+                                        >
+
+                                        <span>
+                                            이용약관 동의
+                                            <span class="agreement-required">
+                                                (필수)
+                                            </span>
+                                        </span>
+                                    </label>
+
+                                    <a
+                                        class="agreement-link"
+                                        href="terms.html"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                    >
+                                        보기
+                                    </a>
+                                </div>
+
+                                <div class="agreement-row">
+                                    <label
+                                        class="agreement-label"
+                                        for="agreePrivacy"
+                                    >
+                                        <input
+                                            type="checkbox"
+                                            id="agreePrivacy"
+                                            name="agreePrivacy"
+                                        >
+
+                                        <span>
+                                            개인정보 수집·이용 동의
+                                            <span class="agreement-required">
+                                                (필수)
+                                            </span>
+                                        </span>
+                                    </label>
+
+                                    <a
+                                        class="agreement-link"
+                                        href="privacy.html"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                    >
+                                        보기
+                                    </a>
+                                </div>
+
+                            </div>
+
+                            <p
+                                id="agreementMessage"
+                                class="agreement-message"
+                                role="status"
+                                aria-live="polite"
+                            ></p>
+
                         </div>
 
                         <!-- 회원가입 결과 -->
@@ -658,7 +744,6 @@
 
                     </form>
 
-                    <!-- 로그인으로 돌아가기 -->
                     <div class="alt">
                         <a
                             href="login.html"
@@ -673,13 +758,11 @@
         </section>
     </main>
 
-    <!-- 기존 AWS Cognito 회원가입 기능 -->
     <script
         type="module"
         src="../js/signup.js"
     ></script>
 
-    <!-- 비밀번호 표시 / 숨기기 -->
     <script>
         document.querySelectorAll(".password-toggle")
             .forEach((button) => {
@@ -690,11 +773,11 @@
 
                     if (!input) return;
 
-                    const visible =
-                        input.type === "password";
+                    const visible = input.type === "password";
 
-                    input.type =
-                        visible ? "text" : "password";
+                    input.type = visible
+                        ? "text"
+                        : "password";
 
                     button.setAttribute(
                         "aria-pressed",

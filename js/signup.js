@@ -3,7 +3,10 @@ import "./cognito-config.js";
 
 import { signUp } from "aws-amplify/auth";
 
-import { limitNicknameLength, NICKNAME_MAX_LENGTH } from "./nickname-input.js";
+import {
+    limitNicknameLength,
+    NICKNAME_MAX_LENGTH
+} from "./nickname-input.js";
 
 // ================================
 // HTML 요소
@@ -13,6 +16,7 @@ const signupForm = document.getElementById("signupForm");
 
 const nicknameInput = document.getElementById("nickname");
 limitNicknameLength(nicknameInput);
+
 const userIdInput = document.getElementById("userId");
 
 const passwordInput = document.getElementById("password");
@@ -31,11 +35,19 @@ const signupMessage =
 const signupButton =
     document.getElementById("signupButton");
 
-// 조건 표시 요소
+// 비밀번호 조건 표시
 const ruleLength = document.getElementById("ruleLength");
 const ruleLowercase = document.getElementById("ruleLowercase");
 const ruleNumber = document.getElementById("ruleNumber");
 const ruleSpecial = document.getElementById("ruleSpecial");
+
+// 약관 동의 요소
+const agreeAll = document.getElementById("agreeAll");
+const agreeTerms = document.getElementById("agreeTerms");
+const agreePrivacy = document.getElementById("agreePrivacy");
+
+const agreementMessage =
+    document.getElementById("agreementMessage");
 
 // ================================
 // 이메일 검사
@@ -50,7 +62,6 @@ function isValidEmail(email) {
 // ================================
 
 function getPasswordRules(password) {
-
     return {
         length: password.length >= 12,
         lowercase: /[a-z]/.test(password),
@@ -60,7 +71,6 @@ function getPasswordRules(password) {
 }
 
 function isValidPassword(password) {
-
     const rules = getPasswordRules(password);
 
     return (
@@ -76,16 +86,11 @@ function isValidPassword(password) {
 // ================================
 
 function updateRule(element, valid, text, hasInput) {
-
     if (valid) {
-
         element.textContent = "✓ " + text;
         element.className = "password-rule valid";
-
     } else {
-
         element.textContent = "○ " + text;
-
         element.className =
             "password-rule" +
             (hasInput ? " invalid" : "");
@@ -97,11 +102,8 @@ function updateRule(element, valid, text, hasInput) {
 // ================================
 
 function checkPassword() {
-
     const password = passwordInput.value;
-
     const rules = getPasswordRules(password);
-
     const hasInput = password.length > 0;
 
     updateRule(
@@ -132,20 +134,15 @@ function checkPassword() {
         hasInput
     );
 
-    // 아무것도 입력하지 않은 경우
     if (!hasInput) {
         passwordWarning.textContent = "";
         return;
     }
 
-    // 조건 미충족
     if (!isValidPassword(password)) {
-
         passwordWarning.textContent =
             "비밀번호는 12자 이상이며 소문자, 숫자, 특수문자를 각각 1개 이상 포함해야 합니다.";
-
     } else {
-
         passwordWarning.textContent = "";
     }
 }
@@ -155,27 +152,22 @@ function checkPassword() {
 // ================================
 
 function checkPasswordMatch() {
-
     const password = passwordInput.value;
     const confirm = passwordConfirmInput.value;
 
     if (confirm === "") {
-
         passwordMessage.textContent = "";
         passwordMessage.className = "password-message";
         return;
     }
 
     if (password === confirm) {
-
         passwordMessage.textContent =
             "비밀번호가 일치합니다.";
 
         passwordMessage.className =
             "password-message success";
-
     } else {
-
         passwordMessage.textContent =
             "비밀번호가 일치하지 않습니다.";
 
@@ -185,14 +177,49 @@ function checkPasswordMatch() {
 }
 
 // ================================
+// 약관 동의 상태
+// ================================
+
+function areRequiredAgreementsChecked() {
+    return agreeTerms.checked && agreePrivacy.checked;
+}
+
+function updateAgreementState() {
+    agreeAll.checked = areRequiredAgreementsChecked();
+
+    if (areRequiredAgreementsChecked()) {
+        agreementMessage.textContent = "";
+    }
+}
+
+// 전체 동의
+agreeAll.addEventListener("change", () => {
+    const checked = agreeAll.checked;
+
+    agreeTerms.checked = checked;
+    agreePrivacy.checked = checked;
+
+    updateAgreementState();
+});
+
+// 개별 동의
+agreeTerms.addEventListener(
+    "change",
+    updateAgreementState
+);
+
+agreePrivacy.addEventListener(
+    "change",
+    updateAgreementState
+);
+
+// ================================
 // 입력 이벤트
 // ================================
 
-passwordInput.addEventListener("input", function () {
-
+passwordInput.addEventListener("input", () => {
     checkPassword();
     checkPasswordMatch();
-
 });
 
 passwordConfirmInput.addEventListener(
@@ -202,6 +229,7 @@ passwordConfirmInput.addEventListener(
 
 // 초기 상태
 checkPassword();
+updateAgreementState();
 
 // ================================
 // Cognito 회원가입
@@ -210,7 +238,6 @@ checkPassword();
 signupForm.addEventListener(
     "submit",
     async function (event) {
-
         event.preventDefault();
 
         const nickname = nicknameInput.value.trim();
@@ -222,30 +249,30 @@ signupForm.addEventListener(
         signupMessage.textContent = "";
         signupMessage.className = "signup-message";
 
+        agreementMessage.textContent = "";
+
         // 빈칸 검사
         if (!nickname || !email || !password || !confirm) {
-
             alert("모든 항목을 입력해주세요.");
             return;
         }
 
         // 닉네임 길이 검사
         if ([...nickname].length > NICKNAME_MAX_LENGTH) {
-
-            alert("닉네임은 1~20자로 입력해주세요.");
+            alert(
+                `닉네임은 1~${NICKNAME_MAX_LENGTH}자로 입력해주세요.`
+            );
             return;
         }
 
         // 이메일 검사
         if (!isValidEmail(email)) {
-
             alert("올바른 이메일 주소를 입력해주세요.");
             return;
         }
 
         // 비밀번호 조건 검사
         if (!isValidPassword(password)) {
-
             checkPassword();
 
             passwordWarning.textContent =
@@ -257,7 +284,6 @@ signupForm.addEventListener(
 
         // 비밀번호 일치 검사
         if (password !== confirm) {
-
             passwordMessage.textContent =
                 "비밀번호가 일치하지 않습니다.";
 
@@ -268,14 +294,32 @@ signupForm.addEventListener(
             return;
         }
 
+        // ================================
+        // 필수 약관 동의 검사
+        // ================================
+
+        if (!areRequiredAgreementsChecked()) {
+            agreementMessage.textContent =
+                "이용약관과 개인정보 수집·이용에 모두 동의해주세요.";
+
+            if (!agreeTerms.checked) {
+                agreeTerms.focus();
+            } else {
+                agreePrivacy.focus();
+            }
+
+            return;
+        }
+
+        // ================================
+        // AWS Cognito 회원가입
+        // ================================
+
         signupButton.disabled = true;
         signupButton.textContent = "회원가입 처리 중...";
 
         try {
-
-            // AWS Cognito 회원가입
             const result = await signUp({
-
                 username: email,
 
                 password: password,
@@ -285,9 +329,9 @@ signupForm.addEventListener(
                         email: email,
                         nickname: nickname
                     },
+
                     autoSignIn: false
                 }
-
             });
 
             // 이메일 인증 필요
@@ -295,7 +339,6 @@ signupForm.addEventListener(
                 result.nextStep?.signUpStep ===
                 "CONFIRM_SIGN_UP"
             ) {
-
                 sessionStorage.setItem(
                     "pendingSignupEmail",
                     email
@@ -307,21 +350,17 @@ signupForm.addEventListener(
 
                 window.location.href =
                     "verify-email.html";
-
             }
 
             // 회원가입 완료
             else if (result.isSignUpComplete) {
-
                 alert("회원가입이 완료되었습니다.");
 
                 window.location.href =
                     "login.html";
-
             }
 
             else {
-
                 signupMessage.textContent =
                     "추가 회원가입 단계가 필요합니다.";
 
@@ -330,45 +369,40 @@ signupForm.addEventListener(
             }
 
         } catch (error) {
-
-            console.error("Cognito 회원가입 오류:", error);
+            console.error(
+                "Cognito 회원가입 오류:",
+                error
+            );
 
             let message = "회원가입에 실패했습니다.";
 
             switch (error.name) {
-
                 case "UsernameExistsException":
-
                     message = "이미 가입된 이메일입니다.";
                     break;
 
                 case "InvalidPasswordException":
-
                     message =
                         "비밀번호가 Cognito 보안 규칙에 맞지 않습니다.";
                     break;
 
                 case "InvalidParameterException":
-
                     message =
                         "회원가입 정보를 확인해주세요.";
                     break;
 
                 case "LimitExceededException":
                 case "TooManyRequestsException":
-
                     message =
                         "요청이 너무 많습니다. 잠시 후 다시 시도해주세요.";
                     break;
 
                 case "CodeDeliveryFailureException":
-
                     message =
                         "인증 이메일 발송에 실패했습니다.";
                     break;
 
                 default:
-
                     message =
                         "회원가입에 실패했습니다. (" +
                         (error.name || "UnknownError") +
@@ -376,12 +410,13 @@ signupForm.addEventListener(
             }
 
             signupMessage.textContent = message;
-            signupMessage.className = "signup-message error";
+            signupMessage.className =
+                "signup-message error";
 
         } finally {
-
             signupButton.disabled = false;
-            signupButton.textContent = "아이디 생성하기";
+            signupButton.textContent =
+                "회원가입 하기";
         }
     }
 );
