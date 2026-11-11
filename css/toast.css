@@ -1,0 +1,124 @@
+
+/* =========================================
+   RecoMate - 공통 토스트 알림
+   Issue #45
+   제공된 styles.css 시안 기준
+========================================= */
+
+/* ---------- 토스트 표시 영역 ---------- */
+
+.toast-zone {
+    position: fixed;
+    left: 50%;
+    bottom: 84px;
+    z-index: 200;
+
+    display: grid;
+    gap: 8px;
+
+    width: min(calc(100% - 32px), 380px);
+
+    transform: translateX(-50%);
+}
+
+/* ---------- 기본 토스트 ---------- */
+
+.toast-zone .toast {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    padding: 12px 16px;
+
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: 8px;
+
+    background: #2b2925;
+    color: #f2f2f2;
+
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
+
+    font-family: var(--font-main);
+    font-size: 14px;
+    line-height: 1.5;
+
+    animation: toast-in 180ms ease-out;
+}
+
+/* ---------- 메시지 ---------- */
+
+.toast-zone .toast-message {
+    flex: 1;
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+
+/* ---------- 닫기 버튼 ---------- */
+
+.toast-zone .toast-close {
+    flex: none;
+
+    margin-left: auto;
+    padding: 4px 0;
+
+    border: 0;
+    background: none;
+
+    color: #e57a14;
+    font-size: 13px;
+    font-weight: 700;
+
+    cursor: pointer;
+}
+
+.toast-zone .toast-close:hover {
+    color: #ff9c40;
+}
+
+/* ---------- 알림 유형 ---------- */
+
+.toast-zone .toast-success {
+    border-left: 3px solid #6cc08b;
+}
+
+.toast-zone .toast-error {
+    border-left: 3px solid #e86a5f;
+}
+
+.toast-zone .toast-warning {
+    border-left: 3px solid #ec8f3c;
+}
+
+.toast-zone .toast-info {
+    border-left: 3px solid #e57a14;
+}
+
+/* ---------- 등장 애니메이션 ---------- */
+
+@keyframes toast-in {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ---------- PC 화면 ---------- */
+
+@media (min-width: 861px) {
+    .toast-zone {
+        bottom: 28px;
+    }
+}
+
+/* ---------- 모션 접근성 ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+    .toast-zone .toast {
+        animation: none;
+    }
+}

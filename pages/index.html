@@ -1,21 +1,41 @@
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
     <meta name="theme-color" content="#141414">
 
     <title>RecoMate | 함께 고르는 콘텐츠</title>
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
 
+    <link
+        href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet"
+    >
+
+    <!-- 공통 디자인 -->
     <link rel="stylesheet" href="../css/common.css">
     <link rel="stylesheet" href="../css/navbar.css">
+    <link rel="stylesheet" href="../css/footer.css">
+    <link rel="stylesheet" href="../css/toast.css">
+
+    <!-- 기존 배경 -->
     <link rel="stylesheet" href="../css/background.css">
 
-    <!-- 홈 · 이용방법 · 인원 선택 (한 화면 안에서 단계 전환) -->
+    <!-- 기존 홈 / 추천 진행 화면 -->
     <link rel="stylesheet" href="../css/flow.css">
 </head>
 
@@ -24,23 +44,40 @@
     <!-- 공통 네비게이션 -->
     <div id="navbar-container"></div>
 
-    <!-- 원본 시안 배경 레이어 -->
+    <!-- 기존 배경 -->
     <div class="fx" aria-hidden="true">
         <div class="fxin">
             <i></i>
         </div>
     </div>
+
     <div class="fxn" aria-hidden="true"></div>
 
-    <!-- 단계별 화면은 js/flow.js 가 이 안에 그림 -->
+    <!-- 기존 추천 진행 화면 -->
     <main id="app"></main>
 
+    <!-- 공통 푸터 -->
+    <footer id="site-footer"></footer>
+
+    <!-- 공통 네비게이션 / 인증 / 푸터 -->
     <script type="module">
         import "../js/navbar.js";
         import "../js/auth-ui.js";
+        import "../js/footer.js";
+
+        // 개발 중 토스트 기능 테스트용
+        import {
+            showToast
+        } from "../js/toast.js";
+
+        window.testRecoMateToast = showToast;
     </script>
 
-    <script type="module" src="../js/flow.js"></script>
+    <!-- 기존 추천 진행 기능 -->
+    <script
+        type="module"
+        src="../js/flow.js"
+    ></script>
 
 </body>
 </html>

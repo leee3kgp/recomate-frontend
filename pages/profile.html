@@ -3,19 +3,91 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
     <meta name="theme-color" content="#141414">
 
     <title>내 프로필 - RecoMate</title>
 
-    <!-- 공통 스타일 -->
+    <!-- 공통 글꼴 -->
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+    <link
+        href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap"
+        rel="stylesheet"
+    >
+
+    <!-- 공통 디자인 시스템 -->
     <link rel="stylesheet" href="../css/common.css">
     <link rel="stylesheet" href="../css/navbar.css">
+    <link rel="stylesheet" href="../css/footer.css">
+    <link rel="stylesheet" href="../css/toast.css">
+
+    <!-- 기존 배경 -->
     <link rel="stylesheet" href="../css/background.css">
 
-    <!-- 프로필 전용 스타일 -->
+    <!-- 기존 프로필 디자인 -->
     <link rel="stylesheet" href="../css/profile.css">
+
+    <style>
+        /* =========================================
+           RecoMate 프로필
+           Issue #45 공통 디자인 연결
+        ========================================= */
+
+        .profile-page {
+            min-height: 100vh;
+        }
+
+        /* 기존 프로필 레이아웃 유지 */
+        .profile-page main {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* 공통 입력 글꼴 */
+        .profile-page input,
+        .profile-page button {
+            font-family: var(--font-main);
+        }
+
+        /* 읽기 전용 이메일 */
+        .profile-page #userEmail[readonly] {
+            cursor: default;
+        }
+
+        /* 버튼 키보드 접근성 */
+        .profile-page button:focus-visible {
+            outline: 2px solid #e57a14;
+            outline-offset: 3px;
+        }
+
+        /* 푸터를 프로필 콘텐츠 뒤에 배치 */
+        .profile-page #site-footer {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* 모바일 화면 */
+        @media (max-width: 560px) {
+            .profile-page .pf-row {
+                flex-wrap: wrap;
+            }
+
+            .profile-page .pf-msg {
+                overflow-wrap: anywhere;
+            }
+        }
+    </style>
 </head>
 
 <body class="profile-page" data-mode="profile">
@@ -23,15 +95,16 @@
     <!-- 공통 네비게이션 -->
     <div id="navbar-container"></div>
 
-    <!-- 원본 시안 배경 -->
+    <!-- 기존 그라데이션 배경 -->
     <div class="fx" aria-hidden="true">
         <div class="fxin">
             <i></i>
         </div>
     </div>
+
     <div class="fxn" aria-hidden="true"></div>
 
-    <!-- 원본 시안 프로필 구조 -->
+    <!-- 기존 프로필 화면 -->
     <main class="stage top">
         <div class="view">
             <div class="panel pfp">
@@ -40,7 +113,7 @@
                     <!-- 페이지 제목 -->
                     <h3>내 프로필</h3>
 
-                    <!-- 공통 상태 및 오류 메시지 -->
+                    <!-- 프로필 상태 및 오류 메시지 -->
                     <p
                         id="profileMessage"
                         role="status"
@@ -85,6 +158,7 @@
                                         height="11"
                                         rx="2"
                                     ></rect>
+
                                     <path
                                         d="M8 10V7a4 4 0 0 1 8 0v3"
                                     ></path>
@@ -110,7 +184,7 @@
                                 >
                             </div>
 
-                            <!-- 저장 버튼 및 메시지 -->
+                            <!-- 닉네임 저장 -->
                             <div class="pf-row">
 
                                 <button
@@ -148,7 +222,7 @@
                             장르 정보를 불러오는 중입니다.
                         </div>
 
-                        <!-- 저장 버튼 및 메시지 -->
+                        <!-- 장르 저장 -->
                         <div class="pf-row">
 
                             <button
@@ -170,11 +244,12 @@
                         </div>
                     </section>
 
-                    <!-- 회원 탈퇴 영역 -->
+                    <!-- 회원 탈퇴 -->
                     <section class="pf-danger">
 
                         <div>
                             <h4>회원 탈퇴</h4>
+
                             <p>
                                 회원 탈퇴 시 계정 및 관련 데이터가
                                 삭제될 수 있습니다.
@@ -197,13 +272,17 @@
         </div>
     </main>
 
-    <!-- 공통 네비게이션 및 인증 -->
+    <!-- 공통 푸터 -->
+    <footer id="site-footer"></footer>
+
+    <!-- 공통 네비게이션 / 인증 / 푸터 -->
     <script type="module">
         import "../js/navbar.js";
         import "../js/auth-ui.js";
+        import "../js/footer.js";
     </script>
 
-    <!-- 기존 프로필 API 및 저장 메시지 -->
+    <!-- 기존 프로필 API -->
     <script
         type="module"
         src="../js/profile.js"
