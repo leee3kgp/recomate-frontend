@@ -3,37 +3,62 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
     <meta name="theme-color" content="#141414">
 
     <title>RecoMate | 회원가입</title>
 
+    <!-- 공통 글꼴 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+    <link
+        href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap"
+        rel="stylesheet"
+    >
+
+    <!-- 공통 디자인 시스템 -->
     <link rel="stylesheet" href="../css/common.css">
+    <link rel="stylesheet" href="../css/toast.css">
+
+    <!-- 기존 인증 화면 디자인 -->
     <link rel="stylesheet" href="../css/background.css">
     <link rel="stylesheet" href="../css/auth.css">
 
     <style>
         /* =========================================
-           회원가입 화면 - 원본 시안 스타일
+           RecoMate 회원가입
+           Issue #45
         ========================================= */
 
         .stage {
             position: relative;
             z-index: 1;
+
             min-height: 100vh;
+
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
+
             padding: 40px 20px;
         }
 
         .view {
             width: 100%;
+
             display: flex;
             flex-direction: column;
             align-items: center;
-            animation: fade .45s ease both;
+
+            animation: fade 0.45s ease both;
         }
 
         @keyframes fade {
@@ -48,7 +73,7 @@
             }
         }
 
-        /* 홈 버튼 */
+        /* ---------- 홈 버튼 ---------- */
 
         .back {
             position: fixed;
@@ -68,26 +93,32 @@
             border: 1px solid #2c2c2c;
             border-radius: 999px;
 
+            font-family: var(--font-main);
             font-size: 13px;
             text-decoration: none;
+
+            transition: border-color 150ms ease;
         }
 
         .back:hover {
             border-color: #777;
         }
 
-        /* 회원가입 카드 */
+        /* ---------- 회원가입 카드 ---------- */
 
         .auth {
             width: min(400px, 100%);
+
             padding: 28px clamp(22px, 9%, 38px) 24px;
 
-            background: var(--panel, #141414);
+            background: var(--panel);
             border: 1px solid #262626;
             border-radius: 10px;
 
-            box-shadow: 0 14px 50px rgba(0, 0, 0, .35);
-            animation: cardUp .55s cubic-bezier(.2, .7, .2, 1) both;
+            box-shadow: 0 14px 50px rgba(0, 0, 0, 0.35);
+
+            animation: cardUp 0.55s
+                cubic-bezier(0.2, 0.7, 0.2, 1) both;
         }
 
         @keyframes cardUp {
@@ -102,27 +133,29 @@
             }
         }
 
-        /* 로고 */
+        /* ---------- 로고 ---------- */
 
         .brand {
             margin: 0;
-            text-align: center;
 
+            text-align: center;
             font-size: 34px;
             font-weight: 400;
-            letter-spacing: .5px;
+            letter-spacing: 0.5px;
             line-height: 1.2;
         }
 
         .brand a {
             background: var(--brand);
+
             -webkit-background-clip: text;
             background-clip: text;
+
             color: transparent;
             text-decoration: none;
         }
 
-        /* 진행 단계 */
+        /* ---------- 진행 단계 ---------- */
 
         .steps {
             display: flex;
@@ -136,6 +169,7 @@
         .step-line {
             width: 27px;
             height: 4px;
+
             border-radius: 999px;
             background: #343434;
         }
@@ -146,11 +180,12 @@
 
         .step-label {
             margin-left: 5px;
+
             color: #999;
             font-size: 12px;
         }
 
-        /* 입력 그룹 */
+        /* ---------- 입력 그룹 ---------- */
 
         .fg {
             margin-bottom: 13px;
@@ -167,6 +202,7 @@
 
         .field {
             display: block;
+
             width: 100%;
             height: 42px;
 
@@ -176,13 +212,13 @@
             color: #ececec;
 
             border: 1px solid #2c2c2c;
-            border-radius: var(--r, 8px);
+            border-radius: var(--r);
             outline: none;
 
+            font-family: var(--font-main);
             font-size: 14px;
-            font-family: inherit;
 
-            transition: border-color .15s;
+            transition: border-color 150ms ease;
         }
 
         .field::placeholder {
@@ -195,12 +231,13 @@
 
         .field:focus {
             border-color: transparent;
+
             background:
                 linear-gradient(#000, #000) padding-box,
                 var(--brand) border-box;
         }
 
-        /* 비밀번호 입력 */
+        /* ---------- 비밀번호 입력 ---------- */
 
         .pw {
             position: relative;
@@ -214,6 +251,7 @@
             position: absolute;
             right: 8px;
             top: 50%;
+
             transform: translateY(-50%);
 
             display: grid;
@@ -223,6 +261,7 @@
             height: 30px;
 
             padding: 0;
+
             background: none;
             border: 0;
             border-radius: 6px;
@@ -246,7 +285,7 @@
             stroke-linejoin: round;
         }
 
-        /* 비밀번호 조건 */
+        /* ---------- 비밀번호 조건 ---------- */
 
         .password-rules {
             display: flex;
@@ -274,6 +313,7 @@
         .password-message,
         .signup-message {
             margin: 0;
+
             font-size: 12px;
             line-height: 1.5;
         }
@@ -299,41 +339,44 @@
             text-align: center;
         }
 
-        /* 회원가입 버튼 */
+        /* ---------- 회원가입 버튼 ---------- */
 
-        .btn {
-            display: block;
+        .auth .btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
             width: 100%;
             height: 42px;
 
             margin-top: 18px;
-            padding: 0;
+            padding: 0 16px;
 
             border: 0;
-            border-radius: var(--r, 8px);
+            border-radius: var(--r);
 
             background: var(--brand);
             color: #fff;
 
-            font-family: inherit;
+            font-family: var(--font-main);
             font-size: 15px;
             font-weight: 600;
 
             cursor: pointer;
-            transition: filter .15s;
+            transition: filter 150ms ease;
         }
 
-        .btn:hover:not(:disabled) {
+        .auth .btn:hover:not(:disabled) {
             filter: brightness(1.12);
         }
 
-        .btn:disabled {
+        .auth .btn:disabled {
             background: #2a2a2a;
             color: #8a8a8a;
             cursor: not-allowed;
         }
 
-        /* 로그인 링크 */
+        /* ---------- 로그인 링크 ---------- */
 
         .alt {
             display: flex;
@@ -344,6 +387,7 @@
         .text-link {
             color: #a8a8a8;
             font-size: 13px;
+
             text-decoration: underline;
             text-underline-offset: 4px;
         }
@@ -352,7 +396,7 @@
             color: #fff;
         }
 
-        /* 모바일 */
+        /* ---------- 모바일 ---------- */
 
         @media (max-width: 560px) {
             .stage {
@@ -378,17 +422,27 @@
                 font-size: 10px;
             }
         }
+
+        /* ---------- 모션 접근성 ---------- */
+
+        @media (prefers-reduced-motion: reduce) {
+            .view,
+            .auth {
+                animation: none;
+            }
+        }
     </style>
 </head>
 
 <body class="signup-page" data-mode="auth">
 
-    <!-- 원본 시안 배경 -->
+    <!-- 기존 그라데이션 배경 -->
     <div class="fx" aria-hidden="true">
         <div class="fxin">
             <i></i>
         </div>
     </div>
+
     <div class="fxn" aria-hidden="true"></div>
 
     <main>
@@ -404,11 +458,16 @@
                 <section class="auth">
 
                     <h1 class="brand">
-                        <a href="index.html">RecoMate</a>
+                        <a href="index.html">
+                            RecoMate
+                        </a>
                     </h1>
 
                     <!-- 진행 단계 -->
-                    <div class="steps" aria-label="회원가입 1단계 / 2단계">
+                    <div
+                        class="steps"
+                        aria-label="회원가입 1단계 / 2단계"
+                    >
                         <span class="step-line active"></span>
                         <span class="step-line"></span>
                         <span class="step-label">1 / 2</span>
@@ -418,7 +477,9 @@
 
                         <!-- 닉네임 -->
                         <div class="fg">
-                            <label for="nickname">닉네임</label>
+                            <label for="nickname">
+                                닉네임
+                            </label>
 
                             <input
                                 class="field"
@@ -434,7 +495,9 @@
 
                         <!-- 이메일 -->
                         <div class="fg">
-                            <label for="userId">아이디(이메일)</label>
+                            <label for="userId">
+                                아이디(이메일)
+                            </label>
 
                             <input
                                 class="field"
@@ -449,7 +512,9 @@
 
                         <!-- 비밀번호 -->
                         <div class="fg">
-                            <label for="password">비밀번호</label>
+                            <label for="password">
+                                비밀번호
+                            </label>
 
                             <div class="pw">
                                 <input
@@ -470,32 +535,54 @@
                                     aria-label="비밀번호 표시"
                                     aria-pressed="false"
                                 >
-                                    <svg viewBox="0 0 24 24" aria-hidden="true">
-                                        <path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12z"></path>
-                                        <circle cx="12" cy="12" r="3"></circle>
+                                    <svg
+                                        viewBox="0 0 24 24"
+                                        aria-hidden="true"
+                                    >
+                                        <path
+                                            d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12z"
+                                        ></path>
+                                        <circle
+                                            cx="12"
+                                            cy="12"
+                                            r="3"
+                                        ></circle>
                                     </svg>
                                 </button>
                             </div>
 
                             <!-- 비밀번호 조건 -->
-                            <div class="password-rules" id="passwordRules">
-
-                                <span id="ruleLength" class="password-rule">
+                            <div
+                                class="password-rules"
+                                id="passwordRules"
+                            >
+                                <span
+                                    id="ruleLength"
+                                    class="password-rule"
+                                >
                                     ○ 12자 이상
                                 </span>
 
-                                <span id="ruleLowercase" class="password-rule">
+                                <span
+                                    id="ruleLowercase"
+                                    class="password-rule"
+                                >
                                     ○ 소문자 포함
                                 </span>
 
-                                <span id="ruleNumber" class="password-rule">
+                                <span
+                                    id="ruleNumber"
+                                    class="password-rule"
+                                >
                                     ○ 숫자 포함
                                 </span>
 
-                                <span id="ruleSpecial" class="password-rule">
+                                <span
+                                    id="ruleSpecial"
+                                    class="password-rule"
+                                >
                                     ○ 특수문자 포함
                                 </span>
-
                             </div>
 
                             <div
@@ -508,7 +595,9 @@
 
                         <!-- 비밀번호 확인 -->
                         <div class="fg">
-                            <label for="passwordConfirm">비밀번호 확인</label>
+                            <label for="passwordConfirm">
+                                비밀번호 확인
+                            </label>
 
                             <div class="pw">
                                 <input
@@ -528,9 +617,18 @@
                                     aria-label="비밀번호 확인 표시"
                                     aria-pressed="false"
                                 >
-                                    <svg viewBox="0 0 24 24" aria-hidden="true">
-                                        <path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12z"></path>
-                                        <circle cx="12" cy="12" r="3"></circle>
+                                    <svg
+                                        viewBox="0 0 24 24"
+                                        aria-hidden="true"
+                                    >
+                                        <path
+                                            d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12z"
+                                        ></path>
+                                        <circle
+                                            cx="12"
+                                            cy="12"
+                                            r="3"
+                                        ></circle>
                                     </svg>
                                 </button>
                             </div>
@@ -562,7 +660,10 @@
 
                     <!-- 로그인으로 돌아가기 -->
                     <div class="alt">
-                        <a href="login.html" class="text-link">
+                        <a
+                            href="login.html"
+                            class="text-link"
+                        >
                             로그인으로 돌아가기
                         </a>
                     </div>
@@ -572,8 +673,11 @@
         </section>
     </main>
 
-    <!-- 기존 Cognito 회원가입 기능 -->
-    <script type="module" src="../js/signup.js"></script>
+    <!-- 기존 AWS Cognito 회원가입 기능 -->
+    <script
+        type="module"
+        src="../js/signup.js"
+    ></script>
 
     <!-- 비밀번호 표시 / 숨기기 -->
     <script>
@@ -586,9 +690,11 @@
 
                     if (!input) return;
 
-                    const visible = input.type === "password";
+                    const visible =
+                        input.type === "password";
 
-                    input.type = visible ? "text" : "password";
+                    input.type =
+                        visible ? "text" : "password";
 
                     button.setAttribute(
                         "aria-pressed",
