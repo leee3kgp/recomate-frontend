@@ -1,0 +1,549 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="RecoMate가 어떤 개인정보를 왜 모으고, 얼마나 보관하며, 어떻게 지키는지 안내합니다.">
+    <meta name="theme-color" content="#141414">
+
+    <title>개인정보처리방침 | RecoMate</title>
+
+    <link rel="stylesheet" href="../css/common.css">
+    <link rel="stylesheet" href="../css/navbar.css">
+
+    <style>
+        /* 개인정보처리방침 시안 적용 */
+        body.privacy-page {
+            min-height: 100vh;
+            margin: 0;
+            background: #141414;
+            color: #f2f2f2;
+            font-family: var(--font-main, sans-serif);
+        }
+
+        .privacy-main {
+            padding: 56px 24px 90px;
+        }
+
+        .privacy-doc {
+            width: 100%;
+            max-width: 960px;
+            margin: 0 auto;
+            line-height: 1.8;
+            overflow-wrap: anywhere;
+        }
+
+        .privacy-doc h1 {
+            margin: 0 0 8px;
+            font-size: clamp(28px, 4vw, 38px);
+            font-weight: 700;
+            line-height: 1.3;
+        }
+
+        .privacy-doc h2 {
+            margin: 48px 0 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #383838;
+            font-size: 21px;
+            font-weight: 700;
+            line-height: 1.5;
+            scroll-margin-top: 85px;
+        }
+
+        .privacy-doc p {
+            margin: 16px 0;
+        }
+
+        .privacy-doc ul {
+            margin: 12px 0 22px;
+            padding-left: 24px;
+        }
+
+        .privacy-doc li {
+            margin: 8px 0;
+        }
+
+        .privacy-muted {
+            color: #aaa;
+        }
+
+        .privacy-alert {
+            margin: 18px 0;
+            padding: 16px 18px;
+            border: 1px solid #51415a;
+            border-radius: 8px;
+            background: #241d2b;
+            color: #ddd0e4;
+            font-size: 14px;
+        }
+
+        .privacy-toc {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 12px 18px;
+            margin: 28px 0 42px;
+            padding: 24px;
+            border: 1px solid #383838;
+            border-radius: 10px;
+            background: #1c1c1c;
+        }
+
+        .privacy-doc a {
+            color: #e7a8da;
+            text-decoration: underline;
+            text-underline-offset: 4px;
+        }
+
+        .privacy-doc a:hover {
+            color: #fff;
+        }
+
+        .privacy-toc a {
+            font-size: 14px;
+            text-decoration: none;
+        }
+
+        .privacy-toc a:hover {
+            text-decoration: underline;
+        }
+
+        .privacy-table-wrap {
+            width: 100%;
+            margin: 18px 0 24px;
+            overflow-x: auto;
+        }
+
+        .privacy-doc table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+            text-align: left;
+        }
+
+        .privacy-doc th,
+        .privacy-doc td {
+            padding: 13px 15px;
+            border: 1px solid #383838;
+            vertical-align: top;
+        }
+
+        .privacy-doc th {
+            background: #252525;
+            font-weight: 600;
+        }
+
+        .privacy-doc td {
+            background: #191919;
+        }
+
+        .privacy-footer {
+            padding: 28px 24px;
+            border-top: 1px solid #333;
+            text-align: center;
+            color: #aaa;
+            font-size: 14px;
+        }
+
+        .privacy-footer a {
+            margin: 0 12px;
+            color: #aaa;
+            text-decoration: none;
+        }
+
+        .privacy-footer a:hover {
+            color: #fff;
+            text-decoration: underline;
+        }
+
+        @media (max-width: 700px) {
+            .privacy-main {
+                padding: 36px 16px 70px;
+            }
+
+            .privacy-toc {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                padding: 18px;
+            }
+
+            .privacy-doc h2 {
+                font-size: 19px;
+            }
+        }
+
+        @media (max-width: 440px) {
+            .privacy-toc {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body class="privacy-page">
+
+    <a class="sr-only" href="#main">본문 바로가기</a>
+
+    <div id="navbar-container"></div>
+
+    <main id="main" class="privacy-main">
+        <article class="privacy-doc">
+
+            <h1>개인정보처리방침</h1>
+
+            <p class="privacy-muted" style="margin:0">
+                시행일 2026년 11월 1일
+            </p>
+
+            <div class="privacy-alert">
+                디자인 시안용 문안입니다. 실제로 공개하기 전에
+                수집 항목과 보관 방식을 실제 구현과 맞추고,
+                [대괄호] 표시한 담당자와 연락처를 채워야 합니다.
+            </div>
+
+            <p>
+                오소웨 2조(이하 "운영팀")는 「개인정보 보호법」에 따라
+                RecoMate 이용자의 개인정보를 보호하고 관련 고충을
+                신속하게 처리하기 위해 다음과 같이
+                개인정보처리방침을 정합니다.
+            </p>
+
+            <nav class="privacy-toc" aria-label="목차">
+                <a href="#p1">1. 처리 목적</a>
+                <a href="#p2">2. 처리 항목</a>
+                <a href="#p3">3. 보유 기간</a>
+                <a href="#p4">4. 만 14세 미만 아동</a>
+                <a href="#p5">5. 제3자 제공</a>
+                <a href="#p6">6. 처리 위탁</a>
+                <a href="#p7">7. 국외 이전</a>
+                <a href="#p8">8. 파기</a>
+                <a href="#p9">9. 이용자의 권리</a>
+                <a href="#p10">10. 안전성 확보 조치</a>
+                <a href="#p11">11. 자동 수집 장치</a>
+                <a href="#p12">12. 보호책임자</a>
+                <a href="#p13">13. 권익침해 구제</a>
+                <a href="#p14">14. 변경</a>
+            </nav>
+
+            <h2 id="p1">1. 개인정보의 처리 목적</h2>
+
+            <p>
+                운영팀은 다음 목적으로만 개인정보를 처리하며,
+                목적이 바뀌면 「개인정보 보호법」 제18조에 따라
+                별도 동의를 받는 등 필요한 조치를 합니다.
+            </p>
+
+            <ul>
+                <li>회원 가입과 관리: 가입 의사 확인, 이메일 본인 확인, 로그인, 부정 이용 방지, 탈퇴 처리</li>
+                <li>서비스 제공: 참여자별 장르를 바탕으로 한 작품 추천, 추천 기록 저장, 본 작품 관리, 본 작품을 뺀 추천</li>
+                <li>안내: 약관과 처리방침 변경 안내</li>
+                <li>서비스 개선: 오류 확인과 수정</li>
+            </ul>
+
+            <h2 id="p2">2. 처리하는 개인정보 항목</h2>
+
+            <div class="privacy-table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>구분</th>
+                            <th>항목</th>
+                            <th>수집 방법</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>회원가입 (필수)</td>
+                            <td>이메일, 비밀번호(복원할 수 없는 방식으로 암호화), 닉네임, 약관 동의 내역(동의 일시, 약관 버전)</td>
+                            <td>회원가입 화면</td>
+                        </tr>
+                        <tr>
+                            <td>서비스 이용 (회원)</td>
+                            <td>추천 기록(참여 인원, 참여자 이름, 참여자별 선택 장르, 추천 조건, 추천 작품, 생성 일시), 선호 장르, 본 작품, 본 작품 자동 제외 설정</td>
+                            <td>서비스 이용 과정</td>
+                        </tr>
+                        <tr>
+                            <td>자동 생성</td>
+                            <td>접속 IP 주소, 접속 일시, 브라우저 종류, 오류 기록</td>
+                            <td>서비스 이용 시 자동 생성</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <p>
+                추천 화면에 입력하는 참여자 이름은 결과에서 누구 취향인지
+                보여주기 위해 추천 기록과 함께 저장되며,
+                기록을 지우거나 탈퇴하면 함께 지워집니다.
+                실명 대신 별명을 써도 됩니다.
+            </p>
+
+            <h2 id="p3">3. 개인정보의 처리 및 보유 기간</h2>
+
+            <div class="privacy-table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>항목</th>
+                            <th>보유 기간</th>
+                            <th>근거</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>회원 정보, 서비스 이용 기록</td>
+                            <td>회원 탈퇴 시까지 (탈퇴 즉시 파기)</td>
+                            <td>이용자 동의</td>
+                        </tr>
+                        <tr>
+                            <td>접속 기록 (IP 주소, 접속 일시)</td>
+                            <td>3개월</td>
+                            <td>「통신비밀보호법」</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h2 id="p4">4. 만 14세 미만 아동의 개인정보</h2>
+
+            <p>
+                RecoMate는 만 14세 이상만 가입할 수 있으며,
+                만 14세 미만 아동의 개인정보를 수집하지 않습니다.
+                만 14세 미만 아동의 가입 사실을 알게 되면
+                해당 정보를 지체 없이 파기합니다.
+            </p>
+
+            <h2 id="p5">5. 개인정보의 제3자 제공</h2>
+
+            <p>
+                운영팀은 이용자의 개인정보를 제3자에게 제공하지 않습니다.
+                다만 법률에 특별한 규정이 있거나 수사기관이
+                법령에 정해진 절차에 따라 요청하는 경우에는 예외로 합니다.
+            </p>
+
+            <p>
+                작품 정보는 TMDB(The Movie Database)에서 받아옵니다.
+                작품 검색 시 입력한 검색어는 작품을 찾기 위해 TMDB로 전달되지만,
+                이메일이나 닉네임 같은 회원을 알아볼 수 있는 정보는
+                함께 보내지 않습니다.
+            </p>
+
+            <h2 id="p6">6. 개인정보 처리의 위탁</h2>
+
+            <div class="privacy-table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>수탁자</th>
+                            <th>위탁 업무</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Amazon Web Services, Inc.</td>
+                            <td>서버 운영, 데이터 저장, 회원 인증, 인증 메일 발송</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <p>
+                위탁 계약 시 개인정보가 안전하게 관리되도록
+                「개인정보 보호법」 제26조에 따라 필요한 사항을 정하고
+                수탁자를 관리·감독합니다.
+            </p>
+
+            <h2 id="p7">7. 개인정보의 국외 수집 및 이전</h2>
+
+            <p>
+                RecoMate의 서버와 데이터는 해외 클라우드에 보관되어,
+                아래와 같이 개인정보가 국외로 이전됩니다.
+                서비스 이용 계약의 이행을 위한 처리 위탁·보관으로서
+                이 처리방침 공개로 이전 사실을 알립니다
+                (「개인정보 보호법」 제28조의8 제1항 제3호).
+            </p>
+
+            <div class="privacy-table-wrap">
+                <table>
+                    <tbody>
+                        <tr>
+                            <th>이전받는 자</th>
+                            <td>
+                                Amazon Web Services, Inc.<br>
+                                연락처:
+                                <a
+                                    href="https://aws.amazon.com/compliance/contact/"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    AWS 개인정보·컴플라이언스 문의
+                                </a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>이전되는 국가</th>
+                            <td>호주 (AWS 아시아 태평양 시드니 리전)</td>
+                        </tr>
+                        <tr>
+                            <th>이전 항목</th>
+                            <td>2번에 적은 항목 전체</td>
+                        </tr>
+                        <tr>
+                            <th>이전 시기와 방법</th>
+                            <td>서비스를 이용할 때마다 암호화된 네트워크(HTTPS)로 전송</td>
+                        </tr>
+                        <tr>
+                            <th>이용 목적</th>
+                            <td>서버 운영과 데이터 보관</td>
+                        </tr>
+                        <tr>
+                            <th>보유·이용 기간</th>
+                            <td>3번의 보유 기간과 같으며, 위탁 계약이 끝나면 파기</td>
+                        </tr>
+                        <tr>
+                            <th>거부 방법과 효과</th>
+                            <td>
+                                가입하지 않거나
+                                <a href="profile.html#settings">
+                                    내 프로필 &gt; 설정
+                                </a>
+                                에서 탈퇴하면 이전되지 않습니다.
+                                거부하면 추천을 포함한 서비스를 이용할 수 없습니다.
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h2 id="p8">8. 개인정보의 파기 절차 및 방법</h2>
+
+            <p>
+                보유 기간이 끝나거나 처리 목적을 달성하면
+                지체 없이 파기합니다.
+                전자 파일은 복구할 수 없는 방법으로 삭제하며,
+                종이 문서는 만들지 않습니다.
+                법령에 따라 보관해야 하는 정보는 다른 정보와 분리해 보관하고,
+                보관 기간이 끝나면 파기합니다.
+            </p>
+
+            <h2 id="p9">9. 이용자와 법정대리인의 권리와 행사 방법</h2>
+
+            <p>
+                이용자는 언제든지 자신의 개인정보 열람,
+                정정·삭제, 처리 정지, 동의 철회를 요구할 수 있습니다.
+            </p>
+
+            <ul>
+                <li>
+                    닉네임 수정, 선호 장르와 설정 변경, 본 작품 삭제:
+                    <a href="profile.html">내 프로필</a>
+                </li>
+                <li>
+                    추천 기록 삭제:
+                    <a href="history.html">추천 기록</a>
+                    (하나씩 또는 전부)
+                </li>
+                <li>회원 탈퇴(전체 삭제): 내 프로필 &gt; 설정</li>
+                <li>그 밖의 요구: 12번의 연락처</li>
+            </ul>
+
+            <p>
+                요구를 받으면 10일 이내에 처리하고 결과를 알려드립니다.
+                법령에 따라 요구를 거절하거나 제한하는 경우
+                그 이유를 알려드립니다.
+            </p>
+
+            <h2 id="p10">10. 개인정보의 안전성 확보 조치</h2>
+
+            <ul>
+                <li>모든 통신은 HTTPS로 암호화합니다.</li>
+                <li>비밀번호는 운영팀도 알 수 없는 방식으로 암호화해 저장하고, 저장된 데이터도 암호화합니다.</li>
+                <li>개인정보에 접근할 수 있는 사람과 권한을 최소한으로 정하고, 접속 기록을 보관합니다.</li>
+            </ul>
+
+            <h2 id="p11">11. 자동 수집 장치의 설치·운영 및 거부</h2>
+
+            <p>
+                RecoMate는 쿠키를 사용하지 않습니다.
+                대신 브라우저 저장소(로컬 저장소, 세션 저장소)에
+                다음 정보를 저장합니다.
+            </p>
+
+            <ul>
+                <li>로그인 상태 유지를 위한 인증 정보</li>
+                <li>최근 검색어, 진행 중인 추천(참여자 이름, 고른 장르), 화면 설정</li>
+            </ul>
+
+            <p>
+                브라우저 설정에서 이 사이트의 데이터를 지우거나
+                저장을 막을 수 있습니다.
+                막으면 로그인 상태 유지, 최근 검색어,
+                진행 중인 추천 이어하기를 이용할 수 없습니다.
+                운영팀은 맞춤형 광고를 위한 행태정보를 수집하지 않습니다.
+            </p>
+
+            <h2 id="p12">12. 개인정보 보호책임자와 고충 처리 담당</h2>
+
+            <div class="privacy-table-wrap">
+                <table>
+                    <tbody>
+                        <tr>
+                            <th>개인정보 보호책임자</th>
+                            <td>[담당자 이름], 오소웨 2조</td>
+                        </tr>
+                        <tr>
+                            <th>연락처</th>
+                            <td>contact@recomate.example [실제 주소로 바꿔야 함]</td>
+                        </tr>
+                        <tr>
+                            <th>고충 처리</th>
+                            <td>위 연락처</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h2 id="p13">13. 권익침해 구제 방법</h2>
+
+            <p>
+                개인정보 침해로 인한 구제를 받으려면
+                아래 기관에 분쟁 해결이나 상담을 신청할 수 있습니다.
+            </p>
+
+            <ul>
+                <li>개인정보분쟁조정위원회: 국번 없이 1833-6972 (www.kopico.go.kr)</li>
+                <li>개인정보침해신고센터: 국번 없이 118 (privacy.kisa.or.kr)</li>
+                <li>대검찰청: 국번 없이 1301 (www.spo.go.kr)</li>
+                <li>경찰청: 국번 없이 182 (ecrm.police.go.kr)</li>
+            </ul>
+
+            <h2 id="p14">14. 개인정보처리방침의 변경</h2>
+
+            <p>
+                이 처리방침은 2026년 11월 1일부터 적용됩니다.
+                내용이 바뀌면 시행 7일 전부터 서비스 화면과
+                이 페이지로 알립니다.
+                수집 항목이나 이용 목적이 바뀌는 등
+                이용자 권리에 중요한 변경은 30일 전부터 알립니다.
+            </p>
+
+            <p class="privacy-muted">
+                변경 이력: 2026년 11월 1일 국외 이전 항목과
+                처리 위탁 항목(인증 메일 발송)을 추가했습니다.
+            </p>
+
+        </article>
+    </main>
+
+    <footer class="privacy-footer">
+        <a href="index.html">RecoMate</a>
+        <a href="terms.html">이용약관</a>
+        <a href="privacy.html" aria-current="page">개인정보처리방침</a>
+    </footer>
+
+    <script type="module">
+        import "../js/navbar.js";
+        import "../js/auth-ui.js";
+    </script>
+
+</body>
+</html>

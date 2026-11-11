@@ -34,7 +34,7 @@
     <style>
         /* =========================================
            RecoMate 로그인
-           Issue #45
+           Issue #45 / Issue #50
         ========================================= */
 
         .stage {
@@ -310,11 +310,14 @@
             cursor: not-allowed;
         }
 
-        /* ---------- 회원가입 링크 ---------- */
+        /* ---------- 하단 링크 ---------- */
 
         .alt {
             display: flex;
-            justify-content: flex-end;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
 
             margin-top: 14px;
         }
@@ -326,6 +329,7 @@
             border: 0;
 
             color: #a8a8a8;
+            font-family: var(--font-main);
             font-size: 13px;
 
             text-decoration: underline;
@@ -501,8 +505,15 @@
                         login
                     </button>
 
-                    <!-- 회원가입 -->
+                    <!-- 비밀번호 재설정 / 회원가입 -->
                     <div class="alt">
+                        <a
+                            href="forgot-password.html"
+                            class="text-link"
+                        >
+                            비밀번호를 잊으셨나요?
+                        </a>
+
                         <a
                             href="signup.html"
                             class="text-link"
