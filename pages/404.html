@@ -10,6 +10,9 @@
 
     <title>페이지를 찾을 수 없어요 | RecoMate</title>
 
+    <!-- 없는 주소(/foo, /a/b 등)에서도 이 페이지가 열리므로 상대 링크의 기준을 /pages/로 고정 -->
+    <base href="/pages/">
+
     <link rel="stylesheet" href="../css/common.css">
     <link rel="stylesheet" href="../css/navbar.css">
 
@@ -126,7 +129,7 @@
     <!-- 기존 공통 네비게이션 -->
     <div id="navbar-container"></div>
 
-    <main id="main" class="error-main">
+    <main id="main" class="error-main" tabindex="-1">
 
         <div class="error-content">
 
@@ -174,6 +177,12 @@
     <script type="module">
         import "../js/navbar.js";
         import "../js/auth-ui.js";
+
+        // base 때문에 "#main"은 /pages/#main으로 이동하므로, 같은 화면 안에서 본문으로 포커스만 옮긴다
+        document.querySelector('a[href="#main"]').addEventListener("click", (event) => {
+            event.preventDefault();
+            document.getElementById("main").focus();
+        });
     </script>
 
 </body>
