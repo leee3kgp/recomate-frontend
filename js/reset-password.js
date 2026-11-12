@@ -6,6 +6,13 @@ import {
     resetPassword
 } from "aws-amplify/auth";
 
+import {
+    getPasswordChecks,
+    getPasswordProblem,
+    isValidPassword,
+    PASSWORD_RULE_MESSAGE
+} from "./password-rules.js";
+
 // =====================================
 // HTML 요소
 // =====================================
@@ -63,21 +70,6 @@ function showMessage(message, success = false) {
 // =====================================
 // 비밀번호 조건
 // =====================================
-
-function getPasswordChecks(password) {
-    return {
-        length: password.length >= 12,
-        lower: /[a-z]/.test(password),
-        number: /[0-9]/.test(password),
-        symbol: /[^A-Za-z0-9]/.test(password)
-    };
-}
-
-function isValidPassword(password) {
-    return Object.values(
-        getPasswordChecks(password)
-    ).every(Boolean);
-}
 
 function updatePasswordRules() {
     if (!passwordRules || !passwordInput) return;
@@ -239,7 +231,28 @@ function updateFormState() {
     );
 }
 
-passwordInput?.addEventListener("input", updateFormState);
+// 앞뒤 공백처럼 조건 표시로 알 수 없는 문제는 메시지로 안내
+let shownPasswordProblem = "";
+
+function updatePasswordProblem() {
+    const problem = getPasswordProblem(passwordInput?.value || "");
+
+    if (problem) {
+        showMessage(problem);
+    } else if (
+        shownPasswordProblem &&
+        resetMessage?.textContent === shownPasswordProblem
+    ) {
+        showMessage("");
+    }
+
+    shownPasswordProblem = problem;
+}
+
+passwordInput?.addEventListener("input", () => {
+    updateFormState();
+    updatePasswordProblem();
+});
 confirmInput?.addEventListener("input", updateFormState);
 
 // =====================================
@@ -411,7 +424,7 @@ resetForm?.addEventListener("submit", async (event) => {
 
     if (!isValidPassword(newPassword)) {
         showMessage(
-            "비밀번호는 12자 이상이며 소문자, 숫자, 특수문자를 포함해야 합니다."
+            getPasswordProblem(newPassword) || PASSWORD_RULE_MESSAGE
         );
         passwordInput?.focus();
         return;
@@ -456,8 +469,13 @@ resetForm?.addEventListener("submit", async (event) => {
                 break;
 
             case "InvalidPasswordException":
+                showMessage(PASSWORD_RULE_MESSAGE);
+                break;
+
+            // 다시 시도해도 같은 결과라 처음부터 진행하도록 안내
+            case "InvalidParameterException":
                 showMessage(
-                    "비밀번호가 보안 조건을 충족하지 않습니다."
+                    "비밀번호를 재설정할 수 없습니다. 비밀번호 찾기부터 다시 진행해주세요."
                 );
                 break;
 
