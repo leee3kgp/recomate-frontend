@@ -112,7 +112,15 @@ if (emailForm && emailInput && sendButton) {
                     );
                     break;
 
+                // 이메일 인증을 마치지 않은 계정 (Cognito는 인증된 이메일로만 재설정 코드를 보냄)
+                // 다시 시도해도 같은 결과라 기다리라고 안내하지 않고, 계정이 있다고 단정하지도 않음
                 case "InvalidParameterException":
+                case "UserNotConfirmedException":
+                    showMessage(
+                        "인증번호를 보낼 수 없습니다."
+                    );
+                    break;
+
                 case "InvalidEmailRoleAccessPolicyException":
                     showMessage(
                         "인증번호를 보낼 수 없습니다. 잠시 후 다시 시도해주세요."

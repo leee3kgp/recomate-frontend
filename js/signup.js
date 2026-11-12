@@ -8,6 +8,13 @@ import {
     NICKNAME_MAX_LENGTH
 } from "./nickname-input.js";
 
+import {
+    getPasswordChecks,
+    getPasswordProblem,
+    isValidPassword,
+    PASSWORD_RULE_MESSAGE
+} from "./password-rules.js";
+
 // ================================
 // HTML 요소
 // ================================
@@ -58,30 +65,6 @@ function isValidEmail(email) {
 }
 
 // ================================
-// 비밀번호 조건 검사
-// ================================
-
-function getPasswordRules(password) {
-    return {
-        length: password.length >= 12,
-        lowercase: /[a-z]/.test(password),
-        number: /[0-9]/.test(password),
-        special: /[^A-Za-z0-9\s]/.test(password)
-    };
-}
-
-function isValidPassword(password) {
-    const rules = getPasswordRules(password);
-
-    return (
-        rules.length &&
-        rules.lowercase &&
-        rules.number &&
-        rules.special
-    );
-}
-
-// ================================
 // 비밀번호 조건 표시
 // ================================
 
@@ -103,7 +86,7 @@ function updateRule(element, valid, text, hasInput) {
 
 function checkPassword() {
     const password = passwordInput.value;
-    const rules = getPasswordRules(password);
+    const rules = getPasswordChecks(password);
     const hasInput = password.length > 0;
 
     updateRule(
@@ -129,7 +112,7 @@ function checkPassword() {
 
     updateRule(
         ruleSpecial,
-        rules.special,
+        rules.symbol,
         "특수문자 포함",
         hasInput
     );
@@ -141,7 +124,7 @@ function checkPassword() {
 
     if (!isValidPassword(password)) {
         passwordWarning.textContent =
-            "비밀번호는 12자 이상이며 소문자, 숫자, 특수문자를 각각 1개 이상 포함해야 합니다.";
+            getPasswordProblem(password) || PASSWORD_RULE_MESSAGE;
     } else {
         passwordWarning.textContent = "";
     }
@@ -276,6 +259,7 @@ signupForm.addEventListener(
             checkPassword();
 
             passwordWarning.textContent =
+                getPasswordProblem(password) ||
                 "비밀번호 조건을 모두 충족해야 회원가입할 수 있습니다.";
 
             passwordInput.focus();
