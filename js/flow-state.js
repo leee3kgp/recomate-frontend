@@ -1,86 +1,95 @@
 // =====================================
-// 추천 흐름 상태 (이용방법 → 인원 선택 → 장르 선택)
-// - 시안의 sessionStorage 'recomate-flow' 키와 같은 이름 사용
-// - 페이지가 바뀌어도, 새로고침해도 탭이 열려 있는 동안 유지
+// 추천 흐름 상태 (인원 · 이름 · 옵션 · 참여자별 선택)
+// start.html 에서 정한 값을 select.html 로 넘기고, 새로고침해도 이어가도록
+// sessionStorage 한 곳에 저장
+//
+//   {
+//     count, names[], ott[], excludeWatched,      ← start.html (1단계)
+//     participants: [{ index, name, genres[], want[], avoid[] }],   ← select.html (2단계)
+//     prefilled                                    ← 프로필 선호 장르를 미리 골라뒀는지
+//   }
+// 서버로 보내는 값(index, genres)과 화면용 값(name, want, avoid, ott …)을 구분해 둠
 // =====================================
 
-const FLOW_KEY = "recomate-flow";
+const FLOW_KEY = "recomate:flow";
 
 export const MIN_PARTICIPANTS = 2;
 export const MAX_PARTICIPANTS = 6;
+export const NAME_MAX_LENGTH = 10;
 
-// 허용 범위(2~6)의 정수인지 확인
 export function isValidCount(value) {
     return Number.isInteger(value)
         && value >= MIN_PARTICIPANTS
         && value <= MAX_PARTICIPANTS;
 }
 
-function loadFlow() {
-    try {
-        const raw = sessionStorage.getItem(FLOW_KEY);
-        const parsed = raw ? JSON.parse(raw) : null;
+// 이름은 글자(이모지 포함) 기준으로 자름
+export function limitName(value) {
+    return Array.from(value).slice(0, NAME_MAX_LENGTH).join("");
+}
 
-        return parsed && typeof parsed === "object" ? parsed : {};
+export function getFlow() {
+    try {
+        const parsed = JSON.parse(sessionStorage.getItem(FLOW_KEY));
+
+        return parsed && typeof parsed === "object" && !Array.isArray(parsed) ? parsed : {};
     } catch {
         return {};
     }
 }
 
-// 저장된 인원 수 (없거나 잘못된 값이면 기본값 2명)
+// 일부 값만 덮어쓰기. 저장소를 쓸 수 없으면 false
+export function patchFlow(patch) {
+    try {
+        sessionStorage.setItem(FLOW_KEY, JSON.stringify({ ...getFlow(), ...patch }));
+        return true;
+    } catch {
+        return false;
+    }
+}
+
+export function clearFlow() {
+    try {
+        sessionStorage.removeItem(FLOW_KEY);
+    } catch {
+        /* 무시 */
+    }
+}
+
 export function getFlowCount() {
-    const { count } = loadFlow();
+    const { count } = getFlow();
 
     return isValidCount(count) ? count : MIN_PARTICIPANTS;
 }
 
-// 인원 수 저장 (허용 범위를 벗어난 값은 저장하지 않음)
-export function setFlowCount(count) {
-    if (!isValidCount(count)) return;
+const strings = (value) => (
+    Array.isArray(value) ? value.filter((item) => typeof item === "string") : []
+);
 
-    try {
-        sessionStorage.setItem(
-            FLOW_KEY,
-            JSON.stringify({ ...loadFlow(), count })
-        );
-    } catch {
-        /* 저장 실패는 무시 (URL 쿼리로도 인원 수를 전달함) */
-    }
+// 인원 수와 이름으로 참여자 목록 만들기 (이름이 비면 "참여자 N")
+export function createParticipants(count, names = []) {
+    return Array.from({ length: count }, (_, i) => ({
+        index: i + 1,
+        name: limitName(String(names[i] ?? "").trim()) || `참여자 ${i + 1}`,
+        genres: [],
+        want: [],
+        avoid: []
+    }));
 }
 
-// ---------- 참여자별 장르 선택 진행 상태 ----------
-// 차례 안내 → 장르 선택을 반복하는 동안의 현재 참여자(idx)와 선택값(picks)
-// 새로고침해도 이어서 진행할 수 있도록 sessionStorage 에 함께 저장
+// 저장된 참여자 선택값을 읽음. 없거나 형식이 맞지 않으면 null
+export function getParticipants() {
+    const { participants } = getFlow();
 
-// picks: [{ index: 1, genres: [] }, ...]  (POST /api/sessions 의 participants 형식과 동일)
-export function getFlowPicks() {
-    const { idx, picks } = loadFlow();
-
-    if (!Array.isArray(picks) || !picks.length || !Number.isInteger(idx)) {
+    if (!Array.isArray(participants) || !isValidCount(participants.length)) {
         return null;
     }
 
-    return { idx, picks };
-}
-
-export function setFlowPicks(idx, picks) {
-    try {
-        sessionStorage.setItem(
-            FLOW_KEY,
-            JSON.stringify({ ...loadFlow(), idx, picks })
-        );
-    } catch {
-        /* 저장 실패 시에는 새로고침하면 인원 선택부터 다시 시작 */
-    }
-}
-
-// 인원 수는 남기고 선택 진행 상태만 삭제
-export function clearFlowPicks() {
-    try {
-        const { idx, picks, ...rest } = loadFlow();
-
-        sessionStorage.setItem(FLOW_KEY, JSON.stringify(rest));
-    } catch {
-        /* 무시 */
-    }
+    return participants.map((p, i) => ({
+        index: i + 1,
+        name: typeof p?.name === "string" && p.name ? p.name : `참여자 ${i + 1}`,
+        genres: strings(p?.genres),
+        want: strings(p?.want),
+        avoid: strings(p?.avoid)
+    }));
 }

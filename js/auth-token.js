@@ -110,12 +110,12 @@ export async function authFetch(url, options = {}) {
 // ================================
 
 // result.js가 저장한 결과(recomate:result:{userId}:{sessionId}, 비회원 recomate:result:guest:*)와
-// "이미 봤어요" 횟수(recomate:excluded:{userId}:{sessionId})를 지움
+// "이미 봤어요" 횟수(recomate:excluded:{userId}:{sessionId}), 추천 흐름 상태(recomate:flow: 인원·이름·선택값)를 지움
 export function clearStoredResults() {
 
     try {
         Object.keys(sessionStorage)
-            .filter((key) => key.startsWith("recomate:result:") || key.startsWith("recomate:excluded:"))
+            .filter((key) => key.startsWith("recomate:result:") || key.startsWith("recomate:excluded:") || key === "recomate:flow")
             .forEach((key) => sessionStorage.removeItem(key));
     } catch {
         /* 저장소 접근 실패는 무시 */

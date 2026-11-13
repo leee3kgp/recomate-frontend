@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="한 명씩 좋아하는 장르를 고르세요.">
+  <meta name="theme-color" content="#141414">
+  <title>장르 고르기 | RecoMate</title>
+  <!-- 공통 디자인 시스템 -->
+  <link rel="stylesheet" href="../css/common.css">
+  <link rel="stylesheet" href="../css/navbar.css">
+  <link rel="stylesheet" href="../css/footer.css">
+  <link rel="stylesheet" href="../css/toast.css">
+
+  <!-- 추천 흐름(시안) 스타일: .stage 범위 -->
+  <link rel="stylesheet" href="../css/flow-stage.css">
+</head>
+<body>
+  <a class="sr-only" href="#main">본문 바로가기</a>
+  <!-- 공통 네비게이션 -->
+  <div id="navbar-container"></div>
+
+  <main id="main" class="stage">
+    <div class="stage-fx" aria-hidden="true"></div>
+
+    <div class="stage-top"><div class="step-dots" id="dots" aria-hidden="true"></div></div>
+
+    <div class="stage-body">
+      <div class="alert info" id="no-session" hidden>인원을 정하지 않아 2명으로 시작했어요. <a class="link" href="start.html">인원·이름 바꾸기</a></div>
+
+      <!-- 차례 안내 (앞사람 선택을 가리고 시작해요) -->
+      <section class="stage-panel" id="handoff" aria-labelledby="handoff-title">
+        <h1 id="handoff-title" tabindex="-1"></h1>
+        <p class="lead">앞사람이 고른 내용은 보이지 않아요. 준비되면 눌러주세요.</p>
+        <div class="stage-actions bare"><button class="btn btn-primary btn-lg" id="handoff-go" type="button">시작하기</button></div>
+      </section>
+
+      <!-- 취향 선택 -->
+      <section class="stage-panel" id="picker" hidden aria-labelledby="cur-title">
+        <h1 id="cur-title" tabindex="-1"></h1>
+        <p class="lead">선호하는 장르를 선택해주세요. 1~3개를 고르면 추천이 가장 정확해요.</p>
+        <div class="stage-card">
+          <div class="grp-wrap">
+            <p class="grp">선호하는 장르 <small>(여러 개 선택)</small></p>
+            <div class="chips" id="genres"></div>
+          </div>
+          <div class="grp-wrap">
+            <p class="grp">오늘 시청하고 싶은 콘텐츠 <small>(선택)</small></p>
+            <div class="chips" id="want"></div>
+          </div>
+          <div class="grp-wrap">
+            <p class="grp">별로 안 끌리는 콘텐츠 <small>(선택)</small></p>
+            <div class="chips" id="avoid"></div>
+          </div>
+          <p id="pick-msg" role="status"></p>
+          <div class="stage-actions" style="margin-top:20px">
+            <button class="btn btn-ghost btn-lg" id="prev" type="button">이전</button>
+            <button class="btn btn-primary btn-lg" id="done" type="button" disabled>다음</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 추천 생성 중 / 완료 / 실패 -->
+      <section class="stage-panel" id="loading" hidden aria-live="polite">
+        <div class="loading-screen" id="loading-box">
+          <svg class="done-check" viewBox="0 0 52 52" aria-hidden="true"><circle cx="26" cy="26" r="24"/><path d="M15 27l8 8 14-16"/></svg>
+          <h1 id="loading-title">데이터를 취합중입니다<span class="ellipsis" aria-hidden="true"><i>.</i><i>.</i><i>.</i><i>.</i><i>.</i></span></h1>
+          <p class="lead" id="loading-sub">잠시만 기다려주세요</p>
+          <div class="stage-actions bare" id="loading-actions" hidden>
+            <button class="btn btn-ghost btn-lg" id="back-to-pick" type="button">장르 다시 고르기</button>
+            <button class="btn btn-primary btn-lg" id="retry" type="button">다시 시도</button>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- 공통 푸터 -->
+  <footer id="site-footer"></footer>
+
+  <!-- 공통 네비게이션 / 인증 / 푸터 -->
+  <script type="module">
+    import "../js/navbar.js";
+    import "../js/auth-ui.js";
+    import "../js/footer.js";
+  </script>
+
+  <script type="module" src="../js/select.js"></script>
+</body>
+</html>
