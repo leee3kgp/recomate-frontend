@@ -1,0 +1,260 @@
+/* =========================================
+   RecoMate - 추천 흐름 화면 스타일 (start.html / select.html)
+   최종 디자인 시안(recomate-design/assets/styles.css)에서 흐름 화면에 필요한 규칙만 추출
+   - 공통 디자인 시스템(common.css · navbar.css · footer.css · toast.css)과 함께 사용
+   - 시안의 규칙은 모두 .stage 범위로 한정해 공통 .btn · .input 등과 충돌하지 않음
+   - 시안 토큰(--line 등 공통 토큰과 이름이 같은 값)도 .stage 안에서만 적용
+========================================= */
+
+.stage {
+  --bg-2: #0b0b0b;
+  --surface: #1b1b1b;
+  --surface-2: #232323;
+  --surface-3: #2e2e2e;
+  --line: rgba(255, 255, 255, 0.08);
+  --line-strong: rgba(255, 255, 255, 0.16);
+  --text-2: #c9c4c4;
+  --muted: #8d8d8d;
+  --accent: #e57a14;
+  --accent-ink: #ffffff;
+  --warning: #ec8f3c;
+  --danger: #e86a5f;
+  --p1: #7fb2e5;
+  --p2: #e58fa8;
+  --p3: #79c49a;
+  --p4: #e3c16f;
+  --p5: #b39ddb;
+  --p6: #e6a173;
+  --radius: 8px;
+  --radius-lg: 12px;
+  --focus: 0 0 0 2px var(--bg), 0 0 0 4px var(--accent);
+  --header-h: var(--nav-h, 58px);
+  word-break: keep-all;
+}
+
+/* hidden 속성이 display 지정보다 우선하도록 (패널 전환에 사용) */
+.stage [hidden] { display: none !important; }
+
+/* 공통 .btn 의 기본값(min-height, 줄 높이)을 시안의 height 기준으로 맞춤 */
+.stage .btn { min-height: 0; line-height: 1.4; }
+
+/* ---------- 시안에서 추출한 규칙 ---------- */
+.stage .btn {--h: 42px;
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  height: var(--h); padding: 0 16px; border-radius: var(--radius); border: 1px solid transparent;
+  font-weight: 600; font-size: 14px; cursor: pointer; white-space: nowrap; transition: background .15s, border-color .15s;}
+.stage .btn svg {width: 18px; height: 18px;}
+.stage .btn-primary {background: var(--grad) border-box; color: var(--accent-ink);}
+.stage .btn-primary:hover {background: var(--grad) border-box; filter: brightness(1.12);}
+.stage .btn-secondary {background: var(--surface-2); color: var(--text); border-color: var(--line-strong);}
+.stage .btn-secondary:hover {background: var(--surface-3);}
+.stage .btn-ghost {background: transparent; color: var(--text-2);}
+.stage .btn-ghost:hover {background: var(--surface); color: var(--text);}
+.stage .btn-danger {background: transparent; color: var(--danger); border-color: rgba(232, 106, 95, 0.45);}
+.stage .btn-danger:hover {background: rgba(232, 106, 95, 0.1);}
+.stage .btn-lg {--h: 50px; padding: 0 22px; font-size: 15px;}
+.stage .btn-sm {--h: 32px; padding: 0 12px; font-size: 13px;}
+.stage .btn-block {width: 100%;}
+.stage .btn[disabled], .stage .btn.is-disabled {opacity: 0.4; cursor: not-allowed;}
+.stage .btn.is-loading {pointer-events: none; opacity: 0.75;}
+.stage .btn.is-loading::before {content: ""; width: 14px; height: 14px; border-radius: 50%; border: 2px solid currentColor; border-right-color: transparent;
+  animation: spin .7s linear infinite;}
+.stage .link {color: var(--text-2); text-decoration: underline; text-underline-offset: 3px; text-decoration-color: var(--line-strong);}
+.stage .link:hover {color: var(--text);}
+@keyframes spin {to { transform: rotate(360deg); }}
+.stage .input {width: 100%; height: 46px; padding: 0 12px; border-radius: var(--radius); border: 1px solid var(--line-strong);
+  background: var(--bg-2); color: var(--text); transition: border-color .15s;}
+.stage textarea.input {height: auto; min-height: 120px; padding: 12px; resize: vertical;}
+.stage .input::placeholder {color: #6f6a62;}
+.stage .input:focus {border-color: var(--accent); outline: none;}
+.stage .input[readonly] {color: var(--muted);}
+.stage .switch {position: relative; width: 42px; height: 24px; flex: none;}
+.stage .switch input {opacity: 0; width: 0; height: 0;}
+.stage .switch span {position: absolute; inset: 0; background: var(--surface-3); border-radius: 999px; transition: .15s; cursor: pointer;}
+.stage .switch span::after {content: ""; position: absolute; left: 3px; top: 3px; width: 18px; height: 18px; border-radius: 50%; background: var(--text-2); transition: .15s;}
+.stage .switch input:checked + span {background: var(--grad) border-box;}
+.stage .switch input:checked + span::after {transform: translateX(18px); background: var(--accent-ink);}
+.stage .switch input:disabled + span {opacity: 0.4; cursor: not-allowed;}
+.stage .switch input:focus-visible + span {box-shadow: var(--focus);}
+.stage .alert {display: flex; gap: 10px; padding: 12px 14px; border-radius: var(--radius); font-size: 14px; background: var(--surface-2); border: 1px solid var(--line); color: var(--text-2);}
+.stage .alert.error {background: rgba(232, 106, 95, 0.1); border-color: rgba(232, 106, 95, 0.35); color: #f3c3bd;}
+.stage .alert.success {background: rgba(108, 192, 139, 0.1); border-color: rgba(108, 192, 139, 0.35); color: #c5ead2;}
+.stage .alert.info {background: var(--surface-2); border-color: var(--line-strong); color: var(--text-2);}
+.stage .chips {display: flex; flex-wrap: wrap; gap: 8px;}
+.stage .chip {height: 36px; padding: 0 14px; border-radius: 999px; border: 1px solid var(--line-strong); background: transparent;
+  color: var(--text-2); font-weight: 500; font-size: 14px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;}
+.stage .chip:hover {border-color: rgba(255,255,255,0.32); color: var(--text);}
+.stage .chip[aria-pressed="true"] {background: var(--grad) border-box; border-color: transparent; color: #fff; font-weight: 600;}
+.stage .counter-big {display: flex; align-items: center; justify-content: center; gap: 22px;}
+.stage .counter-big .value {font-size: 52px; font-weight: 700; min-width: 120px; text-align: center;}
+.stage .circle-btn {width: 52px; height: 52px; border-radius: 50%; border: 1px solid var(--line-strong); background: var(--surface-2); font-size: 24px; cursor: pointer;}
+.stage .circle-btn:hover {background: var(--surface-3);}
+.stage .circle-btn:disabled {opacity: 0.35; cursor: not-allowed;}
+.stage .p-avatar {width: 32px; height: 32px; border-radius: 50%; display: inline-grid; place-items: center; font-weight: 700; color: #16140f; font-size: 13px; flex: none;}
+.stage .loading-screen {padding: 64px 16px; max-width: 420px; margin: 0 auto;}
+.stage {position: relative; isolation: isolate; overflow: hidden; min-height: calc(100vh - var(--header-h)); display: grid; grid-template-rows: auto 1fr; justify-items: center; text-align: center; padding: 28px 16px 56px;}
+.stage-fx {position: absolute; inset: 0; z-index: -1; pointer-events: none; background: linear-gradient(100deg, #5c2f68 0%, #6e3a40 46%, #8a4d12 100%);}
+.stage-top {display: grid; justify-items: center; gap: 12px; min-height: 36px;}
+.stage-body {width: min(100%, 560px); align-self: center;}
+.stage-panel {width: 100%; display: grid; justify-items: center;}
+.stage h1, .stage h2 {margin: 0; font-size: clamp(26px, 3.6vw, 40px); line-height: 1.3; letter-spacing: -0.02em; font-weight: 700; color: #fff; text-wrap: balance; text-shadow: 0 3px 16px rgba(0, 0, 0, 0.25); outline: none;}
+.stage h1:focus-visible, .stage h2:focus-visible {box-shadow: none;}
+.stage .lead {margin: 14px 0 0; color: rgba(255, 255, 255, 0.78); font-size: clamp(14px, 1.4vw, 17px); max-width: 520px;}
+.stage .step-dots {display: flex; gap: 8px; justify-content: center;}
+.stage .step-dots i {width: 8px; height: 8px; border-radius: 999px; background: rgba(255, 255, 255, 0.35); transition: width .2s, background .2s;}
+.stage .step-dots i.done {background: rgba(255, 255, 255, 0.8);}
+.stage .step-dots i.on {width: 28px; background: #fff;}
+.stage-card {width: 100%; margin-top: 28px; padding: 28px; text-align: left; background: #141414; border: 1px solid var(--line); border-radius: var(--radius-lg); box-shadow: 0 24px 56px rgba(0, 0, 0, 0.45);}
+.stage-card .card-title {font-size: 22px; text-shadow: none; text-align: left; margin: 0 0 18px;}
+.stage-actions {display: flex; gap: 12px; justify-content: center; align-items: center; flex-wrap: wrap; margin-top: 28px;}
+.stage-actions.bare {margin-top: 36px;}
+.stage .btn-lg {--h: 54px; padding: 0 36px; font-size: 16px; font-weight: 700;}
+.stage .btn-ghost.btn-lg {padding: 0 22px;}
+.stage .bare .btn-primary {background: #141414;}
+.stage-card .btn-ghost {color: var(--text-2);}
+.stage .bare .btn-ghost {color: rgba(255, 255, 255, 0.88);}
+.stage .bare .btn-ghost:hover {background: #141414; color: #fff;}
+.stage .howto {display: grid; gap: 10px;}
+.stage .howto li {list-style: none; padding: 14px 16px; background: #0b0b0b; border-radius: var(--radius); opacity: 0; transform: translateY(6px); animation: howto-in .7s cubic-bezier(.2, .8, .2, 1) .7s forwards;}
+.stage .howto li:nth-child(2) {animation-delay: 1.7s;}
+.stage .howto li:nth-child(3) {animation-delay: 2.7s;}
+.stage .howto b {display: block; font-size: 15px; margin-bottom: 2px;}
+.stage .howto span {font-size: 14px; color: var(--text-2);}
+@keyframes howto-in {to { opacity: 1; transform: none; }}
+@media (prefers-reduced-motion: reduce) {
+  .stage .howto li {animation: none; opacity: 1; transform: none;}
+}
+.stage .counter-big {margin: 44px 0 0; gap: 28px;}
+.stage .counter-big .value {font-size: 72px; line-height: 1; min-width: 150px; text-align: center;}
+.stage .circle-btn {width: 56px; height: 56px; color: var(--text); background: #141414; border-color: transparent;}
+.stage .circle-btn:hover {background: #232323;}
+.stage .name-list {width: 100%; display: grid; gap: 12px;}
+.stage .name-row {display: flex; align-items: center; gap: 12px;}
+.stage .name-row .input {flex: 1; height: 50px; font-size: 16px;}
+.stage .p-avatar {width: 36px; height: 36px;}
+.stage .grp-wrap + .grp-wrap {margin-top: 26px;}
+.stage .grp {margin: 0 0 10px; font-size: 14px; font-weight: 700; color: var(--text);}
+.stage .grp small {font-weight: 500; color: var(--muted); font-size: 13px;}
+.stage .grp-note {margin: 8px 0 0; font-size: 13px; color: var(--muted);}
+.stage-card .chip {height: 40px; padding: 0 16px; font-size: 15px;}
+.stage .opt-switch {display: flex; align-items: center; justify-content: space-between; gap: 14px;}
+.stage-card #pick-msg {min-height: 22px; margin: 18px 0 0; font-size: 14px; color: var(--muted); text-align: center;}
+.stage .alert {justify-self: center; margin-bottom: 24px;}
+.stage .loading-screen {padding: 0;}
+@media (max-width: 520px) {
+  .stage-card {padding: 22px 18px;}
+  .stage .counter-big .value {font-size: 60px; min-width: 110px;}
+  .stage .btn-lg {padding: 0 26px;}
+}
+.stage {position: relative; isolation: isolate; overflow: hidden; min-height: calc(100vh - var(--header-h)); display: grid; grid-template-rows: auto 1fr; justify-items: center; text-align: center; padding: 28px 16px 56px;}
+.stage-fx {position: absolute; inset: 0; z-index: -1; pointer-events: none; background: linear-gradient(100deg, #5c2f68 0%, #6e3a40 46%, #8a4d12 100%);}
+.stage-top {display: grid; justify-items: center; gap: 12px; min-height: 36px;}
+.stage-body {width: min(100%, 560px); align-self: center;}
+.stage-panel {width: 100%; display: grid; justify-items: center;}
+.stage h1, .stage h2 {margin: 0; font-size: clamp(26px, 3.6vw, 40px); line-height: 1.3; letter-spacing: -0.02em; font-weight: 700; color: #fff; text-wrap: balance; text-shadow: 0 3px 16px rgba(0, 0, 0, 0.25); outline: none;}
+.stage h1:focus-visible, .stage h2:focus-visible {box-shadow: none;}
+.stage .lead {margin: 14px 0 0; color: rgba(255, 255, 255, 0.78); font-size: clamp(14px, 1.4vw, 17px); max-width: 520px;}
+.stage .step-dots {display: flex; gap: 8px; justify-content: center;}
+.stage .step-dots i {width: 8px; height: 8px; border-radius: 999px; background: rgba(255, 255, 255, 0.35); transition: width .2s, background .2s;}
+.stage .step-dots i.done {background: rgba(255, 255, 255, 0.8);}
+.stage .step-dots i.on {width: 28px; background: #fff;}
+.stage-card {width: 100%; margin-top: 28px; padding: 28px; text-align: left; background: #141414; border: 1px solid var(--line); border-radius: var(--radius-lg); box-shadow: 0 24px 56px rgba(0, 0, 0, 0.45);}
+.stage-card .card-title {font-size: 22px; text-shadow: none; text-align: left; margin: 0 0 18px;}
+.stage-actions {display: flex; gap: 12px; justify-content: center; align-items: center; flex-wrap: wrap; margin-top: 28px;}
+.stage-actions.bare {margin-top: 36px;}
+.stage .btn-lg {--h: 54px; padding: 0 36px; font-size: 16px; font-weight: 700;}
+.stage .btn-ghost.btn-lg {padding: 0 22px;}
+.stage .bare .btn-primary {background: #141414;}
+.stage-card .btn-ghost {color: var(--text-2);}
+.stage .bare .btn-ghost {color: rgba(255, 255, 255, 0.88);}
+.stage .bare .btn-ghost:hover {background: #141414; color: #fff;}
+.stage .howto {display: grid; gap: 10px;}
+.stage .howto li {list-style: none; padding: 14px 16px; background: #0b0b0b; border-radius: var(--radius); opacity: 0; transform: translateY(6px); animation: howto-in .7s cubic-bezier(.2, .8, .2, 1) .7s forwards;}
+.stage .howto li:nth-child(2) {animation-delay: 1.7s;}
+.stage .howto li:nth-child(3) {animation-delay: 2.7s;}
+.stage .howto b {display: block; font-size: 15px; margin-bottom: 2px;}
+.stage .howto span {font-size: 14px; color: var(--text-2);}
+@keyframes howto-in {to { opacity: 1; transform: none; }}
+@media (prefers-reduced-motion: reduce) {
+  .stage .howto li {animation: none; opacity: 1; transform: none;}
+}
+.stage .counter-big {margin: 44px 0 0; gap: 28px;}
+.stage .counter-big .value {font-size: 72px; line-height: 1; min-width: 150px; text-align: center;}
+.stage .circle-btn {width: 56px; height: 56px; color: var(--text); background: #141414; border-color: transparent;}
+.stage .circle-btn:hover {background: #232323;}
+.stage .name-list {width: 100%; display: grid; gap: 12px;}
+.stage .name-row {display: flex; align-items: center; gap: 12px;}
+.stage .name-row .input {flex: 1; height: 50px; font-size: 16px;}
+.stage .p-avatar {width: 36px; height: 36px;}
+.stage .grp-wrap + .grp-wrap {margin-top: 26px;}
+.stage .grp {margin: 0 0 10px; font-size: 14px; font-weight: 700; color: var(--text);}
+.stage .grp small {font-weight: 500; color: var(--muted); font-size: 13px;}
+.stage .grp-note {margin: 8px 0 0; font-size: 13px; color: var(--muted);}
+.stage-card .chip {height: 40px; padding: 0 16px; font-size: 15px;}
+.stage .opt-switch {display: flex; align-items: center; justify-content: space-between; gap: 14px;}
+.stage-card #pick-msg {min-height: 22px; margin: 18px 0 0; font-size: 14px; color: var(--muted); text-align: center;}
+.stage .alert {justify-self: center; margin-bottom: 24px;}
+.stage .loading-screen {padding: 0;}
+@media (max-width: 520px) {
+  .stage-card {padding: 22px 18px;}
+  .stage .counter-big .value {font-size: 60px; min-width: 110px;}
+  .stage .btn-lg {padding: 0 26px;}
+}
+.stage-fx {background-size: 230% 100%; background-position: 0% 50%; transition: background-position 1.3s cubic-bezier(.2, .8, .2, 1);}
+.stage-panel.is-in > * {animation: flow-rise .55s cubic-bezier(.2, .8, .2, 1) both;}
+.stage-panel.is-in > :nth-child(2) {animation-delay: .07s;}
+.stage-panel.is-in > :nth-child(3) {animation-delay: .14s;}
+.stage-panel.is-in > :nth-child(4) {animation-delay: .21s;}
+.stage-panel.is-in > :nth-child(5) {animation-delay: .28s;}
+.stage-panel.is-in.back > * {animation-name: flow-rise-back;}
+.stage-panel.is-out {animation: flow-leave .26s ease-in both; pointer-events: none;}
+.stage-panel.is-out.back {animation-name: flow-leave-back;}
+@keyframes flow-rise {from { opacity: 0; transform: translateX(30px); } to { opacity: 1; transform: none; }}
+@keyframes flow-rise-back {from { opacity: 0; transform: translateX(-30px); } to { opacity: 1; transform: none; }}
+@keyframes flow-leave {to { opacity: 0; transform: translateX(-40px) scale(.98); }}
+@keyframes flow-leave-back {to { opacity: 0; transform: translateX(40px) scale(.98); }}
+.stage-panel.is-in .chips .chip {animation: flow-pop .45s cubic-bezier(.2, .9, .3, 1.25) both; animation-delay: calc(.22s + var(--i, 0) * 28ms);}
+@keyframes flow-pop {from { opacity: 0; transform: translateY(10px) scale(.7); } to { opacity: 1; transform: none; }}
+.stage .chip {transition: transform .12s, background .2s, border-color .2s;}
+.stage .chip:active {transform: scale(.93);}
+.stage .chip[aria-pressed="true"] {box-shadow: 0 6px 18px rgba(155, 63, 181, 0.35);}
+.stage .btn, .stage .circle-btn {transition: transform .15s, filter .15s, background .2s, box-shadow .2s;}
+.stage .btn-primary:not([disabled]):hover {transform: translateY(-2px); box-shadow: 0 10px 26px rgba(0, 0, 0, 0.35);}
+.stage .btn:not([disabled]):active, .stage .circle-btn:not(:disabled):active {transform: scale(.94);}
+.stage #count {display: inline-block;}
+.stage .bump {animation: flow-bump .32s cubic-bezier(.2, .9, .3, 1.4);}
+@keyframes flow-bump {40% { transform: scale(1.3); }}
+.stage #handoff.is-in > h1 {animation: flow-title .7s cubic-bezier(.2, .8, .2, 1) both;}
+.stage #handoff.is-in > .lead {animation-delay: .25s;}
+.stage #handoff.is-in > .stage-actions {animation-delay: .4s;}
+@keyframes flow-title {from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; }}
+.stage .loading-screen {display: grid; justify-items: center;}
+.stage .orbit {display: flex; gap: 10px; margin-bottom: 26px; height: 18px;}
+.stage .orbit i {width: 12px; height: 12px; border-radius: 50%; background: #fff; animation: flow-wave 1s ease-in-out infinite;}
+.stage .orbit i:nth-child(2) {animation-delay: .15s;}
+.stage .orbit i:nth-child(3) {animation-delay: .3s;}
+@keyframes flow-wave {0%, 100% { transform: translateY(0); opacity: .5; } 50% { transform: translateY(-12px); opacity: 1; }}
+.stage .done-check {display: none; width: 64px; height: 64px; margin-bottom: 20px; fill: none; stroke: #fff; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round;}
+.stage .done-check circle {stroke-dasharray: 152; animation: flow-draw .6s ease-out both;}
+.stage .done-check path {stroke-dasharray: 40; animation: flow-draw-check .4s .45s ease-out both;}
+@keyframes flow-draw {from { stroke-dashoffset: 152; } to { stroke-dashoffset: 0; }}
+@keyframes flow-draw-check {from { stroke-dashoffset: 40; } to { stroke-dashoffset: 0; }}
+.stage .loading-screen.done .orbit {display: none;}
+.stage .loading-screen.done .done-check {display: block;}
+.stage .swap-text {animation: flow-rise .5s cubic-bezier(.2, .8, .2, 1) both;}
+.stage-curtain {position: fixed; inset: 0; z-index: 200; background: #141414; opacity: 0; pointer-events: none; transition: opacity .5s ease-in;}
+.stage-curtain.on {opacity: 1;}
+@keyframes flow-page-in {from { opacity: 0; }}
+@media (prefers-reduced-motion: reduce) {
+  .stage *, .stage-panel, .stage-fx {animation: none !important; transition-duration: .01ms !important;}
+}
+.stage .switch input:disabled + span {opacity: .45; cursor: not-allowed;}
+.stage .ellipsis i {display: inline-block; font-style: normal; animation: flow-dot 1.2s ease-in-out infinite;}
+.stage .ellipsis i:nth-child(2) {animation-delay: .12s;}
+.stage .ellipsis i:nth-child(3) {animation-delay: .24s;}
+.stage .ellipsis i:nth-child(4) {animation-delay: .36s;}
+.stage .ellipsis i:nth-child(5) {animation-delay: .48s;}
+@keyframes flow-dot {0%, 60%, 100% { transform: translateY(0); opacity: .35; } 30% { transform: translateY(-.28em); opacity: 1; }}
+@media (prefers-reduced-motion: reduce) {
+  .stage .ellipsis i {animation: none; opacity: 1;}
+}

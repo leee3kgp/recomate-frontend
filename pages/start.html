@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="함께 볼 인원과 이름, 추천 옵션을 정하세요.">
+  <meta name="theme-color" content="#141414">
+  <title>같이 추천받기 | RecoMate</title>
+  <!-- 공통 디자인 시스템 -->
+  <link rel="stylesheet" href="../css/common.css">
+  <link rel="stylesheet" href="../css/navbar.css">
+  <link rel="stylesheet" href="../css/footer.css">
+  <link rel="stylesheet" href="../css/toast.css">
+
+  <!-- 추천 흐름(시안) 스타일: .stage 범위 -->
+  <link rel="stylesheet" href="../css/flow-stage.css">
+</head>
+<body>
+  <a class="sr-only" href="#main">본문 바로가기</a>
+  <!-- 공통 네비게이션 -->
+  <div id="navbar-container"></div>
+
+  <main id="main" class="stage">
+    <div class="stage-fx" aria-hidden="true"></div>
+
+    <div class="stage-top"><div class="step-dots" id="dots" aria-hidden="true"><i></i><i></i><i></i><i></i></div></div>
+
+    <div class="stage-body">
+      <!-- 0. 이용방법 -->
+      <section class="stage-panel" data-step="0" aria-labelledby="t0">
+        <div class="stage-card" style="margin-top:0">
+          <h1 id="t0" class="card-title" tabindex="-1">이용방법</h1>
+          <ol class="howto" style="margin:0;padding:0">
+            <li><b>1. 인원 선택</b><span>함께 볼 인원을 2~6명으로 정합니다.</span></li>
+            <li><b>2. 장르 선택</b><span>참여자별로 좋아하는 장르를 고릅니다.</span></li>
+            <li><b>3. TOP 3 확인</b><span>추천 콘텐츠와 취향 분석을 확인합니다.</span></li>
+          </ol>
+          <div class="stage-actions"><button class="btn btn-primary btn-lg" type="button" data-next>다음</button></div>
+        </div>
+      </section>
+
+      <!-- 1. 인원 -->
+      <section class="stage-panel" data-step="1" hidden aria-labelledby="t1">
+        <h1 id="t1" tabindex="-1">몇 명이서 함께 시청하시나요?</h1>
+        <p class="lead">최대 6명까지 함께 고를 수 있어요.</p>
+        <div class="counter-big" role="group" aria-label="참여 인원">
+          <button class="circle-btn" id="minus" type="button" aria-label="한 명 줄이기">−</button>
+          <div class="value" aria-live="polite"><span id="count">2</span><span style="font-size:26px">명</span></div>
+          <button class="circle-btn" id="plus" type="button" aria-label="한 명 늘리기">+</button>
+        </div>
+        <div class="stage-actions bare"><button class="btn btn-ghost btn-lg" type="button" data-prev>이전</button><button class="btn btn-primary btn-lg" type="button" data-next>다음</button></div>
+      </section>
+
+      <!-- 2. 이름 -->
+      <section class="stage-panel" data-step="2" hidden aria-labelledby="t2">
+        <h1 id="t2" tabindex="-1">누구와 함께 보나요?</h1>
+        <p class="lead">이름을 적으면 차례 안내에서 이름으로 불러드려요. 비워두면 '참여자 1'처럼 표시돼요.</p>
+        <div class="stage-card">
+          <div class="name-list" id="names"></div>
+          <div style="text-align:center;margin-top:14px"><button class="btn btn-ghost btn-sm" id="clear-names" type="button">이름 지우기</button></div>
+          <div class="stage-actions" style="margin-top:14px"><button class="btn btn-ghost btn-lg" type="button" data-prev>이전</button><button class="btn btn-primary btn-lg" type="button" data-next>다음</button></div>
+        </div>
+      </section>
+
+      <!-- 3. 옵션 -->
+      <section class="stage-panel" data-step="3" hidden aria-labelledby="t3">
+        <h1 id="t3" tabindex="-1">추천 옵션을 골라주세요</h1>
+        <p class="lead">모두 건너뛰어도 괜찮아요.</p>
+        <div class="stage-card">
+          <div class="grp-wrap">
+            <div class="opt-switch"><span class="grp" style="margin:0">이미 본 작품 빼기</span>
+              <label class="switch"><input type="checkbox" id="exclude-watched" checked><span></span><b class="sr-only">이미 본 작품 빼기</b></label></div>
+            <p class="grp-note" id="watched-hint"></p>
+          </div>
+          <div class="grp-wrap">
+            <p class="grp">구독 중인 OTT만 <small>(선택)</small></p>
+            <div class="chips" id="ott"></div>
+          </div>
+          <div class="stage-actions"><button class="btn btn-ghost btn-lg" type="button" data-prev>이전</button><button class="btn btn-primary btn-lg" id="next" type="button">장르 고르러 가기</button></div>
+          <p class="grp-note" style="text-align:center;margin-top:16px" id="login-hint"></p>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- 공통 푸터 -->
+  <footer id="site-footer"></footer>
+
+  <!-- 공통 네비게이션 / 인증 / 푸터 -->
+  <script type="module">
+    import "../js/navbar.js";
+    import "../js/auth-ui.js";
+    import "../js/footer.js";
+  </script>
+
+  <script type="module" src="../js/start.js"></script>
+</body>
+</html>
