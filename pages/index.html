@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -9,7 +8,11 @@
     >
     <meta name="theme-color" content="#141414">
 
-    <title>RecoMate | 함께 고르는 콘텐츠</title>
+    <title>RecoMate | 여럿이 볼 영화·드라마 추천</title>
+    <meta
+        name="description"
+        content="함께 볼 사람마다 좋아하는 장르를 고르면, 모두의 취향에 맞는 영화·드라마 3편을 추천해요."
+    >
 
     <link
         rel="preconnect"
@@ -32,37 +35,23 @@
     <link rel="stylesheet" href="../css/footer.css">
     <link rel="stylesheet" href="../css/toast.css">
 
-    <!-- 기존 배경 -->
-    <link rel="stylesheet" href="../css/background.css">
-
-    <!-- 기존 홈 화면 -->
-    <link rel="stylesheet" href="../css/flow.css">
+    <!-- 홈 화면 (최종 디자인 시안): .home-page 범위 -->
+    <link rel="stylesheet" href="../css/home-page.css">
 </head>
 
-<body class="flow-page" data-mode="home">
+<body>
 
     <!-- 공통 네비게이션 -->
     <div id="navbar-container"></div>
 
-    <!-- 기존 배경 -->
-    <div class="fx" aria-hidden="true">
-        <div class="fxin">
-            <i></i>
-        </div>
-    </div>
-
-    <div class="fxn" aria-hidden="true"></div>
-
-    <!-- 홈 (새 디자인은 홈 화면 이슈에서 적용). 추천은 start.html 에서 시작 -->
-    <main id="app">
-        <section class="stage hero">
-            <div class="view">
-                <h2 class="title">함께 볼 콘텐츠, 고민하지 말고 골라보세요</h2>
-                <p class="desc">참여자별 선호 장르를 모아 모두가 즐길 수 있는 영화, 드라마 TOP 3를 추천합니다.</p>
-                <a class="link-btn" href="start.html" style="margin-top:96px">같이 볼 콘텐츠 추천받기</a>
-            </div>
-        </section>
-        <div class="home-rest"></div>
+    <!--
+        홈 화면
+        js/home.js 가 로그인 여부에 따라
+        소개 + 인기 목록 블러 미리보기(비회원) / 인기 목록(회원) 화면을 그림
+    -->
+    <main id="app" class="home-page">
+        <h1 class="sr-only">RecoMate 홈</h1>
+        <div id="home-root"></div>
     </main>
 
     <!-- 공통 푸터 -->
@@ -81,6 +70,9 @@
 
         window.testRecoMateToast = showToast;
     </script>
+
+    <!-- 홈 화면 렌더링 / 인기 목록 API -->
+    <script type="module" src="../js/home.js"></script>
 
 </body>
 </html>
