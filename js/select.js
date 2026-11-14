@@ -22,7 +22,8 @@ import {
     getFlow,
     patchFlow,
     getParticipants,
-    createParticipants
+    createParticipants,
+    saveResultNames
 } from "./flow-state.js";
 
 // 콘텐츠 종류. code 는 추천 결과의 mediaType 값("movie" | "tv")과 같음
@@ -286,7 +287,7 @@ function buildRequest() {
     };
 }
 
-// 요청을 보내고 이동할 결과 화면 주소를 돌려줌
+// 요청을 보내고 이동할 결과 화면 주소와 결과 저장 키(회원: sessionId, 비회원: "guest")를 돌려줌
 async function sendRequest() {
     const request = buildRequest();
     const count = request.participantCount;
@@ -301,7 +302,7 @@ async function sendRequest() {
             throw new Error("브라우저 저장소를 사용할 수 없어 추천을 진행할 수 없어요. 로그인 후 이용해주세요.");
         }
 
-        return `result.html?guest=1&count=${count}`;
+        return { target: `result.html?guest=1&count=${count}`, key: "guest" };
     }
 
     // 회원: POST /api/sessions → 201 { sessionId, ... }
@@ -315,7 +316,10 @@ async function sendRequest() {
         throw new Error("세션 정보를 받지 못했어요. 잠시 후 다시 시도해주세요.");
     }
 
-    return `result.html?sessionId=${encodeURIComponent(data.sessionId)}&count=${count}`;
+    return {
+        target: `result.html?sessionId=${encodeURIComponent(data.sessionId)}&count=${count}`,
+        key: data.sessionId
+    };
 }
 
 function errorMessage(error) {
@@ -371,9 +375,10 @@ async function submit() {
 
     const startedAt = Date.now();
     let target;
+    let resultKey;
 
     try {
-        target = await sendRequest();
+        ({ target, key: resultKey } = await sendRequest());
     } catch (error) {
         console.error("추천 요청 에러:", error);
         showError(errorMessage(error));
@@ -383,6 +388,10 @@ async function submit() {
 
     await wait(Math.max(0, MIN_LOADING_MS - (Date.now() - startedAt)));
     showDone();
+
+    // 결과 화면에 보여줄 이름만 따로 넘김 (고른 장르는 서버/요청 쪽 값을 사용)
+    // (이름을 적지 않아 "참여자 N"으로 표시된 사람은 빈 값으로 저장해 다시 추천받을 때 입력칸을 채우지 않음)
+    saveResultNames(resultKey, P.map((p, i) => (p.name === `참여자 ${i + 1}` ? "" : p.name)));
 
     // 서버로 넘어간 선택 내용은 더 두지 않음 (이름·인원은 다시 하기를 위해 남김)
     patchFlow({ participants: null, prefilled: false });
