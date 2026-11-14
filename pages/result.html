@@ -32,89 +32,25 @@
     <link rel="stylesheet" href="../css/footer.css">
     <link rel="stylesheet" href="../css/toast.css">
 
-    <!-- 기존 배경 -->
-    <link rel="stylesheet" href="../css/background.css">
+    <!-- 추천 결과 화면 (최종 디자인 시안): .result-page 범위 -->
+    <link rel="stylesheet" href="../css/result-page.css">
 
-    <!-- 기존 추천 진행 / 결과 디자인 -->
-    <link rel="stylesheet" href="../css/flow.css">
-    <link rel="stylesheet" href="../css/result.css">
-
-    <!-- Chart.js: 기존 버전 유지 -->
+    <!-- Chart.js -->
     <script
         src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"
     ></script>
-
-    <style>
-        /* =========================================
-           RecoMate 추천 결과
-           Issue #45 공통 디자인 연결
-        ========================================= */
-
-        .flow-page[data-mode="flow"] {
-            min-height: 100vh;
-        }
-
-        /* 추천 결과 및 취향 분석 영역 */
-        .flow-page[data-mode="flow"] #app {
-            position: relative;
-            z-index: 1;
-
-            min-height: calc(
-                100vh - var(--nav-h, 58px)
-            );
-        }
-
-        /* 기존 결과 화면의 버튼과 입력 요소에 공통 글꼴 적용 */
-        .flow-page[data-mode="flow"] button,
-        .flow-page[data-mode="flow"] input,
-        .flow-page[data-mode="flow"] select,
-        .flow-page[data-mode="flow"] textarea {
-            font-family: var(--font-main);
-        }
-
-        /* 키보드 접근성 */
-        .flow-page[data-mode="flow"] button:focus-visible,
-        .flow-page[data-mode="flow"] a:focus-visible {
-            outline: 2px solid #e57a14;
-            outline-offset: 3px;
-        }
-
-        /* 공통 푸터 */
-        .flow-page[data-mode="flow"] #site-footer {
-            position: relative;
-            z-index: 1;
-        }
-
-        /* 작은 화면에서 결과 콘텐츠 넘침 방지 */
-        @media (max-width: 560px) {
-            .flow-page[data-mode="flow"] #app {
-                min-width: 0;
-            }
-        }
-    </style>
 </head>
 
-<body class="flow-page" data-mode="flow">
+<body>
 
     <!-- 공통 네비게이션 -->
     <div id="navbar-container"></div>
 
-    <!-- 기존 그라데이션 배경 -->
-    <div class="fx" aria-hidden="true">
-        <div class="fxin">
-            <i></i>
-        </div>
-    </div>
-
-    <div class="fxn" aria-hidden="true"></div>
-
     <!--
-        기존 TOP 3 추천 결과 및 취향 분석 리포트
-
-        js/result.js에서 이 영역에
-        추천 결과와 차트를 렌더링함
+        추천 결과 (1위 / 2·3위 / 취향 분석 차트)
+        js/result.js 가 이 영역에 렌더링
     -->
-    <main id="app"></main>
+    <main id="app" class="result-page page"></main>
 
     <!-- 공통 푸터 -->
     <footer id="site-footer"></footer>
@@ -126,7 +62,7 @@
         import "../js/footer.js";
     </script>
 
-    <!-- 기존 추천 결과 API 및 차트 기능 -->
+    <!-- 추천 결과 API 및 차트 -->
     <script
         type="module"
         src="../js/result.js"

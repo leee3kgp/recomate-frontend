@@ -93,3 +93,28 @@ export function getParticipants() {
         avoid: strings(p?.avoid)
     }));
 }
+
+// ---------- 결과 화면용 이름 ----------
+// 결과 화면이 참여자 이름을 보여주도록 추천 요청이 성공한 뒤 이름을 따로 저장
+// 키가 "recomate:result:"로 시작해 로그아웃 때 clearStoredResults()가 함께 지움
+// key: 회원은 sessionId, 비회원은 "guest"
+
+export const RESULT_NAMES_PREFIX = "recomate:result:names:";
+
+export function saveResultNames(key, names) {
+    try {
+        sessionStorage.setItem(RESULT_NAMES_PREFIX + key, JSON.stringify(names));
+    } catch {
+        /* 저장 실패 시 결과 화면은 "참여자 N"으로 표시 */
+    }
+}
+
+export function loadResultNames(key) {
+    try {
+        const names = JSON.parse(sessionStorage.getItem(RESULT_NAMES_PREFIX + key));
+
+        return Array.isArray(names) ? names.map((name) => String(name ?? "")) : [];
+    } catch {
+        return [];
+    }
+}
