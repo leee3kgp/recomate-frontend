@@ -1,798 +1,411 @@
 
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <meta name="description"
+          content="RecoMate에 가입하고 함께 볼 영화·드라마를 추천받으세요.">
     <meta name="theme-color" content="#141414">
 
-    <title>RecoMate | 회원가입</title>
+    <title>회원가입 | RecoMate</title>
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link
-        rel="preconnect"
-        href="https://fonts.gstatic.com"
-        crossorigin
-    >
-    <link
-        href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap"
-        rel="stylesheet"
-    >
-
-    <link rel="stylesheet" href="../css/common.css">
-    <link rel="stylesheet" href="../css/toast.css">
-    <link rel="stylesheet" href="../css/background.css">
-    <link rel="stylesheet" href="../css/auth.css">
+    <link rel="stylesheet" href="../css/signup-design.css">
 
     <style>
-        /* =========================================
-           RecoMate 회원가입
-           기존 디자인 + 필수 약관 동의
-        ========================================= */
+        #signup-step[hidden],
+        #verification-step[hidden] {
+            display: none !important;
+        }
 
-        .stage {
-            position: relative;
-            z-index: 1;
-            min-height: 100vh;
+        #signup-otp {
             display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 40px 20px;
-        }
-
-        .view {
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            animation: fade 0.45s ease both;
-        }
-
-        @keyframes fade {
-            from {
-                opacity: 0;
-                transform: translateY(8px);
-            }
-
-            to {
-                opacity: 1;
-                transform: none;
-            }
-        }
-
-        /* 홈 버튼 */
-
-        .back {
-            position: fixed;
-            top: 22px;
-            left: 26px;
-            z-index: 5;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 7px 14px 7px 10px;
-            background: #141414;
-            color: #e8e8e8;
-            border: 1px solid #2c2c2c;
-            border-radius: 999px;
-            font-family: var(--font-main);
-            font-size: 13px;
-            text-decoration: none;
-            transition: border-color 150ms ease;
-        }
-
-        .back:hover {
-            border-color: #777;
-        }
-
-        /* 회원가입 카드 */
-
-        .auth {
-            width: min(400px, 100%);
-            padding: 28px clamp(22px, 9%, 38px) 24px;
-            background: var(--panel);
-            border: 1px solid #262626;
-            border-radius: 10px;
-            box-shadow: 0 14px 50px rgba(0, 0, 0, 0.35);
-            animation: cardUp 0.55s
-                cubic-bezier(0.2, 0.7, 0.2, 1) both;
-        }
-
-        @keyframes cardUp {
-            from {
-                opacity: 0;
-                transform: translateY(18px);
-            }
-
-            to {
-                opacity: 1;
-                transform: none;
-            }
-        }
-
-        /* 로고 */
-
-        .brand {
-            margin: 0;
-            text-align: center;
-            font-size: 34px;
-            font-weight: 400;
-            letter-spacing: 0.5px;
-            line-height: 1.2;
-        }
-
-        .brand a {
-            background: var(--brand);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            text-decoration: none;
-        }
-
-        /* 진행 단계 */
-
-        .steps {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 9px;
-            margin: 10px 0 22px;
-        }
-
-        .step-line {
-            width: 27px;
-            height: 4px;
-            border-radius: 999px;
-            background: #343434;
-        }
-
-        .step-line.active {
-            background: var(--brand);
-        }
-
-        .step-label {
-            margin-left: 5px;
-            color: #999;
-            font-size: 12px;
-        }
-
-        /* 입력 그룹 */
-
-        .fg {
-            margin-bottom: 13px;
-        }
-
-        .fg label {
-            display: block;
-            margin: 0 0 6px 2px;
-            color: #bdbdbd;
-            font-size: 12px;
-            font-weight: 400;
-        }
-
-        .field {
-            display: block;
-            width: 100%;
-            height: 42px;
-            padding: 0 13px;
-            background: #000;
-            color: #ececec;
-            border: 1px solid #2c2c2c;
-            border-radius: var(--r);
-            outline: none;
-            font-family: var(--font-main);
-            font-size: 14px;
-            transition: border-color 150ms ease;
-        }
-
-        .field::placeholder {
-            color: #7d7d7d;
-        }
-
-        .field:hover {
-            border-color: #444;
-        }
-
-        .field:focus {
-            border-color: transparent;
-            background:
-                linear-gradient(#000, #000) padding-box,
-                var(--brand) border-box;
-        }
-
-        /* 비밀번호 */
-
-        .pw {
-            position: relative;
-        }
-
-        .pw .field {
-            padding-right: 42px;
-        }
-
-        .eye {
-            position: absolute;
-            right: 8px;
-            top: 50%;
-            transform: translateY(-50%);
-            display: grid;
-            place-items: center;
-            width: 30px;
-            height: 30px;
-            padding: 0;
-            background: none;
-            border: 0;
-            border-radius: 6px;
-            color: #8d8d8d;
-            cursor: pointer;
-        }
-
-        .eye:hover {
-            color: #fff;
-        }
-
-        .eye svg {
-            width: 18px;
-            height: 18px;
-            fill: none;
-            stroke: currentColor;
-            stroke-width: 1.8;
-            stroke-linecap: round;
-            stroke-linejoin: round;
-        }
-
-        /* 비밀번호 조건 */
-
-        .password-rules {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 5px 9px;
-            margin-top: 8px;
-            font-size: 11px;
-        }
-
-        .password-rule {
-            color: #777;
-            white-space: nowrap;
-        }
-
-        .password-rule.valid {
-            color: #6fc59a;
-        }
-
-        .password-rule.invalid {
-            color: #d76a76;
-        }
-
-        .password-warning,
-        .password-message,
-        .signup-message {
-            margin: 0;
-            font-size: 12px;
-            line-height: 1.5;
-        }
-
-        .password-warning:not(:empty),
-        .password-message:not(:empty),
-        .signup-message:not(:empty) {
-            margin-top: 6px;
-        }
-
-        .password-warning,
-        .password-message.error,
-        .signup-message.error {
-            color: #ef8181;
-        }
-
-        .password-message.success,
-        .signup-message.success {
-            color: #6fc59a;
-        }
-
-        .signup-message {
-            text-align: center;
-        }
-
-        /* =========================================
-           약관 동의 영역
-        ========================================= */
-
-        .agreement {
-            margin-top: 20px;
-            padding-top: 16px;
-            border-top: 1px solid #303030;
-        }
-
-        .agreement-all {
-            display: flex;
-            align-items: center;
-            gap: 9px;
-            padding-bottom: 12px;
-            border-bottom: 1px solid #292929;
-        }
-
-        .agreement-all label {
-            color: #eee;
-            font-size: 13px;
-            font-weight: 600;
-            cursor: pointer;
-        }
-
-        .agreement-items {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            padding-top: 14px;
-        }
-
-        .agreement-row {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
             gap: 8px;
+            justify-content: center;
         }
 
-        .agreement-label {
-            display: flex;
-            align-items: center;
-            gap: 8px;
+        #signup-otp input {
+            width: 100%;
             min-width: 0;
-            color: #bdbdbd;
-            font-size: 12px;
-            cursor: pointer;
+            text-align: center;
         }
 
-        .agreement input[type="checkbox"] {
-            width: 16px;
-            height: 16px;
-            margin: 0;
-            flex-shrink: 0;
-            accent-color: #ad548c;
-            cursor: pointer;
+        #signup-otp input:disabled {
+            opacity: 0.65;
         }
 
-        .agreement-required {
-            color: #e0a4d9;
-            font-size: 11px;
+        .verification-status {
+            min-height: 22px;
+            margin: 12px 0 0;
+            font-size: 14px;
+            text-align: center;
         }
 
-        .agreement-link {
-            flex-shrink: 0;
-            color: #999;
-            font-size: 11px;
-            text-decoration: underline;
-            text-underline-offset: 3px;
+        .verification-status.error {
+            color: var(--danger, #ff7777);
         }
 
-        .agreement-link:hover {
-            color: #fff;
-        }
-
-        .agreement-message {
-            min-height: 0;
-            margin: 0;
-            color: #ef8181;
-            font-size: 12px;
-            line-height: 1.5;
-        }
-
-        .agreement-message:not(:empty) {
-            margin-top: 10px;
-        }
-
-        /* 회원가입 버튼 */
-
-        .auth .btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 100%;
-            height: 42px;
-            margin-top: 18px;
-            padding: 0 16px;
-            border: 0;
-            border-radius: var(--r);
-            background: var(--brand);
-            color: #fff;
-            font-family: var(--font-main);
-            font-size: 15px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: filter 150ms ease;
-        }
-
-        .auth .btn:hover:not(:disabled) {
-            filter: brightness(1.12);
-        }
-
-        .auth .btn:disabled {
-            background: #2a2a2a;
-            color: #8a8a8a;
-            cursor: not-allowed;
-        }
-
-        /* 로그인 링크 */
-
-        .alt {
-            display: flex;
-            justify-content: flex-end;
-            margin-top: 14px;
-        }
-
-        .text-link {
-            color: #a8a8a8;
-            font-size: 13px;
-            text-decoration: underline;
-            text-underline-offset: 4px;
-        }
-
-        .text-link:hover {
-            color: #fff;
-        }
-
-        /* 모바일 */
-
-        @media (max-width: 560px) {
-            .stage {
-                justify-content: flex-start;
-                padding: 70px 16px 24px;
-            }
-
-            .auth {
-                padding: 28px 22px 24px;
-            }
-
-            .brand {
-                font-size: 30px;
-            }
-
-            .back {
-                position: static;
-                align-self: flex-start;
-                margin-bottom: 12px;
-            }
-
-            .password-rules {
-                font-size: 10px;
-            }
-        }
-
-        @media (prefers-reduced-motion: reduce) {
-            .view,
-            .auth {
-                animation: none;
-            }
+        .verification-status.success {
+            color: #65d38c;
         }
     </style>
 </head>
 
-<body class="signup-page" data-mode="auth">
+<body data-page="signup">
 
-    <div class="fx" aria-hidden="true">
-        <div class="fxin">
-            <i></i>
+    <a class="sr-only" href="#main">본문 바로가기</a>
+
+    <header id="site-header" class="site-header">
+        <div class="container">
+
+            <a class="logo" href="index.html" aria-label="RecoMate 홈">
+                <svg viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-width="2"
+                     stroke-linejoin="round" aria-hidden="true">
+                    <path d="M3 7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v2a2 2 0 0 0 0 4v2a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-2a2 2 0 0 0 0-4z"/>
+                    <path d="M14 5v12" stroke-dasharray="2 2.5"/>
+                </svg>
+                RecoMate
+            </a>
+
+            <nav class="main-nav" aria-label="주요 메뉴">
+                <a href="index.html">홈</a>
+                <a href="#" aria-disabled="true"
+                   title="준비 중입니다">요즘 대세</a>
+                <a href="#" aria-disabled="true"
+                   title="준비 중입니다">같이 추천받기</a>
+                <a href="#" aria-disabled="true"
+                   title="준비 중입니다">추천 기록</a>
+            </nav>
+
+            <div class="header-actions">
+                <span class="icon-btn" role="img"
+                      aria-label="검색 기능 준비 중">
+                    <svg viewBox="0 0 24 24" fill="none"
+                         stroke="currentColor" stroke-width="2"
+                         stroke-linecap="round" aria-hidden="true">
+                        <circle cx="11" cy="11" r="7"/>
+                        <path d="M20 20l-3.5-3.5"/>
+                    </svg>
+                </span>
+
+                <a class="avatar" href="profile.html"
+                   id="signupHeaderAvatar"
+                   aria-label="프로필">정</a>
+            </div>
+
         </div>
-    </div>
+    </header>
 
-    <div class="fxn" aria-hidden="true"></div>
+    <main id="main" class="auth">
+        <div class="auth-card">
+            <div class="card">
 
-    <main>
-        <section class="stage">
-            <div class="view">
+                <!-- 1단계: 회원가입 -->
+                <section id="signup-step">
 
-                <a href="index.html" class="back">
-                    ← 홈
-                </a>
-
-                <section class="auth">
-
-                    <h1 class="brand">
-                        <a href="index.html">
-                            RecoMate
+                    <div class="auth-head">
+                        <a class="logo" href="index.html">
+                            <span>RecoMate</span>
                         </a>
-                    </h1>
 
-                    <div
-                        class="steps"
-                        aria-label="회원가입 1단계 / 2단계"
-                    >
-                        <span class="step-line active"></span>
-                        <span class="step-line"></span>
-                        <span class="step-label">1 / 2</span>
+                        <div class="steps-dots"
+                             aria-label="2단계 중 1단계">
+                            <i class="on"></i>
+                            <i></i>
+                        </div>
+
+                        <h1>회원가입</h1>
+
+                        <p class="muted" style="margin:0">
+                            가입하면 함께 볼 작품을 추천받고,
+                            추천 기록과 본 작품이 저장돼요.
+                        </p>
                     </div>
 
-                    <form id="signupForm">
+                    <form id="signupForm" novalidate>
 
-                        <!-- 닉네임 -->
-                        <div class="fg">
-                            <label for="nickname">
-                                닉네임
-                            </label>
+                        <div class="field" id="f-nickname">
+                            <label for="nickname">닉네임</label>
 
-                            <input
-                                class="field"
-                                type="text"
-                                id="nickname"
-                                name="nickname"
-                                placeholder="사용할 닉네임을 작성하세요"
-                                maxlength="40"
-                                autocomplete="nickname"
-                                required
-                            >
-                        </div>
+                            <input class="input"
+                                   id="nickname"
+                                   type="text"
+                                   autocomplete="nickname"
+                                   placeholder="친구들에게 보일 이름"
+                                   required>
 
-                        <!-- 이메일 -->
-                        <div class="fg">
-                            <label for="userId">
-                                아이디(이메일)
-                            </label>
-
-                            <input
-                                class="field"
-                                type="email"
-                                id="userId"
-                                name="email"
-                                placeholder="아이디(이메일)를 입력하세요"
-                                autocomplete="email"
-                                required
-                            >
-                        </div>
-
-                        <!-- 비밀번호 -->
-                        <div class="fg">
-                            <label for="password">
-                                비밀번호
-                            </label>
-
-                            <div class="pw">
-                                <input
-                                    class="field"
-                                    type="password"
-                                    id="password"
-                                    name="password"
-                                    placeholder="사용할 비밀번호를 입력하세요"
-                                    autocomplete="new-password"
-                                    minlength="12"
-                                    required
-                                >
-
-                                <button
-                                    type="button"
-                                    class="eye password-toggle"
-                                    data-target="password"
-                                    aria-label="비밀번호 표시"
-                                    aria-pressed="false"
-                                >
-                                    <svg viewBox="0 0 24 24" aria-hidden="true">
-                                        <path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12z"></path>
-                                        <circle cx="12" cy="12" r="3"></circle>
-                                    </svg>
-                                </button>
-                            </div>
-
-                            <div
-                                class="password-rules"
-                                id="passwordRules"
-                            >
-                                <span id="ruleLength" class="password-rule">
-                                    ○ 12자 이상
+                            <div class="row">
+                                <span class="error" id="nickname-error">
+                                    닉네임을 1~20자로 입력해주세요.
                                 </span>
 
-                                <span id="ruleLowercase" class="password-rule">
-                                    ○ 소문자 포함
-                                </span>
+                                <span class="spacer"></span>
 
-                                <span id="ruleNumber" class="password-rule">
-                                    ○ 숫자 포함
-                                </span>
-
-                                <span id="ruleSpecial" class="password-rule">
-                                    ○ 특수문자 포함
+                                <span class="counter" id="nickname-count">
+                                    0 / 20
                                 </span>
                             </div>
-
-                            <div
-                                id="passwordWarning"
-                                class="password-warning"
-                                role="status"
-                                aria-live="polite"
-                            ></div>
                         </div>
 
-                        <!-- 비밀번호 확인 -->
-                        <div class="fg">
+                        <div class="field" id="f-email">
+                            <label for="userId">이메일</label>
+
+                            <input class="input"
+                                   id="userId"
+                                   type="email"
+                                   autocomplete="email"
+                                   placeholder="you@example.com"
+                                   required
+                                   aria-describedby="email-hint email-error">
+
+                            <span class="hint" id="email-hint">
+                                로그인 아이디로 쓰이고, 인증번호를 보내드려요.
+                            </span>
+
+                            <span class="error" id="email-error">
+                                올바른 이메일 주소를 입력해주세요.
+                            </span>
+                        </div>
+
+                        <div class="field" id="f-password">
+                            <label for="password">비밀번호</label>
+
+                            <div class="input-wrap">
+                                <input class="input"
+                                       id="password"
+                                       type="password"
+                                       autocomplete="new-password"
+                                       placeholder="12자 이상"
+                                       required>
+
+                                <button class="icon-btn"
+                                        type="button"
+                                        data-toggle-password="password"
+                                        aria-label="비밀번호 보기"></button>
+                            </div>
+
+                            <div class="rules" id="pw-rules"
+                                 aria-live="polite">
+                                <span data-rule="length">12자 이상</span>
+                                <span data-rule="lower">소문자</span>
+                                <span data-rule="number">숫자</span>
+                                <span data-rule="symbol">특수문자</span>
+                            </div>
+
+                            <span class="error" id="password-error">
+                                위 조건을 모두 채워주세요.
+                            </span>
+                        </div>
+
+                        <div class="field" id="f-confirm">
                             <label for="passwordConfirm">
                                 비밀번호 확인
                             </label>
 
-                            <div class="pw">
-                                <input
-                                    class="field"
-                                    type="password"
-                                    id="passwordConfirm"
-                                    name="passwordConfirm"
-                                    placeholder="비밀번호를 확인하세요"
-                                    autocomplete="new-password"
-                                    required
-                                >
+                            <div class="input-wrap">
+                                <input class="input"
+                                       id="passwordConfirm"
+                                       type="password"
+                                       autocomplete="new-password"
+                                       placeholder="한 번 더 입력"
+                                       required>
 
-                                <button
-                                    type="button"
-                                    class="eye password-toggle"
-                                    data-target="passwordConfirm"
-                                    aria-label="비밀번호 확인 표시"
-                                    aria-pressed="false"
-                                >
-                                    <svg viewBox="0 0 24 24" aria-hidden="true">
-                                        <path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12z"></path>
-                                        <circle cx="12" cy="12" r="3"></circle>
-                                    </svg>
-                                </button>
+                                <button class="icon-btn"
+                                        type="button"
+                                        data-toggle-password="passwordConfirm"
+                                        aria-label="비밀번호 확인 보기"></button>
                             </div>
 
-                            <div
-                                id="passwordMessage"
-                                class="password-message"
-                                aria-live="polite"
-                            ></div>
+                            <span class="error" id="confirm-error">
+                                비밀번호가 일치하지 않아요.
+                            </span>
                         </div>
 
-                        <!-- 약관 동의 -->
-                        <div class="agreement">
+                        <div class="card tight field" id="f-agree"
+                             style="margin-top:20px">
 
-                            <div class="agreement-all">
-                                <input
-                                    type="checkbox"
-                                    id="agreeAll"
-                                >
+                            <label class="checkbox"
+                                   style="font-weight:800;color:var(--text)">
+                                <input type="checkbox" id="agreeAll">
+                                전체 동의
+                            </label>
 
-                                <label for="agreeAll">
-                                    전체 동의
-                                </label>
-                            </div>
+                            <hr class="divider" style="margin:12px 0">
 
-                            <div class="agreement-items">
+                            <div class="stack">
 
-                                <div class="agreement-row">
-                                    <label
-                                        class="agreement-label"
-                                        for="agreeTerms"
-                                    >
-                                        <input
-                                            type="checkbox"
-                                            id="agreeTerms"
-                                            name="agreeTerms"
-                                        >
-
-                                        <span>
-                                            이용약관 동의
-                                            <span class="agreement-required">
-                                                (필수)
-                                            </span>
-                                        </span>
+                                <div class="row">
+                                    <label class="checkbox">
+                                        <input type="checkbox"
+                                               id="agreeTerms"
+                                               class="agree"
+                                               data-required="1">
+                                        (필수) 이용약관 동의
                                     </label>
 
-                                    <a
-                                        class="agreement-link"
-                                        href="terms.html"
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                    >
-                                        보기
-                                    </a>
+                                    <span class="spacer"></span>
+
+                                    <a class="link"
+                                       href="terms.html"
+                                       target="_blank"
+                                       rel="noopener"
+                                       style="font-size:13px">보기</a>
                                 </div>
 
-                                <div class="agreement-row">
-                                    <label
-                                        class="agreement-label"
-                                        for="agreePrivacy"
-                                    >
-                                        <input
-                                            type="checkbox"
-                                            id="agreePrivacy"
-                                            name="agreePrivacy"
-                                        >
-
-                                        <span>
-                                            개인정보 수집·이용 동의
-                                            <span class="agreement-required">
-                                                (필수)
-                                            </span>
-                                        </span>
+                                <div class="row">
+                                    <label class="checkbox">
+                                        <input type="checkbox"
+                                               id="agreePrivacy"
+                                               class="agree"
+                                               data-required="1">
+                                        (필수) 개인정보 수집·이용 동의
                                     </label>
 
-                                    <a
-                                        class="agreement-link"
-                                        href="privacy.html"
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                    >
-                                        보기
-                                    </a>
+                                    <span class="spacer"></span>
+
+                                    <a class="link"
+                                       href="privacy.html"
+                                       target="_blank"
+                                       rel="noopener"
+                                       style="font-size:13px">보기</a>
+                                </div>
+
+                                <div class="row">
+                                    <label class="checkbox">
+                                        <input type="checkbox"
+                                               id="agreeAge"
+                                               class="agree"
+                                               data-required="1">
+                                        (필수) 만 14세 이상입니다
+                                    </label>
                                 </div>
 
                             </div>
 
-                            <p
-                                id="agreementMessage"
-                                class="agreement-message"
-                                role="status"
-                                aria-live="polite"
-                            ></p>
-
+                            <span class="error" id="agree-error"
+                                  style="margin-top:10px">
+                                필수 항목에 모두 동의해주세요.
+                            </span>
                         </div>
 
-                        <!-- 회원가입 결과 -->
-                        <div
-                            id="signupMessage"
-                            class="signup-message"
-                            role="status"
-                            aria-live="polite"
-                        ></div>
+                        <p id="signupMessage"
+                           role="status"
+                           aria-live="polite"
+                           style="font-size:13px;color:var(--danger)"
+                           hidden></p>
 
-                        <button
-                            class="btn"
-                            type="submit"
-                            id="signupButton"
-                        >
-                            회원가입 하기
+                        <button class="btn btn-primary btn-block btn-lg"
+                                id="signupButton"
+                                type="submit"
+                                style="margin-top:20px">
+                            인증번호 받고 계속하기
                         </button>
-
                     </form>
 
-                    <div class="alt">
-                        <a
-                            href="login.html"
-                            class="text-link"
-                        >
-                            로그인으로 돌아가기
-                        </a>
+                    <div class="auth-foot">
+                        이미 계정이 있나요?
+                        <a class="link" href="login.html">로그인</a>
                     </div>
 
                 </section>
+
+                <!-- 2단계: 이메일 인증 -->
+                <section id="verification-step" hidden>
+
+                    <div class="auth-head">
+                        <a class="logo" href="index.html">
+                            <span>RecoMate</span>
+                        </a>
+
+                        <div class="steps-dots"
+                             aria-label="2단계 중 2단계">
+                            <i class="on"></i>
+                            <i class="on"></i>
+                        </div>
+
+                        <h1>메일함을 확인해주세요</h1>
+
+                        <p class="muted" style="margin:0">
+                            <strong id="masked-email"
+                                    style="color:var(--text)"></strong>(으)로
+                            <br>
+                            6자리 인증번호를 보냈어요.
+                        </p>
+                    </div>
+
+                    <form id="inline-verify-form" novalidate>
+                        <fieldset style="border:0;padding:0;margin:0">
+                            <legend class="sr-only">
+                                인증번호 6자리
+                            </legend>
+
+                            <div class="otp" id="signup-otp">
+                                <input type="text" inputmode="numeric"
+                                       autocomplete="one-time-code"
+                                       maxlength="6" aria-label="1번째 숫자">
+                                <input type="text" inputmode="numeric"
+                                       maxlength="1" aria-label="2번째 숫자">
+                                <input type="text" inputmode="numeric"
+                                       maxlength="1" aria-label="3번째 숫자">
+                                <input type="text" inputmode="numeric"
+                                       maxlength="1" aria-label="4번째 숫자">
+                                <input type="text" inputmode="numeric"
+                                       maxlength="1" aria-label="5번째 숫자">
+                                <input type="text" inputmode="numeric"
+                                       maxlength="1" aria-label="6번째 숫자">
+                            </div>
+                        </fieldset>
+
+                        <p id="inline-verify-message"
+                           class="verification-status muted"
+                           role="status"
+                           aria-live="polite">
+                            인증번호는 24시간 동안 쓸 수 있어요.
+                        </p>
+
+                        <button class="btn btn-primary btn-block btn-lg"
+                                id="inline-verify-button"
+                                type="submit"
+                                disabled
+                                style="margin-top:12px">
+                            인증하고 시작하기
+                        </button>
+                    </form>
+
+                    <div class="row"
+                         style="justify-content:center;margin-top:16px;gap:6px">
+
+                        <span class="muted" style="font-size:14px">
+                            메일이 안 왔나요?
+                        </span>
+
+                        <button class="btn btn-ghost btn-sm"
+                                id="inline-resend"
+                                type="button"
+                                disabled>
+                            인증번호 다시 받기
+                        </button>
+                    </div>
+
+                    <ul class="muted"
+                        style="font-size:13px;margin:14px 0 0;padding-left:18px">
+                        <li>스팸함·프로모션함도 확인해주세요.</li>
+                        <li>
+                            이메일을 잘못 입력했다면
+                            <a class="link" href="signup.html">
+                                이메일 주소 변경
+                            </a>
+                        </li>
+                    </ul>
+
+                </section>
+
             </div>
-        </section>
+        </div>
     </main>
 
-    <script
-        type="module"
-        src="../js/signup.js"
-    ></script>
-
-    <script>
-        document.querySelectorAll(".password-toggle")
-            .forEach((button) => {
-                button.addEventListener("click", () => {
-                    const input = document.getElementById(
-                        button.dataset.target
-                    );
-
-                    if (!input) return;
-
-                    const visible = input.type === "password";
-
-                    input.type = visible
-                        ? "text"
-                        : "password";
-
-                    button.setAttribute(
-                        "aria-pressed",
-                        String(visible)
-                    );
-
-                    button.setAttribute(
-                        "aria-label",
-                        visible
-                            ? "비밀번호 숨기기"
-                            : "비밀번호 표시"
-                    );
-                });
-            });
-    </script>
-
+    <script type="module" src="../js/signup.js"></script>
 </body>
 </html>
