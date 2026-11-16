@@ -10,89 +10,218 @@
     <title>개인정보처리방침 | RecoMate</title>
 
     <link rel="stylesheet" href="../css/common.css">
-    <link rel="stylesheet" href="../css/navbar.css">
 
     <style>
-        /* 개인정보처리방침 시안 적용 */
+        * {
+            box-sizing: border-box;
+        }
+
         body.privacy-page {
             min-height: 100vh;
             margin: 0;
             background: #141414;
             color: #f2f2f2;
-            font-family: var(--font-main, sans-serif);
+            font-family: var(--font-main, "IBM Plex Sans KR", sans-serif);
+            font-size: 15px;
+            line-height: 1.6;
+            word-break: keep-all;
         }
 
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        /* =========================================
+           로그인 전 상단 네비게이션
+        ========================================= */
+
+        body.privacy-page .site-header {
+            height: 60px;
+            background: #141414;
+            border-bottom: 1px solid rgba(255,255,255,.08);
+            position: sticky;
+            top: 0;
+            z-index: 40;
+        }
+
+        body.privacy-page .site-header .container {
+            width: min(100% - 32px, 1160px);
+            height: 100%;
+            margin-inline: auto;
+            display: flex;
+            align-items: center;
+            gap: 28px;
+        }
+
+        body.privacy-page .site-header .logo {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 19px;
+            font-weight: 700;
+            line-height: 1.4;
+            background: linear-gradient(90deg,#9b3fb5,#e57a14);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+
+        body.privacy-page .site-header .logo svg {
+            width: 22px;
+            height: 22px;
+            flex: none;
+        }
+
+        body.privacy-page .site-header .main-nav {
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+
+        body.privacy-page .site-header .main-nav a {
+            padding: 8px 12px;
+            border-radius: 8px;
+            color: #c9c4c4;
+            font-size: 14px;
+            font-weight: 500;
+            text-decoration: none;
+        }
+
+        body.privacy-page .site-header .main-nav a:hover {
+            color: #fff;
+            background: #1b1b1b;
+        }
+
+        body.privacy-page .site-header .header-actions {
+            margin-left: auto;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        body.privacy-page .site-header .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            height: 32px;
+            padding: 0 12px;
+            border: 1px solid transparent;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            line-height: 1;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        body.privacy-page .site-header .btn-ghost {
+            background: transparent;
+            color: #c9c4c4;
+        }
+
+        body.privacy-page .site-header .btn-ghost:hover {
+            background: #1b1b1b;
+            color: #fff;
+        }
+
+        body.privacy-page .site-header .btn-primary {
+            background: linear-gradient(
+                100deg,
+                #793988 0%,
+                #9e4d4b 52%,
+                #c16311 100%
+            );
+            color: #fff;
+        }
+
+        body.privacy-page .site-header .btn-primary:hover {
+            filter: brightness(1.12);
+        }
+
+        /* =========================================
+           개인정보처리방침 본문
+        ========================================= */
+
         .privacy-main {
-            padding: 56px 24px 90px;
+            min-height: 70vh;
+            padding: 32px 20px 80px;
         }
 
         .privacy-doc {
-            width: 100%;
-            max-width: 960px;
+            width: min(100%, 810px);
             margin: 0 auto;
             line-height: 1.8;
             overflow-wrap: anywhere;
         }
 
         .privacy-doc h1 {
-            margin: 0 0 8px;
-            font-size: clamp(28px, 4vw, 38px);
+            margin: 0 0 4px;
+            font-size: 30px;
             font-weight: 700;
-            line-height: 1.3;
+            line-height: 1.4;
+            letter-spacing: -0.03em;
         }
 
         .privacy-doc h2 {
-            margin: 48px 0 16px;
-            padding-bottom: 12px;
-            border-bottom: 1px solid #383838;
-            font-size: 21px;
+            margin: 34px 0 14px;
+            font-size: 18px;
             font-weight: 700;
             line-height: 1.5;
-            scroll-margin-top: 85px;
+            letter-spacing: -0.02em;
+            scroll-margin-top: 80px;
+        }
+
+        .privacy-doc p,
+        .privacy-doc li {
+            color: #c9c4c4;
+            font-size: 15px;
+            line-height: 1.8;
         }
 
         .privacy-doc p {
-            margin: 16px 0;
+            margin: 12px 0;
         }
 
         .privacy-doc ul {
-            margin: 12px 0 22px;
-            padding-left: 24px;
+            margin: 12px 0 24px;
+            padding-left: 40px;
         }
 
         .privacy-doc li {
-            margin: 8px 0;
+            margin: 2px 0;
         }
 
         .privacy-muted {
-            color: #aaa;
+            color: #aaa !important;
         }
 
-        .privacy-alert {
-            margin: 18px 0;
-            padding: 16px 18px;
-            border: 1px solid #51415a;
-            border-radius: 8px;
-            background: #241d2b;
-            color: #ddd0e4;
-            font-size: 14px;
-        }
-
+        /* 시안과 동일한 가로형 목차 */
         .privacy-toc {
-            display: grid;
-            grid-template-columns: repeat(3, minmax(0, 1fr));
-            gap: 12px 18px;
-            margin: 28px 0 42px;
-            padding: 24px;
-            border: 1px solid #383838;
-            border-radius: 10px;
-            background: #1c1c1c;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px 16px;
+            margin: 22px 0 32px;
+            padding: 16px;
+            border: 1px solid #333;
+            border-radius: 8px;
+            background: #141414;
         }
 
         .privacy-doc a {
-            color: #e7a8da;
+            color: #c9c4c4;
             text-decoration: underline;
-            text-underline-offset: 4px;
+            text-underline-offset: 3px;
+            text-decoration-color: rgba(255,255,255,.25);
         }
 
         .privacy-doc a:hover {
@@ -100,14 +229,11 @@
         }
 
         .privacy-toc a {
-            font-size: 14px;
-            text-decoration: none;
+            font-size: 13px;
+            line-height: 1.8;
         }
 
-        .privacy-toc a:hover {
-            text-decoration: underline;
-        }
-
+        /* 개인정보 처리 항목 및 보유 기간 표 */
         .privacy-table-wrap {
             width: 100%;
             margin: 18px 0 24px;
@@ -123,20 +249,24 @@
 
         .privacy-doc th,
         .privacy-doc td {
-            padding: 13px 15px;
+            padding: 12px 14px;
             border: 1px solid #383838;
             vertical-align: top;
+            color: #c9c4c4;
+            line-height: 1.7;
         }
 
         .privacy-doc th {
-            background: #252525;
+            background: #202020;
+            color: #f2f2f2;
             font-weight: 600;
         }
 
         .privacy-doc td {
-            background: #191919;
+            background: #171717;
         }
 
+        /* 기존 푸터 유지 */
         .privacy-footer {
             padding: 28px 24px;
             border-top: 1px solid #333;
@@ -156,24 +286,42 @@
             text-decoration: underline;
         }
 
-        @media (max-width: 700px) {
-            .privacy-main {
-                padding: 36px 16px 70px;
-            }
-
-            .privacy-toc {
-                grid-template-columns: repeat(2, minmax(0, 1fr));
-                padding: 18px;
-            }
-
-            .privacy-doc h2 {
-                font-size: 19px;
+        @media (max-width: 860px) {
+            body.privacy-page .site-header .main-nav {
+                display: none;
             }
         }
 
-        @media (max-width: 440px) {
+        @media (max-width: 700px) {
+            .privacy-main {
+                padding: 28px 16px 64px;
+            }
+
+            .privacy-doc h1 {
+                font-size: 28px;
+            }
+
+            .privacy-doc h2 {
+                font-size: 18px;
+            }
+
             .privacy-toc {
-                grid-template-columns: 1fr;
+                padding: 14px;
+                gap: 6px 12px;
+            }
+
+            .privacy-doc ul {
+                padding-left: 24px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body.privacy-page .site-header .container {
+                gap: 12px;
+            }
+
+            body.privacy-page .site-header .logo {
+                font-size: 17px;
             }
         }
     </style>
@@ -183,7 +331,43 @@
 
     <a class="sr-only" href="#main">본문 바로가기</a>
 
-    <div id="navbar-container"></div>
+    <!-- 로그인 전 상단 네비게이션 -->
+    <header class="site-header" id="site-header">
+        <div class="container">
+
+            <a class="logo" href="index.html" aria-label="RecoMate 홈">
+                <svg
+                    viewBox="0 0 24 24"
+                    width="22"
+                    height="22"
+                    fill="none"
+                    stroke="#e57a14"
+                    stroke-width="2"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                >
+                    <path d="M3 7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v2a2 2 0 0 0 0 4v2a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-2a2 2 0 0 0 0-4z"/>
+                    <path d="M14 5v12" stroke-dasharray="2 2.5"/>
+                </svg>
+                RecoMate
+            </a>
+
+            <nav class="main-nav" aria-label="주요 메뉴">
+                <a href="start.html">같이 추천받기</a>
+            </nav>
+
+            <div class="header-actions">
+                <a class="btn btn-ghost btn-sm" href="login.html">
+                    로그인
+                </a>
+
+                <a class="btn btn-primary btn-sm" href="signup.html">
+                    회원가입
+                </a>
+            </div>
+
+        </div>
+    </header>
 
     <main id="main" class="privacy-main">
         <article class="privacy-doc">
@@ -194,12 +378,6 @@
                 시행일 2026년 11월 1일
             </p>
 
-            <div class="privacy-alert">
-                디자인 시안용 문안입니다. 실제로 공개하기 전에
-                수집 항목과 보관 방식을 실제 구현과 맞추고,
-                [대괄호] 표시한 담당자와 연락처를 채워야 합니다.
-            </div>
-
             <p>
                 오소웨 2조(이하 "운영팀")는 「개인정보 보호법」에 따라
                 RecoMate 이용자의 개인정보를 보호하고 관련 고충을
@@ -207,6 +385,7 @@
                 개인정보처리방침을 정합니다.
             </p>
 
+            <!-- 개인정보처리방침 목차 -->
             <nav class="privacy-toc" aria-label="목차">
                 <a href="#p1">1. 처리 목적</a>
                 <a href="#p2">2. 처리 항목</a>
@@ -540,11 +719,6 @@
         <a href="terms.html">이용약관</a>
         <a href="privacy.html" aria-current="page">개인정보처리방침</a>
     </footer>
-
-    <script type="module">
-        import "../js/navbar.js";
-        import "../js/auth-ui.js";
-    </script>
 
 </body>
 </html>

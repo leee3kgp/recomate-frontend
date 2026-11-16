@@ -2,77 +2,39 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#141414">
-
     <title>RecoMate | 여럿이 볼 영화·드라마 추천</title>
-    <meta
-        name="description"
-        content="함께 볼 사람마다 좋아하는 장르를 고르면, 모두의 취향에 맞는 영화·드라마 3편을 추천해요."
-    >
-
-    <link
-        rel="preconnect"
-        href="https://fonts.googleapis.com"
-    >
-    <link
-        rel="preconnect"
-        href="https://fonts.gstatic.com"
-        crossorigin
-    >
-
-    <link
-        href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@300;400;500;600;700&display=swap"
-        rel="stylesheet"
-    >
-
-    <!-- 공통 디자인 -->
+    <meta name="description" content="함께 볼 사람마다 좋아하는 장르를 고르면, 모두의 취향에 맞는 영화·드라마 3편을 추천해요.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../css/common.css">
     <link rel="stylesheet" href="../css/navbar.css">
     <link rel="stylesheet" href="../css/footer.css">
     <link rel="stylesheet" href="../css/toast.css">
-
-    <!-- 홈 화면 (최종 디자인 시안): .home-page 범위 -->
     <link rel="stylesheet" href="../css/home-page.css">
+    <link rel="stylesheet" href="../css/welcome.css">
 </head>
-
 <body>
-
-    <!-- 공통 네비게이션 -->
     <div id="navbar-container"></div>
-
-    <!--
-        홈 화면
-        js/home.js 가 로그인 여부에 따라
-        소개 + 인기 목록 블러 미리보기(비회원) / 인기 목록(회원) 화면을 그림
-    -->
     <main id="app" class="home-page">
         <h1 class="sr-only">RecoMate 홈</h1>
         <div id="home-root"></div>
     </main>
-
-    <!-- 공통 푸터 -->
     <footer id="site-footer"></footer>
-
-    <!-- 공통 네비게이션 / 인증 / 푸터 -->
+    <div id="welcome-banner" class="welcome-banner" role="status" aria-live="polite" hidden>
+        <p class="welcome-message">가입이 끝났어요. 같이 볼 사람 수를 정하고<br>시작해보세요</p>
+        <a href="start.html" class="welcome-start" id="welcome-start">시작하기</a>
+    </div>
     <script type="module">
         import "../js/navbar.js";
         import "../js/auth-ui.js";
         import "../js/footer.js";
-
-        // 개발 중 토스트 기능 테스트용
-        import {
-            showToast
-        } from "../js/toast.js";
-
+        import { showToast } from "../js/toast.js";
         window.testRecoMateToast = showToast;
     </script>
-
-    <!-- 홈 화면 렌더링 / 인기 목록 API -->
     <script type="module" src="../js/home.js"></script>
-
+    <script type="module" src="../js/welcome.js"></script>
 </body>
 </html>

@@ -12,8 +12,8 @@ import { loadGenres } from "./genres.js";
 
 const TMDB_IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500";
 
-const SHOW_COUNT = 10;               // 화면에 보여줄 개수
-const CACHE_MS = 10 * 60 * 1000;     // 서버 캐시(10분)와 같은 간격으로 이전 조회를 재사용
+const SHOW_COUNT = 10;
+const CACHE_MS = 10 * 60 * 1000;
 
 const TYPES = [
     { value: "all", label: "전체" },
@@ -21,7 +21,6 @@ const TYPES = [
     { value: "tv", label: "TV 시리즈" }
 ];
 
-// GET /api/popular 의 country 는 두 글자 ISO 3166-1 코드
 const COUNTRIES = [
     { value: "", label: "모든 국가" },
     { value: "KR", label: "한국" },
@@ -41,7 +40,6 @@ const el = (tag, className, text) => {
 
 const root = document.getElementById("home-root");
 
-// 제목에서 색을 계산해 포스터가 없을 때의 배경으로 사용 (시안 posterHTML 과 같은 방식)
 const hueOf = (text = "") => [...text].reduce((a, c) => (a * 31 + c.charCodeAt(0)) % 360, 7);
 
 const posterBackground = (seed) => {
@@ -49,6 +47,14 @@ const posterBackground = (seed) => {
 
     return `linear-gradient(160deg, hsl(${hue} 60% 32%), hsl(${(hue + 40) % 360} 55% 14%))`;
 };
+
+// 원본 시안 data.js의 미리보기 작품(m1, t4, m5)과 포스터를 그대로 사용
+// t4는 원본에도 포스터 이미지가 없어 제목 대체 화면으로 표시
+const PREVIEW_POSTERS = [
+    { title: "인터스텔라", path: "/gEU2QniE6E77NI6lCU6MxlNBvIx.jpg" },
+    { title: "궤도 정거장", path: "" },
+    { title: "듄", path: "/d5NXSklXo0qyIYkgV94XAgMIckC.jpg" }
+];
 
 // ---------- 공통 화면 조각 ----------
 
@@ -80,7 +86,6 @@ const howHTML = (guest) => `
 
 // ---------- 비회원 ----------
 
-// 인기 목록 자리에 보여줄 가짜 순위 카드 (실제 작품 정보 없이 모양만)
 const placeholderRail = () => Array.from({ length: SHOW_COUNT }, (_, i) => `
     <li class="rank-item">
         <span class="num" aria-hidden="true">${i + 1}</span>
@@ -165,7 +170,7 @@ const heroHTML = () => `
                     <strong style="font-size:14px">정우, 다혜, 주현의 추천</strong>
                     <span class="muted" style="font-size:12px">결과 예시</span>
                 </div>
-                <div class="posters3">${[1, 2, 3].map((rank) => `<div class="poster" style="background:${posterBackground(rank * 53)}"><span class="badge brand rank">${rank}위</span></div>`).join("")}</div>
+                <div class="posters3">${PREVIEW_POSTERS.map((item, index) => `<div class="poster" style="background:${posterBackground(item.title)}"><span class="fallback">${item.title}</span>${item.path ? `<img src="${TMDB_IMAGE_BASE_URL}${item.path}" alt="${item.title} 포스터" loading="lazy" onerror="this.remove()">` : ""}<span class="badge brand rank">${index + 1}위</span></div>`).join("")}</div>
                 <div>${[["정우", 100, "var(--p1)"], ["다혜", 100, "var(--p2)"], ["주현", 81, "var(--p3)"]].map(([name, pct, color]) => `
                     <div class="match-row" style="grid-template-columns:56px 1fr 40px">
                         <span class="row" style="gap:6px"><span class="p-dot" style="background:${color}"></span>${name}</span>
@@ -205,9 +210,9 @@ const memberTrendHTML = () => `
 
 function setupMemberTrend() {
     const state = { type: "all", genre: "", country: "" };
-    const cache = new Map();   // "장르|국가" → { at, items }
+    const cache = new Map();
     let genreNames = {};
-    let requestId = 0;         // 느리게 도착한 이전 요청이 화면을 덮어쓰지 않도록
+    let requestId = 0;
 
     const body = document.getElementById("trend-body");
     const status = document.getElementById("trend-status");
@@ -290,7 +295,7 @@ function setupMemberTrend() {
         status.textContent = title;
     };
 
-    // 영화/TV 탭으로 거르고 평점 높은 순으로 10개 (API 는 영화·TV 를 섞은 인기순 20개)
+    // 영화/TV 탭으로 거르고 평점 높은 순으로 10개
     const pickItems = (items) => items
         .filter((item) => state.type === "all" || item.type === state.type)
         .sort((a, b) => (Number(b.voteAverage) || 0) - (Number(a.voteAverage) || 0))
@@ -370,9 +375,7 @@ function setupMemberTrend() {
         return "인기 목록을 불러오지 못했어요. 잠시 후 다시 시도해주세요.";
     };
 
-    // GET /api/popular?genre=…&country=… (둘 다 선택, 없으면 전체 인기 목록)
     async function load() {
-        // 이전 요청이 아직 진행 중이어도 그 응답은 무시되도록 먼저 번호를 올림
         const id = ++requestId;
         const cached = readCache();
 
@@ -394,7 +397,7 @@ function setupMemberTrend() {
         try {
             const data = await apiFetch(`/api/popular${queryText ? `?${queryText}` : ""}`);
 
-            if (id !== requestId) return; // 그 사이 필터가 바뀜
+            if (id !== requestId) return;
 
             const items = Array.isArray(data?.items) ? data.items : [];
 
@@ -457,7 +460,6 @@ function setupMemberTrend() {
             t.setAttribute("aria-selected", String(t === tab));
         });
 
-        // 종류 탭은 이미 받은 20개를 다시 거르기만 함 (캐시가 만료됐으면 다시 조회)
         const items = readCache();
 
         if (items) {
@@ -472,7 +474,6 @@ function setupMemberTrend() {
         load();
     });
 
-    // 장르 이름은 먼저 기본 목록으로 그리고, 서버 목록이 오면 교체 (실패해도 기본 목록 사용)
     buildGenreChips([]);
     loadGenres().then(buildGenreChips);
 
@@ -489,7 +490,6 @@ const formatDate = (createdAt) => {
         : date.toLocaleString("ko-KR", { dateStyle: "medium", timeStyle: "short" });
 };
 
-// GET /api/sessions?limit=2 (목록 항목에는 날짜와 인원만 있어 상세는 결과 화면에서 확인)
 async function setupRecent(section) {
     try {
         const data = await apiFetch("/api/sessions?limit=2");
@@ -528,7 +528,6 @@ async function setupRecent(section) {
 
         section.hidden = false;
     } catch (error) {
-        // 기록을 못 불러와도 홈의 나머지 기능에는 영향이 없으므로 영역만 숨김
         console.error("추천 기록 조회 실패:", error);
         section.hidden = true;
     }
@@ -551,7 +550,6 @@ if (member) {
     setupMemberTrend();
     setupRecent(document.getElementById("recent-section"));
 } else {
-    // 비회원: 인기 목록 API 는 로그인이 필요하므로 호출하지 않고 블러 미리보기와 안내만 보여줌
     root.innerHTML = `
         ${landingHTML(true)}
         <div class="container">
