@@ -6,10 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="RecoMate 이용약관입니다.">
     <meta name="theme-color" content="#141414">
+
     <title>이용약관 | RecoMate</title>
 
     <link rel="stylesheet" href="../css/common.css">
-    <link rel="stylesheet" href="../css/navbar.css">
     <link rel="stylesheet" href="../css/footer.css">
 
     <style>
@@ -17,74 +17,207 @@
             margin: 0;
             background: #141414;
             color: #f2f2f2;
-            font-family: var(--font-main, sans-serif);
+            font-family: var(--font-main, "IBM Plex Sans KR", sans-serif);
+            font-size: 15px;
+            line-height: 1.6;
+            word-break: keep-all;
         }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        /* =========================================
+           로그인 전 상단 네비게이션
+        ========================================= */
+
+        body[data-page="terms"] .site-header {
+            height: 60px;
+            background: #141414;
+            border-bottom: 1px solid rgba(255,255,255,.08);
+            position: sticky;
+            top: 0;
+            z-index: 40;
+        }
+
+        body[data-page="terms"] .site-header .container {
+            width: min(100% - 32px, 1160px);
+            height: 100%;
+            margin-inline: auto;
+            display: flex;
+            align-items: center;
+            gap: 28px;
+        }
+
+        body[data-page="terms"] .site-header .logo {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 19px;
+            font-weight: 700;
+            line-height: 1.4;
+            background: linear-gradient(90deg,#9b3fb5,#e57a14);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+
+        body[data-page="terms"] .site-header .logo svg {
+            width: 22px;
+            height: 22px;
+            flex: none;
+        }
+
+        body[data-page="terms"] .site-header .main-nav {
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+
+        body[data-page="terms"] .site-header .main-nav a {
+            padding: 8px 12px;
+            border-radius: 8px;
+            color: #c9c4c4;
+            font-size: 14px;
+            font-weight: 500;
+            text-decoration: none;
+        }
+
+        body[data-page="terms"] .site-header .main-nav a:hover {
+            color: #fff;
+            background: #1b1b1b;
+        }
+
+        body[data-page="terms"] .site-header .header-actions {
+            margin-left: auto;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        body[data-page="terms"] .site-header .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            height: 32px;
+            padding: 0 12px;
+            border: 1px solid transparent;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            line-height: 1;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        body[data-page="terms"] .site-header .btn-ghost {
+            background: transparent;
+            color: #c9c4c4;
+        }
+
+        body[data-page="terms"] .site-header .btn-ghost:hover {
+            background: #1b1b1b;
+            color: #fff;
+        }
+
+        body[data-page="terms"] .site-header .btn-primary {
+            background: linear-gradient(
+                100deg,
+                #793988 0%,
+                #9e4d4b 52%,
+                #c16311 100%
+            );
+            color: #fff;
+        }
+
+        body[data-page="terms"] .site-header .btn-primary:hover {
+            filter: brightness(1.12);
+        }
+
+        /* =========================================
+           이용약관 본문 - 디자인 시안 기준
+        ========================================= */
 
         .terms-page {
             min-height: 70vh;
-            padding: 48px 20px 80px;
+            padding: 32px 20px 80px;
         }
 
         .terms-container {
-            width: min(100%, 960px);
+            width: min(100%, 810px);
             margin: 0 auto;
         }
 
         .terms-container h1 {
-            margin: 0 0 10px;
-            font-size: clamp(28px, 4vw, 38px);
+            margin: 0 0 4px;
+            font-size: 30px;
+            font-weight: 700;
+            line-height: 1.4;
+            letter-spacing: -0.03em;
         }
 
         .terms-container h2 {
-            margin: 38px 0 14px;
-            font-size: 21px;
+            margin: 34px 0 14px;
+            font-size: 18px;
+            font-weight: 700;
             line-height: 1.5;
+            letter-spacing: -0.02em;
         }
 
         .terms-container p,
         .terms-container li {
             font-size: 15px;
-            line-height: 1.9;
+            line-height: 1.8;
+            color: #c9c4c4;
+        }
+
+        .terms-container p {
+            margin: 0 0 14px;
         }
 
         .terms-container ol {
-            padding-left: 24px;
+            padding-left: 40px;
+            margin: 12px 0 26px;
         }
 
         .terms-container li {
-            margin-bottom: 8px;
+            margin-bottom: 2px;
         }
 
         .terms-muted {
-            color: #aaa;
-        }
-
-        .terms-alert {
-            margin: 18px 0;
-            padding: 14px 16px;
-            border: 1px solid #51435a;
-            border-radius: 8px;
-            background: #231c29;
-            color: #ddd;
-            font-size: 14px;
-            line-height: 1.7;
+            color: #aaa !important;
         }
 
         .terms-toc {
             display: flex;
             flex-wrap: wrap;
-            gap: 10px 18px;
-            margin: 28px 0 36px;
-            padding: 20px;
+            gap: 6px 16px;
+            margin: 22px 0 32px;
+            padding: 16px;
             border: 1px solid #333;
-            border-radius: 10px;
-            background: #1b1b1b;
+            border-radius: 8px;
+            background: #141414;
         }
 
         .terms-link {
-            color: #d8a7e5;
+            color: #c9c4c4;
             text-decoration: underline;
-            text-underline-offset: 4px;
+            text-underline-offset: 3px;
+            text-decoration-color: rgba(255,255,255,.25);
         }
 
         .terms-link:hover {
@@ -93,15 +226,26 @@
 
         .terms-toc .terms-link {
             font-size: 13px;
+            line-height: 1.8;
         }
 
         .terms-container h2[id] {
             scroll-margin-top: 80px;
         }
 
+        @media (max-width: 860px) {
+            body[data-page="terms"] .site-header .main-nav {
+                display: none;
+            }
+        }
+
         @media (max-width: 600px) {
             .terms-page {
-                padding: 32px 16px 64px;
+                padding: 28px 16px 64px;
+            }
+
+            .terms-container h1 {
+                font-size: 28px;
             }
 
             .terms-container h2 {
@@ -109,16 +253,68 @@
             }
 
             .terms-toc {
-                padding: 16px;
+                padding: 14px;
+                gap: 6px 12px;
+            }
+
+            .terms-container ol {
+                padding-left: 24px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body[data-page="terms"] .site-header .container {
+                gap: 12px;
+            }
+
+            body[data-page="terms"] .site-header .logo {
+                font-size: 17px;
             }
         }
     </style>
 </head>
 
 <body data-page="terms">
+
     <a class="sr-only" href="#main">본문 바로가기</a>
 
-    <div id="navbar-container"></div>
+    <!-- 로그인 전 상단 네비게이션 -->
+    <header class="site-header" id="site-header">
+        <div class="container">
+
+            <a class="logo" href="index.html" aria-label="RecoMate 홈">
+                <svg
+                    viewBox="0 0 24 24"
+                    width="22"
+                    height="22"
+                    fill="none"
+                    stroke="#e57a14"
+                    stroke-width="2"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                >
+                    <path d="M3 7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v2a2 2 0 0 0 0 4v2a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-2a2 2 0 0 0 0-4z"/>
+                    <path d="M14 5v12" stroke-dasharray="2 2.5"/>
+                </svg>
+                RecoMate
+            </a>
+
+            <nav class="main-nav" aria-label="주요 메뉴">
+                <a href="start.html">같이 추천받기</a>
+            </nav>
+
+            <div class="header-actions">
+                <a class="btn btn-ghost btn-sm" href="login.html">
+                    로그인
+                </a>
+
+                <a class="btn btn-primary btn-sm" href="signup.html">
+                    회원가입
+                </a>
+            </div>
+
+        </div>
+    </header>
 
     <main id="main" class="terms-page">
         <article class="terms-container">
@@ -129,10 +325,7 @@
                 시행일 2026년 11월 1일
             </p>
 
-            <div class="terms-alert">
-                디자인 시안용 문안입니다. 실제로 공개하기 전에 팀 검토를 거쳐야 합니다.
-            </div>
-
+            <!-- 약관 목차 -->
             <nav class="terms-toc" aria-label="약관 목차">
                 <a class="terms-link" href="#t1">제1조 목적</a>
                 <a class="terms-link" href="#t2">제2조 정의</a>
@@ -248,9 +441,8 @@
     <div id="footer-container"></div>
 
     <script type="module">
-        import "../js/navbar.js";
-        import "../js/auth-ui.js";
         import "../js/footer.js";
     </script>
+
 </body>
 </html>

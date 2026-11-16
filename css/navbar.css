@@ -1,285 +1,455 @@
 
 /* =========================================
    RecoMate - 공통 네비게이션
-   Issue #45
+   원본 디자인 시안 적용
 ========================================= */
 
-/* ---------- 기본 네비게이션 ---------- */
+/* ---------- 헤더 ---------- */
 
-.nav-bar {
+.site-header {
+    --nav-bg: #141414;
+    --nav-surface: #1b1b1b;
+    --nav-surface-2: #232323;
+    --nav-surface-3: #2e2e2e;
+    --nav-text: #f2f2f2;
+    --nav-text-2: #c9c4c4;
+    --nav-muted: #8d8d8d;
+    --nav-accent: #e57a14;
+    --nav-line: rgba(255, 255, 255, 0.08);
+    --nav-line-strong: rgba(255, 255, 255, 0.16);
+    --nav-gradient: linear-gradient(
+        90deg,
+        #9b3fb5,
+        #e57a14
+    );
+
     position: sticky;
     top: 0;
     z-index: 100;
 
+    width: 100%;
+    height: 60px;
+
+    background: var(--nav-bg);
+    border-bottom: 1px solid var(--nav-line);
+}
+
+/* ---------- 네비게이션 ---------- */
+
+.site-header .nav-bar {
+    width: 100%;
+    height: 100%;
+
+    margin: 0;
+    padding: 0;
+
+    background: var(--nav-bg);
+    border: 0;
+}
+
+.site-header .nav-container {
     display: flex;
     align-items: center;
     gap: 28px;
 
-    width: 100%;
-    height: var(--nav-h, 58px);
-    padding: 0 clamp(16px, 4.3vw, 86px);
+    width: min(100% - 32px, 1160px);
+    height: 100%;
 
-    background: linear-gradient(#000000, #141414);
-    border: 0;
+    margin-inline: auto;
 }
 
 /* ---------- 로고 ---------- */
 
-.nav-bar .logo {
+.site-header .logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+
     flex-shrink: 0;
+
     margin: 0;
     padding: 0;
 
-    background: var(--brand);
-    background-clip: text;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    background: none;
+    color: var(--nav-text);
 
-    font-family: var(--font-main);
-    font-size: 25px;
-    font-weight: 400;
-    letter-spacing: 0.5px;
+    font-family: "IBM Plex Sans KR", sans-serif;
+    font-size: 19px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
     line-height: 1.3;
 
     text-decoration: none;
     white-space: nowrap;
+
+    -webkit-text-fill-color: initial;
 }
 
-/* ---------- 메뉴 영역 ---------- */
+.site-header .logo span {
+    background: var(--nav-gradient);
+    background-clip: text;
+    -webkit-background-clip: text;
 
-.nav-links,
-.nav-actions {
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+}
+
+.site-header .logo svg {
+    display: block;
+
+    width: 22px;
+    height: 22px;
+
+    flex: none;
+
+    color: var(--nav-accent);
+    stroke: currentColor;
+}
+
+/* ---------- 메인 메뉴 ---------- */
+
+.site-header .main-nav {
     display: flex;
     align-items: center;
-    gap: 28px;
+    gap: 2px;
 }
 
-.nav-actions {
-    margin-left: auto;
-}
-
-/* ---------- 메뉴 버튼 ---------- */
-
-.nav-bar .nav-btn {
+.site-header .main-nav a {
     display: inline-flex;
     align-items: center;
     justify-content: center;
 
-    padding: 6px 0;
+    min-height: 38px;
+    padding: 8px 12px;
 
-    border: 0;
-    background: transparent;
-    color: var(--text);
+    border-radius: 8px;
 
-    font-family: var(--font-main);
-    font-size: 15px;
-    font-weight: 400;
+    color: var(--nav-text-2);
+
+    font-family: "IBM Plex Sans KR", sans-serif;
+    font-size: 14px;
+    font-weight: 500;
     line-height: 1.4;
 
     text-decoration: none;
     white-space: nowrap;
 
-    transition: opacity 150ms ease;
+    transition:
+        color 150ms ease,
+        background 150ms ease;
 }
 
-.nav-bar .nav-btn:hover {
-    opacity: 0.75;
+.site-header .main-nav a:hover {
+    color: var(--nav-text);
+    background: var(--nav-surface);
 }
 
-.nav-bar .nav-active {
-    color: var(--text);
+.site-header .main-nav a[aria-current="page"] {
+    color: var(--nav-text);
+    font-weight: 700;
+
+    border-radius: 0;
+
+    box-shadow:
+        inset 0 -2px 0 var(--nav-accent);
 }
 
-/* ---------- 준비 중인 메뉴 ---------- */
+/* ---------- 오른쪽 영역 ---------- */
 
-.nav-bar .nav-btn-disabled {
-    color: var(--text);
-    opacity: 0.7;
-    cursor: default;
-}
+.site-header .header-actions {
+    display: flex;
+    align-items: center;
+    gap: 6px;
 
-.nav-bar .nav-btn-disabled:hover {
-    opacity: 0.7;
-}
-
-/* ---------- 로그인 / 로그아웃 ---------- */
-
-.nav-bar .nav-login {
-    min-width: auto;
-    padding: 6px 0;
-
-    background: transparent;
-    color: var(--text);
-
-    font-size: 15px;
-    font-weight: 400;
+    margin-left: auto;
 }
 
 /* ---------- 검색 아이콘 ---------- */
 
-.nav-bar .nav-search-icon {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
+.site-header .icon-btn {
+    position: relative;
 
-    width: 22px;
-    height: 22px;
+    display: inline-grid;
+    place-items: center;
+
+    width: 38px;
+    height: 38px;
+
     padding: 0;
 
-    color: #ffffff;
+    border: 1px solid transparent;
+    border-radius: 8px;
+
+    background: transparent;
+    color: var(--nav-text-2);
 }
 
-.nav-bar .nav-search-icon svg {
+.site-header .icon-btn svg {
     display: block;
-    width: 22px;
-    height: 22px;
 
-    fill: none;
-    stroke: currentColor;
-    stroke-width: 1.6;
-    stroke-linecap: round;
-    stroke-linejoin: round;
+    width: 20px;
+    height: 20px;
+}
+
+.site-header .nav-search-disabled {
+    cursor: default;
+}
+
+/* ---------- 원형 프로필 ---------- */
+
+.site-header .avatar {
+    display: inline-grid;
+    place-items: center;
+
+    width: 34px;
+    height: 34px;
+
+    padding: 0;
+
+    border: 1px solid var(--nav-line-strong);
+    border-radius: 50%;
+
+    background: var(--nav-surface-3);
+    color: var(--nav-text);
+
+    font-family: "IBM Plex Sans KR", sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1;
+
+    cursor: pointer;
+}
+
+.site-header .avatar:hover {
+    background: #383838;
+}
+
+.site-header .avatar:focus-visible {
+    outline: 2px solid var(--nav-accent);
+    outline-offset: 3px;
+}
+
+/* ---------- 드롭다운 ---------- */
+
+.site-header .dropdown {
+    position: relative;
+}
+
+.site-header .dropdown-menu {
+    position: absolute;
+
+    top: calc(100% + 8px);
+    right: 0;
+
+    display: none;
+
+    min-width: 210px;
+    padding: 6px;
+
+    background: var(--nav-surface-2);
+
+    border: 1px solid var(--nav-line-strong);
+    border-radius: 12px;
+
+    box-shadow:
+        0 12px 32px rgba(0, 0, 0, 0.5);
+}
+
+.site-header .dropdown.open .dropdown-menu {
+    display: block;
+}
+
+.site-header .dropdown-menu a,
+.site-header .dropdown-menu button {
+    display: flex;
+    align-items: center;
+
+    width: 100%;
+    min-height: 38px;
+
+    padding: 9px 12px;
+
+    border: 0;
+    border-radius: 6px;
+
+    background: none;
+    color: var(--nav-text-2);
+
+    font-family: "IBM Plex Sans KR", sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.4;
+
+    text-align: left;
+    text-decoration: none;
+
+    cursor: pointer;
+}
+
+.site-header .dropdown-menu a:hover,
+.site-header .dropdown-menu button:hover {
+    background: var(--nav-surface-3);
+    color: var(--nav-text);
+}
+
+.site-header .dropdown-menu hr {
+    height: 0;
+
+    margin: 6px 0;
+
+    border: 0;
+    border-top: 1px solid var(--nav-line);
+}
+
+.site-header .dropdown-menu .user-line {
+    padding: 8px 12px 10px;
+
+    color: var(--nav-muted);
+
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.site-header .dropdown-menu .user-line strong {
+    display: block;
+
+    color: var(--nav-text);
+
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.site-header .nav-auth-link {
+    font-weight: 500;
 }
 
 /* ---------- 모바일 메뉴 버튼 ---------- */
 
-.nav-menu-toggle {
+.site-header .nav-menu-toggle {
     display: none;
     align-items: center;
     justify-content: center;
 
     width: 38px;
     height: 38px;
+
     padding: 7px;
 
-    margin-left: auto;
-
-    border: 1px solid var(--line);
+    border: 1px solid var(--nav-line-strong);
     border-radius: 8px;
 
-    background: #222222;
-    color: var(--text);
+    background: transparent;
+    color: var(--nav-text);
 
     cursor: pointer;
 }
 
-.nav-menu-toggle svg {
+.site-header .nav-menu-toggle svg {
     width: 22px;
     height: 22px;
-
-    fill: none;
-    stroke: currentColor;
-    stroke-width: 1.8;
-    stroke-linecap: round;
 }
 
-/* ---------- 모바일 메뉴 패널 ---------- */
+/* ---------- 모바일 메뉴 ---------- */
 
-.nav-mobile-panel {
+.site-header .nav-mobile-panel {
     display: none;
 }
 
-/* ---------- 태블릿 ---------- */
+/* ---------- 태블릿 / 모바일 ---------- */
 
 @media (max-width: 860px) {
-    .nav-bar {
-        gap: 16px;
-    }
-
-    .nav-links,
-    .nav-actions {
-        gap: 16px;
-    }
-
-    .nav-links .nav-btn-disabled {
-        display: none;
-    }
-}
-
-/* ---------- 모바일 ---------- */
-
-@media (max-width: 560px) {
-    .nav-bar {
-        gap: 12px;
-        padding: 0 16px;
-    }
-
-    .nav-bar .logo {
-        font-size: 22px;
-    }
-
-    .nav-links,
-    .nav-actions {
+    .site-header .main-nav {
         display: none;
     }
 
-    .nav-menu-toggle {
+    .site-header .nav-menu-toggle {
         display: inline-flex;
     }
 
-    .nav-mobile-panel {
+    .site-header .nav-mobile-panel {
         position: absolute;
+
         top: 100%;
         left: 0;
         right: 0;
 
         display: none;
         flex-direction: column;
-        gap: 0;
+        gap: 2px;
 
         padding: 8px 16px 16px;
 
-        background: #181818;
-        border-bottom: 1px solid var(--line);
+        background: var(--nav-bg);
 
-        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
+        border-bottom: 1px solid var(--nav-line);
+
+        box-shadow:
+            0 12px 24px rgba(0, 0, 0, 0.3);
     }
 
-    .nav-mobile-panel.is-open {
+    .site-header .nav-mobile-panel.is-open {
         display: flex;
     }
 
-    .nav-mobile-panel .nav-btn {
+    .site-header .nav-mobile-panel a {
         display: flex;
-        justify-content: flex-start;
+        align-items: center;
 
-        width: 100%;
         min-height: 44px;
+
         padding: 10px 12px;
 
         border-radius: 6px;
 
+        color: var(--nav-text-2);
+
         font-size: 14px;
+        font-weight: 500;
+
+        text-decoration: none;
     }
 
-    .nav-mobile-panel .nav-btn:hover {
-        background: rgba(255, 255, 255, 0.06);
+    .site-header .nav-mobile-panel a:hover {
+        background: var(--nav-surface);
+        color: var(--nav-text);
     }
 
-    .nav-mobile-panel .nav-active {
-        background: rgba(123, 53, 147, 0.15);
-    }
+    .site-header .nav-mobile-panel a[aria-current="page"] {
+        color: var(--nav-text);
+        font-weight: 700;
 
-    .nav-mobile-panel .nav-btn-disabled {
-        opacity: 0.5;
-    }
-
-    .nav-mobile-panel .nav-login {
-        font-size: 14px;
-    }
-
-    .nav-mobile-panel .nav-mobile-divider {
-        height: 1px;
-        margin: 6px 0;
-
-        background: var(--line);
+        box-shadow:
+            inset 2px 0 0 var(--nav-accent);
     }
 }
 
-/* ---------- 모션 접근성 ---------- */
+@media (max-width: 560px) {
+    .site-header .nav-container {
+        gap: 12px;
+    }
+
+    .site-header .logo {
+        font-size: 19px;
+    }
+
+    .site-header .header-actions {
+        gap: 4px;
+    }
+
+    .site-header .icon-btn {
+        width: 34px;
+        height: 34px;
+    }
+
+    .site-header .dropdown-menu {
+        right: -44px;
+    }
+}
+
+/* ---------- 접근성 ---------- */
 
 @media (prefers-reduced-motion: reduce) {
-    .nav-bar .nav-btn {
+    .site-header .main-nav a {
         transition: none;
     }
 }
