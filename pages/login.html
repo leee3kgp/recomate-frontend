@@ -1,569 +1,227 @@
 
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
-    <meta name="theme-color" content="#141414">
-
-    <title>RecoMate | 로그인</title>
-
-    <!-- 공통 글꼴 -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link
-        rel="preconnect"
-        href="https://fonts.gstatic.com"
-        crossorigin
-    >
-    <link
-        href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap"
-        rel="stylesheet"
-    >
-
-    <!-- 공통 디자인 시스템 -->
-    <link rel="stylesheet" href="../css/common.css">
-    <link rel="stylesheet" href="../css/toast.css">
-
-    <!-- 기존 로그인 디자인 -->
-    <link rel="stylesheet" href="../css/background.css">
-    <link rel="stylesheet" href="../css/auth.css">
-
-    <style>
-        /* =========================================
-           RecoMate 로그인
-           Issue #45 / Issue #50
-        ========================================= */
-
-        .stage {
-            position: relative;
-            z-index: 1;
-
-            min-height: 100vh;
-
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-
-            padding: 56px 20px;
-        }
-
-        .view {
-            width: 100%;
-
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-
-            text-align: center;
-
-            animation: fade 0.45s ease both;
-        }
-
-        @keyframes fade {
-            from {
-                opacity: 0;
-                transform: translateY(8px);
-            }
-
-            to {
-                opacity: 1;
-                transform: none;
-            }
-        }
-
-        /* ---------- 홈으로 돌아가기 ---------- */
-
-        .back {
-            position: fixed;
-            top: 22px;
-            left: 26px;
-            z-index: 5;
-
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-
-            padding: 7px 14px 7px 10px;
-
-            background: #141414;
-            color: #e8e8e8;
-
-            border: 1px solid #2c2c2c;
-            border-radius: 999px;
-
-            font-family: var(--font-main);
-            font-size: 13px;
-
-            text-decoration: none;
-            cursor: pointer;
-
-            transition: border-color 150ms ease;
-        }
-
-        .back:hover {
-            border-color: #777;
-        }
-
-        /* ---------- 로그인 카드 ---------- */
-
-        .auth {
-            width: min(400px, 100%);
-
-            background: var(--panel);
-            border: 1px solid #262626;
-            border-radius: 10px;
-
-            padding: 34px clamp(22px, 9%, 38px) 28px;
-
-            box-shadow: 0 14px 50px rgba(0, 0, 0, 0.35);
-
-            text-align: left;
-
-            animation: cardUp 0.55s
-                cubic-bezier(0.2, 0.7, 0.2, 1) both;
-        }
-
-        @keyframes cardUp {
-            from {
-                opacity: 0;
-                transform: translateY(18px);
-            }
-
-            to {
-                opacity: 1;
-                transform: none;
-            }
-        }
-
-        /* ---------- 브랜드 ---------- */
-
-        .brand {
-            margin: 0 0 8px;
-
-            text-align: center;
-            font-size: 34px;
-            font-weight: 400;
-            letter-spacing: 0.5px;
-            line-height: 1.2;
-        }
-
-        .brand a {
-            background: var(--brand);
-
-            -webkit-background-clip: text;
-            background-clip: text;
-
-            color: transparent;
-            text-decoration: none;
-        }
-
-        .tagline {
-            margin: 0 0 24px;
-
-            text-align: center;
-            font-size: 13.5px;
-            color: #a3a3a3;
-        }
-
-        /* ---------- 입력 영역 ---------- */
-
-        .fg {
-            margin: 0 0 14px;
-        }
-
-        .fg label {
-            display: block;
-
-            margin: 0 0 6px 2px;
-
-            font-size: 12px;
-            color: #bdbdbd;
-        }
-
-        .pw {
-            position: relative;
-        }
-
-        .field {
-            display: block;
-
-            width: 100%;
-            height: 42px;
-
-            padding: 0 13px;
-
-            color: #ececec;
-            background: #000;
-
-            border: 1px solid #2c2c2c;
-            border-radius: var(--r);
-
-            font-family: var(--font-main);
-            font-size: 14px;
-            font-weight: 400;
-
-            text-align: left;
-            outline: 0;
-
-            transition: border-color 150ms ease;
-        }
-
-        .pw .field {
-            padding-right: 42px;
-        }
-
-        .field::placeholder {
-            color: #7d7d7d;
-        }
-
-        .field:hover {
-            border-color: #444;
-        }
-
-        .field:focus {
-            border-color: transparent;
-
-            background:
-                linear-gradient(#000, #000) padding-box,
-                var(--brand) border-box;
-        }
-
-        /* ---------- 비밀번호 표시 ---------- */
-
-        .eye {
-            position: absolute;
-            right: 8px;
-            top: 50%;
-
-            transform: translateY(-50%);
-
-            width: 30px;
-            height: 30px;
-
-            display: grid;
-            place-items: center;
-
-            background: none;
-            border: 0;
-            border-radius: 6px;
-
-            color: #8d8d8d;
-            cursor: pointer;
-        }
-
-        .eye:hover {
-            color: #fff;
-        }
-
-        .eye svg {
-            width: 18px;
-            height: 18px;
-
-            fill: none;
-            stroke: currentColor;
-            stroke-width: 1.8;
-            stroke-linecap: round;
-            stroke-linejoin: round;
-        }
-
-        /* ---------- 로그인 버튼 ---------- */
-
-        .auth .btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            width: 100%;
-            height: 42px;
-
-            margin-top: 4px;
-            padding: 0 16px;
-
-            border: 0;
-            border-radius: var(--r);
-
-            background: var(--brand);
-            color: #fff;
-
-            font-family: var(--font-main);
-            font-size: 15px;
-            font-weight: 600;
-
-            cursor: pointer;
-
-            transition:
-                filter 150ms ease,
-                transform 100ms ease;
-        }
-
-        .auth .btn:hover:not(:disabled) {
-            filter: brightness(1.12);
-        }
-
-        .auth .btn:disabled {
-            background: #2a2a2a;
-            color: #8a8a8a;
-            cursor: not-allowed;
-        }
-
-        /* ---------- 하단 링크 ---------- */
-
-        .alt {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 10px;
-
-            margin-top: 14px;
-        }
-
-        .text-link {
-            padding: 4px 0;
-
-            background: none;
-            border: 0;
-
-            color: #a8a8a8;
-            font-family: var(--font-main);
-            font-size: 13px;
-
-            text-decoration: underline;
-            text-underline-offset: 4px;
-
-            cursor: pointer;
-        }
-
-        .text-link:hover {
-            color: #fff;
-        }
-
-        /* ---------- 로그인 결과 ---------- */
-
-        .err {
-            min-height: 20px;
-
-            margin: 0 0 4px;
-
-            font-size: 13px;
-            color: #ff9c90;
-            text-align: center;
-        }
-
-        .err.ok {
-            color: #8fe0a8;
-        }
-
-        /* ---------- 모바일 ---------- */
-
-        @media (max-width: 560px) {
-            .stage {
-                justify-content: flex-start;
-                padding: 70px 16px 24px;
-            }
-
-            .auth {
-                padding: 34px 22px 26px;
-            }
-
-            .brand {
-                font-size: 30px;
-            }
-
-            .back {
-                position: static;
-                align-self: flex-start;
-                margin: 0 0 12px;
-            }
-        }
-
-        /* ---------- 모션 접근성 ---------- */
-
-        @media (prefers-reduced-motion: reduce) {
-            .view,
-            .auth {
-                animation: none;
-            }
-        }
-    </style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#141414">
+  <title>로그인 | RecoMate</title>
+
+  <link rel="stylesheet" href="../css/recomate-design.css">
 </head>
 
-<body class="login-page" data-mode="auth">
+<body data-page="login">
 
-    <!-- 기존 그라데이션 배경 -->
-    <div class="fx" aria-hidden="true">
-        <div class="fxin">
-            <i></i>
-        </div>
+  <a class="sr-only" href="#main">본문 바로가기</a>
+
+  <!-- 상단 네비게이션 -->
+  <header class="site-header" id="site-header">
+    <div class="container">
+      <a class="logo" href="index.html" aria-label="RecoMate 홈">
+        <svg
+          viewBox="0 0 24 24"
+          width="22"
+          height="22"
+          fill="none"
+          stroke="#e57a14"
+          stroke-width="2"
+          stroke-linejoin="round"
+          aria-hidden="true"
+          style="flex:none"
+        >
+          <path d="M3 7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v2a2 2 0 0 0 0 4v2a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-2a2 2 0 0 0 0-4z"/>
+          <path d="M14 5v12" stroke-dasharray="2 2.5"/>
+        </svg>
+        RecoMate
+      </a>
+
+      <nav class="main-nav" aria-label="주요 메뉴">
+        <a href="start.html">같이 추천받기</a>
+      </nav>
+
+      <div class="header-actions">
+        <a class="btn btn-ghost btn-sm" href="login.html">
+          로그인
+        </a>
+        <a class="btn btn-primary btn-sm" href="signup.html">
+          회원가입
+        </a>
+      </div>
     </div>
+  </header>
 
-    <div class="fxn" aria-hidden="true"></div>
+  <!-- 로그인 화면 -->
+  <main id="main" class="auth">
+    <div class="auth-card">
+      <div class="card">
 
-    <main>
-        <section class="stage">
-            <div class="view">
+        <div class="auth-head">
+          <a class="logo" href="index.html">
+            <span>RecoMate</span>
+          </a>
 
-                <!-- 홈으로 돌아가기 -->
-                <a href="index.html" class="back">
-                    ← 홈
-                </a>
+          <h1>로그인</h1>
 
-                <!-- 로그인 카드 -->
-                <form
-                    class="auth"
-                    id="loginForm"
-                    novalidate
+          <p class="muted" style="margin:0">
+            로그인하고 함께 볼 영화·드라마를 추천받으세요.
+          </p>
+        </div>
+
+        <!-- 로그인 오류 -->
+        <div
+          class="alert error"
+          id="login-error"
+          role="alert"
+          hidden
+        >
+          이메일 또는 비밀번호가 올바르지 않아요.
+        </div>
+
+        <!-- 기존 Cognito 로그인 연결 -->
+        <form
+          id="loginForm"
+          novalidate
+          style="margin-top:16px"
+        >
+
+          <!-- 이메일 -->
+          <div class="field" id="f-email">
+            <label for="userId">이메일</label>
+
+            <input
+              class="input"
+              id="userId"
+              name="email"
+              type="email"
+              autocomplete="username"
+              placeholder="you@example.com"
+              required
+            >
+
+            <span class="error">
+              올바른 이메일 주소를 입력해주세요.
+            </span>
+          </div>
+
+          <!-- 비밀번호 -->
+          <div class="field" id="f-password">
+            <label for="password">비밀번호</label>
+
+            <div class="input-wrap">
+              <input
+                class="input"
+                id="password"
+                name="password"
+                type="password"
+                autocomplete="current-password"
+                placeholder="비밀번호"
+                required
+              >
+
+              <button
+                class="icon-btn"
+                id="passwordToggle"
+                type="button"
+                aria-label="비밀번호 보기"
+                aria-pressed="false"
+              >
+                <svg
+                  viewBox="0 0 24 24"
+                  width="20"
+                  height="20"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
                 >
-
-                    <h1 class="brand">
-                        <a href="index.html">
-                            RecoMate
-                        </a>
-                    </h1>
-
-                    <p class="tagline">
-                        함께 볼 콘텐츠, 고민 없이
-                    </p>
-
-                    <!-- 이메일 -->
-                    <div class="fg">
-                        <label for="userId">
-                            이메일
-                        </label>
-
-                        <input
-                            class="field"
-                            id="userId"
-                            name="email"
-                            type="email"
-                            placeholder="email"
-                            autocomplete="username"
-                            required
-                        >
-                    </div>
-
-                    <!-- 비밀번호 -->
-                    <div class="fg">
-                        <label for="password">
-                            비밀번호
-                        </label>
-
-                        <div class="pw">
-                            <input
-                                class="field"
-                                id="password"
-                                name="password"
-                                type="password"
-                                placeholder="password"
-                                autocomplete="current-password"
-                                required
-                            >
-
-                            <button
-                                class="eye"
-                                id="passwordToggle"
-                                type="button"
-                                aria-pressed="false"
-                                aria-label="비밀번호 보기"
-                            >
-                                <svg
-                                    viewBox="0 0 24 24"
-                                    aria-hidden="true"
-                                >
-                                    <path
-                                        d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"
-                                    ></path>
-
-                                    <circle
-                                        cx="12"
-                                        cy="12"
-                                        r="3"
-                                    ></circle>
-                                </svg>
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- 로그인 결과 -->
-                    <p
-                        class="err"
-                        id="loginMessage"
-                        role="status"
-                        aria-live="polite"
-                    ></p>
-
-                    <!-- 로그인 버튼 -->
-                    <button
-                        class="btn"
-                        id="loginButton"
-                        type="submit"
-                    >
-                        login
-                    </button>
-
-                    <!-- 비밀번호 재설정 / 회원가입 -->
-                    <div class="alt">
-                        <a
-                            href="forgot-password.html"
-                            class="text-link"
-                        >
-                            비밀번호를 잊으셨나요?
-                        </a>
-
-                        <a
-                            href="signup.html"
-                            class="text-link"
-                        >
-                            회원가입 하기
-                        </a>
-                    </div>
-
-                </form>
+                  <path
+                    d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"
+                  />
+                  <circle cx="12" cy="12" r="3"/>
+                </svg>
+              </button>
             </div>
-        </section>
-    </main>
 
-    <!-- 비밀번호 표시 -->
-    <script>
-        const passwordInput =
-            document.getElementById("password");
+            <span class="error">
+              비밀번호를 입력해주세요.
+            </span>
+          </div>
 
-        const passwordToggle =
-            document.getElementById("passwordToggle");
+          <!-- 로그인 결과 메시지 -->
+          <p
+            id="loginMessage"
+            role="status"
+            aria-live="polite"
+            style="font-size:13px;color:#ff9c90"
+          ></p>
 
-        passwordToggle.addEventListener(
-            "click",
-            () => {
-                const show =
-                    passwordInput.type === "password";
+          <!-- 로그인 상태 유지 -->
+          <div class="row" style="margin:14px 0 20px">
+            <label class="checkbox">
+              <input type="checkbox" id="remember" checked>
+              로그인 상태 유지
+            </label>
 
-                passwordInput.type =
-                    show ? "text" : "password";
+            <span class="spacer"></span>
 
-                passwordToggle.setAttribute(
-                    "aria-pressed",
-                    String(show)
-                );
+            <a
+              class="link"
+              href="forgot-password.html"
+              style="font-size:14px"
+            >
+              비밀번호를 잊으셨나요?
+            </a>
+          </div>
 
-                passwordToggle.setAttribute(
-                    "aria-label",
-                    show
-                        ? "비밀번호 숨기기"
-                        : "비밀번호 보기"
-                );
-            }
+          <!-- 로그인 버튼 -->
+          <button
+            class="btn btn-primary btn-block btn-lg"
+            id="loginButton"
+            type="submit"
+          >
+            로그인
+          </button>
+
+        </form>
+
+        <!-- 회원가입 -->
+        <div class="auth-foot">
+          아직 계정이 없나요?
+          <a class="link" href="signup.html">
+            회원가입
+          </a>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- 비밀번호 표시 -->
+  <script>
+    document
+      .getElementById("passwordToggle")
+      .addEventListener("click", function () {
+        const input = document.getElementById("password");
+        const show = input.type === "password";
+
+        input.type = show ? "text" : "password";
+
+        this.setAttribute("aria-pressed", String(show));
+
+        this.setAttribute(
+          "aria-label",
+          show ? "비밀번호 숨기기" : "비밀번호 보기"
         );
-    </script>
+      });
+  </script>
 
-    <!-- 기존 AWS Cognito 로그인 유지 -->
-    <script
-        type="module"
-        src="../js/login.js"
-    ></script>
+  <!-- 기존 AWS Cognito 로그인 기능 -->
+  <script
+    type="module"
+    src="../js/login.js"
+  ></script>
 
 </body>
 </html>
