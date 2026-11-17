@@ -1,4 +1,3 @@
-
 import {
     getLoginUser,
     logout
@@ -13,294 +12,209 @@ import {
     getAllGenres
 } from "./user-api.js";
 
-import { limitNicknameLength, NICKNAME_MAX_LENGTH } from "./nickname-input.js";
+import {
+    limitNicknameLength,
+    NICKNAME_MAX_LENGTH
+} from "./nickname-input.js";
 
 // =====================================
-// HTML 요소 가져오기
+// HTML 요소
 // =====================================
 
-const profileMessage = document.getElementById("profileMessage");
+const $ = (selector) => document.querySelector(selector);
+const $$ = (selector) => [...document.querySelectorAll(selector)];
 
-const userEmail = document.getElementById("userEmail");
-const userNickname = document.getElementById("userNickname");
-const nicknameForm = document.getElementById("nicknameForm");
-const saveNicknameBtn = document.getElementById("saveNicknameBtn");
+const nicknameInput = $("#nick");
+const nicknameForm = $("#nick-form");
+const nicknameSave = $("#nick-save");
+const nicknameError = $("#nick-error");
+const nicknameHint = $("#nick-hint");
+const nicknameCount = $("#nick-count");
 
-limitNicknameLength(userNickname);
+const emailInput = $("#email");
 
-const genreList = document.getElementById("genreList");
-const saveGenresBtn = document.getElementById("saveGenresBtn");
+const genreContainer = $("#pref-genres");
+const genreMessage = $("#genre-message");
 
-const deleteAccountBtn = document.getElementById("deleteAccountBtn");
+const passwordModal = $("#pw-modal");
+const withdrawModal = $("#withdraw-modal");
 
-const nicknameMessage = document.getElementById("nick-msg");
-const genreMessage = document.getElementById("genre-msg");
+const withdrawConfirm = $("#wd-confirm");
+const withdrawButton = $("#wd-go");
+const withdrawError = $("#wd-error");
 
 // =====================================
-// 상태 관리
+// 상태
 // =====================================
-
-let availableGenres = [];
-let selectedGenres = [];
-let originalNickname = "";
 
 let profileReady = false;
 let genresReady = false;
 
 let savingNickname = false;
 let savingGenres = false;
-
-let deleteModal = null;
 let deletingAccount = false;
+
+let originalNickname = "";
+
+let availableGenres = [];
+let selectedGenres = [];
+
+let activeModal = null;
 let previousFocus = null;
 
-const flashTimers = new Map();
+// =====================================
+// 닉네임 길이 제한
+// =====================================
+
+limitNicknameLength(nicknameInput);
+
+nicknameInput.removeAttribute("maxlength");
 
 // =====================================
 // 공통 메시지
 // =====================================
 
-function showMessage(message) {
-    if (profileMessage) {
-        profileMessage.textContent = message;
-    }
-}
-
-// =====================================
-// 원본 시안 flash() 기능
-// 저장 메시지 2.2초 표시
-// =====================================
-
-function flash(id, message, bad = false) {
-    const element = document.getElementById(id);
+function showMessage(message, isError = false) {
+    let element = $("#profileMessage");
 
     if (!element) {
-        return;
-    }
+        element = document.createElement("p");
 
-    const previousTimer = flashTimers.get(id);
+        element.id = "profileMessage";
+        element.setAttribute("role", "status");
+        element.setAttribute("aria-live", "polite");
 
-    if (previousTimer) {
-        clearTimeout(previousTimer);
+        document.querySelector("main .container").prepend(element);
     }
 
     element.textContent = message;
-    element.classList.toggle("bad", bad);
-    element.classList.add("on");
 
-    const timer = setTimeout(() => {
-        element.classList.remove("on");
-        flashTimers.delete(id);
-    }, 2200);
+    element.style.color = isError
+        ? "var(--danger)"
+        : "var(--muted)";
 
-    flashTimers.set(id, timer);
+    element.hidden = !message;
 }
 
-// =====================================
-// API 오류 처리
-// =====================================
-
-function handleApiError(error, action, messageId = null) {
+function handleError(error, action) {
     console.error(`${action} 실패:`, error);
 
-    if (error?.code === "NICKNAME_REQUIRED") {
-        const message =
-            "닉네임 설정이 필요합니다. " +
-            "닉네임을 입력하고 저장한 뒤 다시 시도해주세요.";
-
-        showMessage(message);
-
-        if (messageId) {
-            flash(messageId, "닉네임 설정이 필요해요", true);
-        }
-
-        userNickname.focus();
-        return;
-    }
-
-    const errorMessage =
-        error?.message || "알 수 없는 오류";
-
-    showMessage(`${action} 실패: ${errorMessage}`);
-
-    if (messageId) {
-        flash(messageId, "저장하지 못했어요", true);
-    }
+    showMessage(
+        `${action} 실패: ${error?.message || "잠시 후 다시 시도해주세요."}`,
+        true
+    );
 }
 
 // =====================================
-// 닉네임 저장 버튼 상태
+// 프로필 상단 정보
 // =====================================
 
-function updateNicknameButton() {
-    const nickname = userNickname.value.trim();
+function updateProfileHeader() {
+    const nickname = originalNickname || "사용자";
 
-    const changed = nickname !== originalNickname;
+    $("#head-name").textContent = nickname;
+    $("#head-email").textContent = emailInput.value;
 
-    const valid =
-        nickname.length > 0 &&
-        [...nickname].length <= NICKNAME_MAX_LENGTH;
+    $("#big-avatar").textContent =
+        Array.from(nickname)[0] || "?";
+}
 
-    saveNicknameBtn.disabled =
+// =====================================
+// 닉네임 검증
+// =====================================
+
+function updateNicknameState() {
+    const nickname = nicknameInput.value.trim();
+
+    const length = Array.from(nickname).length;
+
+    nicknameCount.textContent =
+        `${length}/${NICKNAME_MAX_LENGTH}`;
+
+    let error = "";
+
+    if (!nickname) {
+        error = "닉네임을 입력해주세요.";
+    } else if (length > NICKNAME_MAX_LENGTH) {
+        error = `닉네임은 최대 ${NICKNAME_MAX_LENGTH}자까지 입력할 수 있어요.`;
+    } else if (/[<>]/.test(nickname)) {
+        error = "< > 기호는 사용할 수 없어요.";
+    }
+
+    nicknameError.textContent = error;
+
+    $("#f-nick").classList.toggle(
+        "invalid",
+        Boolean(error)
+    );
+
+    nicknameHint.hidden = Boolean(error);
+
+    nicknameSave.disabled =
         !profileReady ||
         savingNickname ||
-        !changed ||
-        !valid;
+        Boolean(error) ||
+        nickname === originalNickname;
+
+    return !error;
 }
 
 // =====================================
-// 선호 장르 저장 버튼 상태
+// 닉네임 변경
 // =====================================
 
-function getCheckedGenres() {
-    return [
-        ...genreList.querySelectorAll(
-            'input[type="checkbox"]:checked'
-        )
-    ].map((input) => input.value);
-}
+nicknameInput.addEventListener(
+    "input",
+    updateNicknameState
+);
 
-function sameGenres(first, second) {
-    if (first.length !== second.length) {
-        return false;
-    }
+nicknameForm.addEventListener(
+    "submit",
+    async (event) => {
+        event.preventDefault();
 
-    const firstSet = new Set(first);
-    const secondSet = new Set(second);
-
-    if (firstSet.size !== secondSet.size) {
-        return false;
-    }
-
-    return [...firstSet].every(
-        (code) => secondSet.has(code)
-    );
-}
-
-function updateGenresButton() {
-    if (!genresReady || savingGenres) {
-        saveGenresBtn.disabled = true;
-        return;
-    }
-
-    const checkedGenres = getCheckedGenres();
-
-    saveGenresBtn.disabled = sameGenres(
-        checkedGenres,
-        selectedGenres
-    );
-}
-
-// =====================================
-// 프로필 조회
-// =====================================
-
-async function loadProfile() {
-    profileReady = false;
-    updateNicknameButton();
-
-    try {
-        const profile = await getUserProfile();
-
-        userEmail.value = profile.email ?? "";
-        userNickname.value = profile.nickname ?? "";
-
-        originalNickname = userNickname.value.trim();
-
-        profileReady = true;
-
-        updateNicknameButton();
-        showMessage("");
-
-    } catch (error) {
-        profileReady = false;
-        updateNicknameButton();
-
-        handleApiError(error, "프로필 조회");
-    }
-}
-
-// =====================================
-// 닉네임 입력 변경 감지
-// =====================================
-
-userNickname.addEventListener("input", () => {
-    updateNicknameButton();
-});
-
-// =====================================
-// 닉네임 저장
-// =====================================
-
-nicknameForm.addEventListener("submit", async (event) => {
-    event.preventDefault();
-
-    if (!profileReady || savingNickname) {
-        return;
-    }
-
-    const nickname = userNickname.value.trim();
-
-    if (
-        nickname.length < 1 ||
-        [...nickname].length > NICKNAME_MAX_LENGTH
-    ) {
-        flash(
-            "nick-msg",
-            "닉네임은 1~20자로 입력해주세요",
-            true
-        );
-        return;
-    }
-
-    if (nickname === originalNickname) {
-        updateNicknameButton();
-        return;
-    }
-
-    savingNickname = true;
-    updateNicknameButton();
-
-    try {
-        const updatedProfile =
-            await updateUserProfile(nickname);
-
-        const savedNickname =
-            updatedProfile?.nickname ?? nickname;
-
-        userNickname.value = savedNickname;
-        originalNickname = savedNickname.trim();
-
-        if (updatedProfile?.email) {
-            userEmail.value = updatedProfile.email;
+        if (!profileReady || savingNickname) {
+            return;
         }
 
-        profileReady = true;
-
-        showMessage("");
-
-        // 원본 시안: 버튼 오른쪽 초록색 메시지
-        flash("nick-msg", "저장했어요");
-
-        if (!genresReady) {
-            await loadGenres();
+        if (!updateNicknameState() || nicknameSave.disabled) {
+            return;
         }
 
-    } catch (error) {
-        handleApiError(
-            error,
-            "닉네임 수정",
-            "nick-msg"
-        );
+        const nickname = nicknameInput.value.trim();
 
-    } finally {
-        savingNickname = false;
-        updateNicknameButton();
+        savingNickname = true;
+        updateNicknameState();
+
+        try {
+            const response =
+                await updateUserProfile(nickname);
+
+            const savedNickname =
+                typeof response?.nickname === "string"
+                    ? response.nickname.trim()
+                    : nickname;
+
+            originalNickname = savedNickname;
+            nicknameInput.value = savedNickname;
+
+            if (response?.email) {
+                emailInput.value = response.email;
+            }
+
+            updateProfileHeader();
+            showMessage("");
+        } catch (error) {
+            handleError(error, "닉네임 수정");
+        } finally {
+            savingNickname = false;
+            updateNicknameState();
+        }
     }
-});
+);
 
 // =====================================
-// 장르 데이터 변환
+// 장르 데이터 정규화
 // =====================================
 
 function normalizeGenreCatalog(result) {
@@ -323,20 +237,17 @@ function normalizeGenreCatalog(result) {
                 return null;
             }
 
-            const code = item.code;
-
-            const name =
-                item.name ??
-                item.displayName ??
-                code;
-
-            if (typeof code !== "string") {
+            if (typeof item.code !== "string") {
                 return null;
             }
 
             return {
-                code,
-                name: String(name)
+                code: item.code,
+                name: String(
+                    item.name ??
+                    item.displayName ??
+                    item.code
+                )
             };
         })
         .filter(Boolean);
@@ -361,55 +272,46 @@ function normalizeSelectedGenres(result) {
 }
 
 // =====================================
+// 장르 선택 목록
+// =====================================
+
+function getSelectedGenreCodes() {
+    return $$(
+        '#pref-genres [data-genre][aria-pressed="true"]'
+    ).map((button) => button.dataset.genre);
+}
+
+// =====================================
 // 장르 화면 표시
 // =====================================
 
 function renderGenres() {
-    genreList.replaceChildren();
+    genreContainer.replaceChildren();
 
-    if (availableGenres.length === 0) {
-        genreList.textContent =
+    if (!availableGenres.length) {
+        genreContainer.textContent =
             "표시할 장르 목록이 없습니다.";
 
-        saveGenresBtn.disabled = true;
         return;
     }
 
     for (const genre of availableGenres) {
-        const label = document.createElement("label");
-        label.className = "genre-item chip";
+        const button = document.createElement("button");
 
-        const checkbox = document.createElement("input");
+        button.type = "button";
+        button.className = "chip";
+        button.dataset.genre = genre.code;
 
-        checkbox.type = "checkbox";
-        checkbox.value = genre.code;
+        button.setAttribute(
+            "aria-pressed",
+            String(selectedGenres.includes(genre.code))
+        );
 
-        checkbox.checked =
-            selectedGenres.includes(genre.code);
+        button.textContent = genre.name;
 
-        const span = document.createElement("span");
-        span.textContent = genre.name;
-
-        label.append(checkbox, span);
-        genreList.appendChild(label);
+        genreContainer.appendChild(button);
     }
-
-    updateGenresButton();
 }
-
-// =====================================
-// 장르 선택 변경 감지
-// =====================================
-
-genreList.addEventListener("change", (event) => {
-    if (
-        event.target.matches(
-            'input[type="checkbox"]'
-        )
-    ) {
-        updateGenresButton();
-    }
-});
 
 // =====================================
 // 장르 조회
@@ -417,13 +319,12 @@ genreList.addEventListener("change", (event) => {
 
 async function loadGenres() {
     genresReady = false;
-    updateGenresButton();
 
-    genreList.textContent =
-        "장르 목록을 불러오는 중입니다.";
+    genreContainer.textContent =
+        "장르 정보를 불러오는 중입니다.";
 
     try {
-        const [catalogResult, userGenresResult] =
+        const [catalogResult, selectedResult] =
             await Promise.all([
                 getAllGenres(),
                 getUserGenres()
@@ -433,184 +334,157 @@ async function loadGenres() {
             normalizeGenreCatalog(catalogResult);
 
         selectedGenres =
-            normalizeSelectedGenres(userGenresResult);
+            normalizeSelectedGenres(selectedResult);
 
         genresReady = true;
 
         renderGenres();
-
     } catch (error) {
         genresReady = false;
 
-        genreList.textContent =
+        genreContainer.textContent =
             "장르 정보를 불러오지 못했습니다.";
 
-        updateGenresButton();
-
-        handleApiError(error, "장르 조회");
+        handleError(error, "장르 조회");
     }
 }
 
 // =====================================
-// 선호 장르 저장
+// 장르 저장 상태
 // =====================================
 
-saveGenresBtn.addEventListener("click", async () => {
-    if (!genresReady || savingGenres) {
-        return;
-    }
+function setGenreBusy(busy) {
+    savingGenres = busy;
 
-    const checkedGenres = getCheckedGenres();
+    $$("[data-genre]").forEach((button) => {
+        button.disabled = busy;
+    });
+}
 
-    if (sameGenres(checkedGenres, selectedGenres)) {
-        updateGenresButton();
-        return;
-    }
+// =====================================
+// 장르 클릭 시 자동 저장
+// =====================================
 
-    savingGenres = true;
-    updateGenresButton();
+genreContainer.addEventListener(
+    "click",
+    async (event) => {
+        const button =
+            event.target.closest("[data-genre]");
 
-    try {
-        await updateUserGenres(checkedGenres);
+        if (
+            !button ||
+            !genresReady ||
+            savingGenres
+        ) {
+            return;
+        }
 
-        selectedGenres = [...checkedGenres];
+        const currentlySelected =
+            button.getAttribute("aria-pressed") === "true";
 
-        showMessage("");
-
-        // 원본 시안: 버튼 오른쪽 초록색 메시지
-        flash("genre-msg", "저장했어요");
-
-    } catch (error) {
-        handleApiError(
-            error,
-            "선호 장르 저장",
-            "genre-msg"
+        button.setAttribute(
+            "aria-pressed",
+            String(!currentlySelected)
         );
 
-    } finally {
-        savingGenres = false;
-        updateGenresButton();
+        const nextGenres = getSelectedGenreCodes();
+
+        setGenreBusy(true);
+
+        genreMessage.hidden = true;
+        genreMessage.textContent = "";
+
+        try {
+            await updateUserGenres(nextGenres);
+
+            selectedGenres = [...nextGenres];
+
+            genreMessage.textContent =
+                "장르가 저장되었어요.";
+
+            genreMessage.hidden = false;
+        } catch (error) {
+            console.error("선호 장르 저장 실패:", error);
+
+            renderGenres();
+
+            genreMessage.textContent =
+                `장르를 저장하지 못했어요. ${error?.message || "다시 시도해주세요."}`;
+
+            genreMessage.hidden = false;
+        } finally {
+            setGenreBusy(false);
+        }
     }
-});
+);
 
 // =====================================
-// 회원 탈퇴 모달 생성
+// 본 콘텐츠
+// 조회 API 미연동 상태
 // =====================================
 
-function createDeleteModal() {
-    const modal = document.createElement("div");
+function initializeWatched() {
+    const watchedList = $("#watched-list");
 
-    modal.className = "modal";
-    modal.id = "deleteModal";
+    watchedList.replaceChildren();
 
-    modal.setAttribute("role", "dialog");
-    modal.setAttribute("aria-modal", "true");
-    modal.setAttribute(
-        "aria-labelledby",
-        "deleteModalTitle"
-    );
-    modal.setAttribute(
-        "aria-describedby",
-        "deleteModalDescription"
-    );
+    const empty = document.createElement("div");
+    empty.className = "empty";
 
-    modal.innerHTML = `
-        <div class="box">
-            <h4 id="deleteModalTitle">
-                정말 탈퇴할까요?
-            </h4>
+    const title = document.createElement("h3");
 
-            <p id="deleteModalDescription">
-                계정과 선호 장르, 추천 기록이 삭제될 수 있어요.<br>
-                이 작업은 되돌릴 수 없어요.
-            </p>
+    // 시안과 동일한 제목
+    title.textContent = "아직 본 작품이 없어요";
 
-            <p
-                class="modal-error"
-                id="deleteModalError"
-                role="alert"
-                hidden
-            ></p>
+    const description = document.createElement("p");
 
-            <div class="two">
-                <button
-                    type="button"
-                    class="btn-gray"
-                    data-act="modal-cancel"
-                >
-                    취소
-                </button>
+    // 시안과 동일한 안내 문구
+    description.textContent =
+        "추천 결과나 상세 화면에서 '이미 봤어요'를 눌러보세요.";
 
-                <button
-                    type="button"
-                    class="btn-red"
-                    data-act="modal-confirm"
-                >
-                    탈퇴하기
-                </button>
-            </div>
-        </div>
-    `;
-
-    return modal;
+    empty.append(title, description);
+    watchedList.appendChild(empty);
 }
 
 // =====================================
-// 회원 탈퇴 모달 열기
+// 모달 열기
 // =====================================
 
-function openDeleteModal() {
-    if (deleteModal || deletingAccount) {
+function openModal(modal) {
+    if (!modal || activeModal) {
         return;
     }
 
     previousFocus = document.activeElement;
+    activeModal = modal;
 
-    deleteModal = createDeleteModal();
+    modal.classList.add("open");
+    modal.setAttribute("aria-hidden", "false");
 
-    document.body.appendChild(deleteModal);
     document.body.classList.add("modal-open");
 
-    const cancelBtn =
-        deleteModal.querySelector(
-            '[data-act="modal-cancel"]'
-        );
-
-    const confirmBtn =
-        deleteModal.querySelector(
-            '[data-act="modal-confirm"]'
-        );
-
-    cancelBtn.addEventListener(
-        "click",
-        closeDeleteModal
+    const focusable = modal.querySelector(
+        'input:not(:disabled), button:not(:disabled)'
     );
 
-    confirmBtn.addEventListener(
-        "click",
-        confirmDeleteAccount
-    );
-
-    deleteModal.addEventListener("click", (event) => {
-        if (event.target === deleteModal) {
-            closeDeleteModal();
-        }
-    });
-
-    cancelBtn.focus();
+    focusable?.focus();
 }
 
 // =====================================
-// 회원 탈퇴 모달 닫기
+// 모달 닫기
 // =====================================
 
-function closeDeleteModal() {
-    if (!deleteModal || deletingAccount) {
+function closeModal() {
+    if (!activeModal || deletingAccount) {
         return;
     }
 
-    deleteModal.remove();
-    deleteModal = null;
+    const modal = activeModal;
+
+    modal.classList.remove("open");
+    modal.setAttribute("aria-hidden", "true");
+
+    activeModal = null;
 
     document.body.classList.remove("modal-open");
 
@@ -622,95 +496,66 @@ function closeDeleteModal() {
 }
 
 // =====================================
-// 회원 탈퇴 API 호출
+// 비밀번호 변경 안내
 // =====================================
 
-async function confirmDeleteAccount() {
-    if (!deleteModal || deletingAccount) {
-        return;
+$("#change-password").addEventListener(
+    "click",
+    () => {
+        openModal(passwordModal);
     }
+);
 
-    deletingAccount = true;
+// =====================================
+// 회원 탈퇴 모달
+// =====================================
 
-    const cancelBtn =
-        deleteModal.querySelector(
-            '[data-act="modal-cancel"]'
-        );
+$("#withdraw-open").addEventListener(
+    "click",
+    () => {
+        withdrawConfirm.value = "";
+        withdrawButton.disabled = true;
+        withdrawError.textContent = "";
 
-    const confirmBtn =
-        deleteModal.querySelector(
-            '[data-act="modal-confirm"]'
-        );
+        openModal(withdrawModal);
+    }
+);
 
-    const errorMessage =
-        deleteModal.querySelector("#deleteModalError");
+// =====================================
+// 모달 닫기 버튼
+// =====================================
 
-    cancelBtn.disabled = true;
-    confirmBtn.disabled = true;
+$$("[data-close]").forEach((button) => {
+    button.addEventListener(
+        "click",
+        closeModal
+    );
+});
 
-    confirmBtn.textContent = "탈퇴 처리 중...";
+// =====================================
+// 모달 배경 클릭
+// =====================================
 
-    errorMessage.hidden = true;
-    errorMessage.textContent = "";
-
-    let accountDeleted = false;
-
-    try {
-        await deleteUserAccount();
-
-        accountDeleted = true;
-
-        deleteModal.remove();
-        deleteModal = null;
-
-        document.body.classList.remove("modal-open");
-
-        previousFocus = null;
-
-        await logout();
-
-        window.location.replace("index.html");
-
-    } catch (error) {
-        console.error("회원 탈퇴 처리 실패:", error);
-
-        if (accountDeleted) {
-            window.location.replace("login.html");
-            return;
+$$(".modal-backdrop").forEach((modal) => {
+    modal.addEventListener("click", (event) => {
+        if (event.target === modal) {
+            closeModal();
         }
-
-        handleApiError(error, "회원 탈퇴");
-
-        errorMessage.textContent =
-            `회원 탈퇴 실패: ${
-                error?.message || "알 수 없는 오류"
-            }`;
-
-        errorMessage.hidden = false;
-
-        cancelBtn.disabled = false;
-        confirmBtn.disabled = false;
-
-        confirmBtn.textContent = "탈퇴하기";
-        confirmBtn.focus();
-
-    } finally {
-        deletingAccount = false;
-    }
-}
+    });
+});
 
 // =====================================
-// 모달 키보드 동작
+// ESC 및 Tab 키
 // =====================================
 
 document.addEventListener("keydown", (event) => {
-    if (!deleteModal) {
+    if (!activeModal) {
         return;
     }
 
     if (event.key === "Escape") {
         event.preventDefault();
-        closeDeleteModal();
+        closeModal();
         return;
     }
 
@@ -718,19 +563,19 @@ document.addEventListener("keydown", (event) => {
         return;
     }
 
-    const buttons = [
-        ...deleteModal.querySelectorAll(
-            "button:not(:disabled)"
+    const focusable = [
+        ...activeModal.querySelectorAll(
+            'button:not(:disabled), input:not(:disabled)'
         )
     ];
 
-    if (buttons.length === 0) {
+    if (!focusable.length) {
         event.preventDefault();
         return;
     }
 
-    const first = buttons[0];
-    const last = buttons[buttons.length - 1];
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
 
     if (
         event.shiftKey &&
@@ -738,7 +583,6 @@ document.addEventListener("keydown", (event) => {
     ) {
         event.preventDefault();
         last.focus();
-
     } else if (
         !event.shiftKey &&
         document.activeElement === last
@@ -749,41 +593,166 @@ document.addEventListener("keydown", (event) => {
 });
 
 // =====================================
-// 회원 탈퇴 버튼
+// 로그아웃
 // =====================================
 
-deleteAccountBtn.addEventListener("click", () => {
-    openDeleteModal();
-});
+$('[data-action="logout"]').addEventListener(
+    "click",
+    async () => {
+        try {
+            await logout();
+        } catch (error) {
+            handleError(error, "로그아웃");
+        }
+    }
+);
 
 // =====================================
-// 프로필 페이지 초기화
+// 회원 탈퇴 확인
+// =====================================
+
+withdrawConfirm.addEventListener(
+    "input",
+    () => {
+        withdrawButton.disabled =
+            withdrawConfirm.value.trim() !== "탈퇴" ||
+            deletingAccount;
+    }
+);
+
+// =====================================
+// 회원 탈퇴 API
+// =====================================
+
+withdrawButton.addEventListener(
+    "click",
+    async () => {
+        if (
+            withdrawConfirm.value.trim() !== "탈퇴" ||
+            deletingAccount
+        ) {
+            return;
+        }
+
+        deletingAccount = true;
+
+        withdrawButton.disabled = true;
+        withdrawButton.textContent = "탈퇴 처리 중...";
+
+        withdrawError.textContent = "";
+
+        try {
+            await deleteUserAccount();
+        } catch (error) {
+            console.error("회원 탈퇴 실패:", error);
+
+            withdrawError.textContent =
+                error?.message ||
+                "회원 탈퇴에 실패했습니다.";
+
+            deletingAccount = false;
+            withdrawButton.disabled = false;
+            withdrawButton.textContent = "탈퇴하기";
+
+            return;
+        }
+
+        try {
+            await logout();
+        } catch (error) {
+            console.error(
+                "회원 탈퇴 후 로그아웃 실패:",
+                error
+            );
+
+            window.location.replace(
+                "/pages/login.html"
+            );
+        }
+    }
+);
+
+// =====================================
+// 사이드 메뉴 활성화
+// =====================================
+
+function activateSideNavigation() {
+    const links = $$("#side-nav a");
+
+    const scrollPosition =
+        window.scrollY + 140;
+
+    let activeLink = links[0];
+
+    for (const link of links) {
+        const target = document.querySelector(
+            link.getAttribute("href")
+        );
+
+        if (
+            target &&
+            target.offsetTop <= scrollPosition
+        ) {
+            activeLink = link;
+        }
+    }
+
+    links.forEach((link) => {
+        link.classList.toggle(
+            "active",
+            link === activeLink
+        );
+    });
+}
+
+window.addEventListener(
+    "scroll",
+    activateSideNavigation,
+    { passive: true }
+);
+
+// =====================================
+// 프로필 초기화
 // =====================================
 
 async function initializeProfile() {
-    profileReady = false;
-    genresReady = false;
+    nicknameSave.disabled = true;
 
-    saveNicknameBtn.disabled = true;
-    saveGenresBtn.disabled = true;
-    deleteAccountBtn.disabled = true;
+    initializeWatched();
 
-    const user = await getLoginUser();
+    try {
+        const user = await getLoginUser();
 
-    if (!user) {
-        window.location.replace("login.html");
-        return;
+        if (!user) {
+            window.location.replace("login.html");
+            return;
+        }
+
+        const [profile] = await Promise.all([
+            getUserProfile(),
+            loadGenres()
+        ]);
+
+        emailInput.value = profile?.email ?? "";
+
+        originalNickname =
+            typeof profile?.nickname === "string"
+                ? profile.nickname.trim()
+                : "";
+
+        nicknameInput.value = originalNickname;
+
+        profileReady = true;
+
+        updateProfileHeader();
+        updateNicknameState();
+
+        showMessage("");
+    } catch (error) {
+        handleError(error, "프로필 조회");
     }
 
-    await Promise.all([
-        loadProfile(),
-        loadGenres()
-    ]);
-
-    deleteAccountBtn.disabled = false;
-
-    updateNicknameButton();
-    updateGenresButton();
+    activateSideNavigation();
 }
 
 initializeProfile();
