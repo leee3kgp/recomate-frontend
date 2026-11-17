@@ -1,0 +1,100 @@
+/* =========================================
+   가입 직후 환영 배너 (js/welcome.js)
+   공통 토스트(css/toast.css)와 같은 위치·모양
+========================================= */
+
+.welcome-banner {
+    position: fixed;
+    left: 50%;
+    bottom: 84px;
+    z-index: 200;
+
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    width: min(calc(100% - 32px), 420px);
+    padding: 12px 16px;
+
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: var(--radius-md, 8px);
+
+    background: #2b2925;
+    color: #f2f2f2;
+
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
+
+    font-family: var(--font-main);
+    font-size: 14px;
+    line-height: 1.5;
+
+    transform: translateX(-50%);
+    animation: welcome-in 180ms ease-out;
+}
+
+.welcome-banner[hidden] {
+    display: none;
+}
+
+.welcome-message {
+    flex: 1;
+    min-width: 0;
+    margin: 0;
+}
+
+.welcome-start,
+.welcome-close {
+    flex: none;
+    padding: 4px 0;
+    border: 0;
+    background: none;
+    font: 700 13px var(--font-main);
+    cursor: pointer;
+}
+
+.welcome-start {
+    color: #e57a14;
+    text-decoration: none;
+}
+
+.welcome-start:hover {
+    color: #ff9c40;
+}
+
+.welcome-close {
+    color: var(--sub, #b9a9a9);
+}
+
+.welcome-close:hover {
+    color: #f2f2f2;
+}
+
+.welcome-start:focus-visible,
+.welcome-close:focus-visible {
+    outline: 2px solid #e57a14;
+    outline-offset: 3px;
+}
+
+@media (min-width: 861px) {
+    .welcome-banner {
+        bottom: 28px;
+    }
+}
+
+@keyframes welcome-in {
+    from {
+        opacity: 0;
+        transform: translate(-50%, 8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(-50%);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .welcome-banner {
+        animation: none;
+    }
+}
