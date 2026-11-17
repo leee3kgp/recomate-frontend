@@ -2,6 +2,7 @@ import { getCurrentUser } from "aws-amplify/auth";
 
 import { requireLogin, apiFetch, publicFetch, ApiError } from "./api.js";
 import { loadGenres } from "./genres.js";
+import { withLogin } from "./login-gate.js";
 import {
     GUEST_REQUEST_KEY,
     GUEST_RESULT_KEY,
@@ -415,6 +416,15 @@ async function initResultPage() {
     );
 
     const comingSoon = (name) => flash(`‘${name}’ 기능은 준비 중이에요.`);
+
+    // 작품 상세는 로그인 전용 (팀 결정 11/17): 비회원은 로그인 안내 모달, 로그인하면 이 결과 화면으로 돌아옴
+    // 회원은 아래 TODO대로 상세 페이지가 생기면 comingSoon 대신 이동
+    const openDetail = (target) => withLogin(() => comingSoon("상세 보기"), {
+        title: target.dataset.title
+            ? `‘${target.dataset.title}’ 상세 정보는 로그인 후 볼 수 있어요`
+            : "로그인이 필요해요",
+        reason: "로그인하면 작품 줄거리, 출연진, 볼 수 있는 OTT를 확인할 수 있어요."
+    });
 
     // 작품 상세 보기: 상세 화면과 API 가 생기면 이동하도록 연결
     // TODO: 상세 페이지 주소가 정해지면 comingSoon 대신 이동 처리
@@ -1101,7 +1111,7 @@ async function initResultPage() {
         if (target.dataset.act === "share") shareResult();
         if (target.dataset.act === "reroll") rerollItems();
         if (target.dataset.act === "first-set") goToPage(0);
-        if (target.dataset.act === "detail") comingSoon("상세 보기");
+        if (target.dataset.act === "detail") openDetail(target);
     });
 
     // ---------- API ----------

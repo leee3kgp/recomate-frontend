@@ -7,6 +7,8 @@ import {
     getCurrentUser
 } from "aws-amplify/auth";
 
+import { takeReturnTo } from "./login-gate.js";
+
 // =====================================
 // HTML 요소 가져오기
 // =====================================
@@ -17,6 +19,15 @@ const passwordInput = document.getElementById("password");
 
 const loginButton = document.getElementById("loginButton");
 const loginMessage = document.getElementById("loginMessage");
+
+// =====================================
+// 로그인 후 이동할 화면
+// 로그인 안내 모달(login-gate.js)에서 왔으면 보던 화면으로, 아니면 메인으로
+// =====================================
+
+function goAfterLogin() {
+    window.location.replace(takeReturnTo() || "index.html");
+}
 
 // =====================================
 // 메시지 출력
@@ -41,8 +52,8 @@ function showLoginSuccess() {
         true
     );
 
-    // 메인 페이지 이동
-    window.location.replace("index.html");
+    // 보던 화면 또는 메인 페이지 이동
+    goAfterLogin();
 }
 
 // =====================================
@@ -159,8 +170,8 @@ loginForm.addEventListener(
 
                 passwordInput.value = "";
 
-                // 메인 페이지 이동
-                window.location.replace("index.html");
+                // 보던 화면 또는 메인 페이지 이동
+                goAfterLogin();
 
             } else {
 
