@@ -1,0 +1,114 @@
+/* =========================================
+   RecoMate - 로그인 안내 모달 (js/login-gate.js)
+   비회원이 로그인 전용 기능을 눌렀을 때 지금 화면 위에 띄우는 <dialog>
+   - 버튼은 공통 .btn 스타일(common.css) 사용
+   - 넓은 화면: 가운데 카드 / 좁은 화면(모바일): 아래에서 올라오는 바텀시트
+========================================= */
+
+.login-gate {
+    --gate-surface: #232323;
+    --gate-line: rgba(255, 255, 255, 0.16);
+    --gate-muted: #b3adad;
+
+    width: min(100% - 32px, 420px);
+    max-width: none;
+    margin: auto;
+    padding: 0;
+
+    /* 등장 애니메이션 중 패널이 움직여도 스크롤바가 생기지 않게 */
+    overflow: visible;
+
+    color: var(--text);
+    background: transparent;
+
+    border: none;
+}
+
+.login-gate::backdrop {
+    background: rgba(0, 0, 0, 0.66);
+}
+
+/* 모달이 열려 있는 동안 뒤 화면이 스크롤되지 않게 */
+body.login-gate-open {
+    overflow: hidden;
+}
+
+.login-gate__panel {
+    padding: 24px;
+
+    background: var(--gate-surface);
+
+    border: 1px solid var(--gate-line);
+    border-radius: var(--radius-lg);
+
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
+}
+
+.login-gate__title {
+    margin: 0 0 8px;
+
+    font-size: 19px;
+    font-weight: 700;
+    line-height: 1.4;
+}
+
+.login-gate__reason {
+    margin: 0;
+
+    color: var(--gate-muted);
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.login-gate__actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+
+    margin-top: 22px;
+}
+
+.login-gate__actions .btn {
+    min-width: 88px;
+}
+
+.login-gate .btn:focus-visible {
+    outline: 2px solid var(--color-primary-hover);
+    outline-offset: 2px;
+}
+
+/* 모바일: 화면 아래에 붙는 바텀시트, 버튼은 세로로 크게 */
+@media (max-width: 560px) {
+    .login-gate {
+        width: 100%;
+        margin: auto 0 0;
+    }
+
+    .login-gate__panel {
+        padding: 22px 16px calc(16px + env(safe-area-inset-bottom));
+
+        border-bottom: none;
+        border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    }
+
+    .login-gate__actions {
+        flex-direction: column;
+    }
+
+    .login-gate__actions .btn {
+        width: 100%;
+    }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    .login-gate[open] .login-gate__panel {
+        animation: login-gate-in var(--transition-normal);
+    }
+
+    @keyframes login-gate-in {
+        from {
+            opacity: 0;
+            transform: translateY(12px);
+        }
+    }
+}
