@@ -4,13 +4,15 @@ import {
     refreshTokens
 } from "./auth-token.js";
 
-import { API_BASE_URL, NETWORK_ERROR_MESSAGE } from "./api-config.js";
+import {
+    API_BASE_URL,
+    NETWORK_ERROR_MESSAGE
+} from "./api-config.js";
 
 const LOGIN_PAGE = "login.html";
 
 // 로그인이 만료되면 로그인 화면으로 이동
 function goToLogin() {
-
     window.location.replace(LOGIN_PAGE);
 
     // 이후 코드가 실행되지 않도록 대기
@@ -104,7 +106,7 @@ async function userApiRequest(path, options = {}) {
     }
 
     // 응답 본문이 없는 경우
-    if (response.status === 204) {
+    if (response.status === 204 || response.status === 205) {
         return null;
     }
 
@@ -188,5 +190,94 @@ export async function getAllGenres() {
 
     return userApiRequest("/api/genres", {
         method: "GET"
+    });
+}
+
+// =====================================
+// 7. 본 작품 목록 조회
+// GET /api/users/me/watched
+// =====================================
+
+export async function getMyWatched(
+    limit = 20,
+    nextToken = null
+) {
+
+    const params = new URLSearchParams();
+
+    params.set("limit", String(limit));
+
+    if (nextToken) {
+        params.set("nextToken", nextToken);
+    }
+
+    return userApiRequest(
+        `/api/users/me/watched?${params.toString()}`,
+        {
+            method: "GET"
+        }
+    );
+}
+
+// =====================================
+// 8. 본 작품 저장
+// POST /api/users/me/watched
+// =====================================
+
+export async function addMyWatched(tmdbId, mediaType) {
+
+    return userApiRequest("/api/users/me/watched", {
+        method: "POST",
+        body: JSON.stringify({
+            tmdbId,
+            mediaType
+        })
+    });
+}
+
+// =====================================
+// 9. 본 작품 삭제
+// DELETE /api/users/me/watched/{mediaType}/{tmdbId}
+// =====================================
+
+export async function removeMyWatched(
+    mediaType,
+    tmdbId
+) {
+
+    return userApiRequest(
+        `/api/users/me/watched/` +
+        `${encodeURIComponent(mediaType)}/` +
+        `${encodeURIComponent(tmdbId)}`,
+        {
+            method: "DELETE"
+        }
+    );
+}
+
+// =====================================
+// 10. 내 설정 조회
+// GET /api/users/me/settings
+// =====================================
+
+export async function getMySettings() {
+
+    return userApiRequest("/api/users/me/settings", {
+        method: "GET"
+    });
+}
+
+// =====================================
+// 11. 자동 제외 설정 변경
+// PATCH /api/users/me/settings
+// =====================================
+
+export async function updateMySettings(excludeWatched) {
+
+    return userApiRequest("/api/users/me/settings", {
+        method: "PATCH",
+        body: JSON.stringify({
+            excludeWatched
+        })
     });
 }

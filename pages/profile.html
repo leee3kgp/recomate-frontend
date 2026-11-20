@@ -8,13 +8,10 @@
 
     <title>내 프로필 | RecoMate</title>
 
-    <!-- 기존 공통 스타일 유지 -->
     <link rel="stylesheet" href="../css/common.css">
     <link rel="stylesheet" href="../css/navbar.css">
     <link rel="stylesheet" href="../css/footer.css">
     <link rel="stylesheet" href="../css/toast.css">
-
-    <!-- 프로필 시안 스타일 -->
     <link rel="stylesheet" href="../css/profile.css">
 </head>
 
@@ -22,13 +19,11 @@
 
     <a class="sr-only" href="#main">본문 바로가기</a>
 
-    <!-- 기존 네비게이션: 수정하지 않음 -->
     <div id="navbar-container"></div>
 
     <main id="main" class="page">
         <div class="container">
 
-            <!-- 프로필 상단 -->
             <section class="card profile-head" style="flex-wrap: wrap;">
 
                 <span
@@ -69,7 +64,6 @@
                 style="margin-top: 24px;"
             >
 
-                <!-- 프로필 사이드 메뉴 -->
                 <nav
                     class="side-nav"
                     id="side-nav"
@@ -82,7 +76,6 @@
 
                 <div class="stack" style="--gap: 20px;">
 
-                    <!-- 계정 정보 -->
                     <section
                         class="card"
                         id="account"
@@ -93,7 +86,6 @@
                             <h3 id="account-title">계정 정보</h3>
                         </div>
 
-                        <!-- 닉네임 -->
                         <form id="nick-form" novalidate>
                             <div class="field" id="f-nick">
 
@@ -143,11 +135,7 @@
                             </div>
                         </form>
 
-                        <!-- 이메일 -->
-                        <div
-                            class="field"
-                            style="margin-top: 16px;"
-                        >
+                        <div class="field" style="margin-top: 16px;">
                             <label for="email">이메일</label>
 
                             <input
@@ -164,7 +152,6 @@
 
                         <hr class="divider">
 
-                        <!-- 자주 고르는 장르 -->
                         <div class="panel-title">
                             <h3>자주 고르는 장르</h3>
 
@@ -192,7 +179,6 @@
 
                     </section>
 
-                    <!-- 본 콘텐츠 -->
                     <section
                         class="card"
                         id="watched"
@@ -200,26 +186,17 @@
                     >
 
                         <div class="panel-title">
-                            <h3 id="watched-title">
-                                본 콘텐츠
-                            </h3>
+                            <h3 id="watched-title">본 콘텐츠</h3>
 
-                            <span
-                                class="muted"
-                                style="font-size: 13px;"
-                            >
+                            <span class="muted" style="font-size: 13px;">
                                 여기 있는 작품은 추천에서 빠져요
                             </span>
                         </div>
 
-                        <div
-                            class="list"
-                            id="watched-list"
-                        ></div>
+                        <div class="list" id="watched-list"></div>
 
                     </section>
 
-                    <!-- 설정 -->
                     <section
                         class="card"
                         id="settings"
@@ -227,20 +204,14 @@
                     >
 
                         <div class="panel-title">
-                            <h3 id="settings-title">
-                                설정
-                            </h3>
+                            <h3 id="settings-title">설정</h3>
                         </div>
 
                         <div class="list">
 
-                            <!-- 이미 본 작품 자동 제외 -->
                             <div class="list-row">
-
                                 <div class="grow">
-                                    <strong>
-                                        이미 본 작품 자동으로 빼기
-                                    </strong>
+                                    <strong>이미 본 작품 자동으로 빼기</strong>
 
                                     <div class="sub">
                                         추천할 때 '이미 봤어요' 작품을
@@ -255,23 +226,16 @@
                                         data-setting="excludeWatched"
                                         disabled
                                     >
-
                                     <span></span>
-
                                     <b class="sr-only">
                                         이미 본 작품 자동으로 빼기
                                     </b>
                                 </label>
-
                             </div>
 
-                            <!-- 비밀번호 변경 -->
                             <div class="list-row">
-
                                 <div class="grow">
-                                    <strong>
-                                        비밀번호 변경
-                                    </strong>
+                                    <strong>비밀번호 변경</strong>
 
                                     <div class="sub">
                                         주기적으로 바꾸면 계정을
@@ -286,12 +250,9 @@
                                 >
                                     변경
                                 </button>
-
                             </div>
 
-                            <!-- 로그아웃 -->
                             <div class="list-row">
-
                                 <div class="grow">
                                     <strong>로그아웃</strong>
 
@@ -307,12 +268,9 @@
                                 >
                                     로그아웃
                                 </button>
-
                             </div>
 
-                            <!-- 회원 탈퇴 -->
                             <div class="list-row">
-
                                 <div class="grow">
                                     <strong style="color: var(--danger);">
                                         회원 탈퇴
@@ -331,7 +289,6 @@
                                 >
                                     탈퇴하기
                                 </button>
-
                             </div>
 
                         </div>
@@ -343,25 +300,178 @@
         </div>
     </main>
 
-    <!-- 비밀번호 변경 안내 -->
+    <!-- ==================================
+         비밀번호 변경 모달
+    =================================== -->
+
     <div
         class="modal-backdrop"
         id="pw-modal"
         aria-hidden="true"
     >
         <div
-            class="modal"
+            class="modal password-modal"
             role="dialog"
             aria-modal="true"
             aria-labelledby="pw-title"
         >
+            <h2 id="pw-title">비밀번호 변경</h2>
 
-            <h2 id="pw-title">
-                비밀번호 변경
-            </h2>
+            <form id="pw-form" novalidate>
+
+                <div class="field">
+                    <label for="pw-current">현재 비밀번호</label>
+
+                    <div class="password-input-wrap">
+                        <input
+                            class="input"
+                            id="pw-current"
+                            type="password"
+                            autocomplete="current-password"
+                            required
+                        >
+
+                        <button
+                            class="password-visibility"
+                            type="button"
+                            data-toggle-password="pw-current"
+                            aria-label="현재 비밀번호 표시"
+                            aria-pressed="false"
+                        >
+                            <svg
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="1.8"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                aria-hidden="true"
+                            >
+                                <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"/>
+                                <circle cx="12" cy="12" r="3"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label for="pw-new">새 비밀번호</label>
+
+                    <div class="password-input-wrap">
+                        <input
+                            class="input"
+                            id="pw-new"
+                            type="password"
+                            placeholder="12자 이상"
+                            autocomplete="new-password"
+                            required
+                        >
+
+                        <button
+                            class="password-visibility"
+                            type="button"
+                            data-toggle-password="pw-new"
+                            aria-label="새 비밀번호 표시"
+                            aria-pressed="false"
+                        >
+                            <svg
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="1.8"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                aria-hidden="true"
+                            >
+                                <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"/>
+                                <circle cx="12" cy="12" r="3"/>
+                            </svg>
+                        </button>
+                    </div>
+
+                    <div
+                        class="password-requirements"
+                        aria-label="새 비밀번호 조건"
+                    >
+                        <span id="pw-rule-length">○ 12자 이상</span>
+                        <span id="pw-rule-lower">○ 소문자</span>
+                        <span id="pw-rule-number">○ 숫자</span>
+                        <span id="pw-rule-special">○ 특수문자</span>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label for="pw-confirm">새 비밀번호 확인</label>
+
+                    <div class="password-input-wrap">
+                        <input
+                            class="input"
+                            id="pw-confirm"
+                            type="password"
+                            autocomplete="new-password"
+                            required
+                        >
+                    </div>
+
+                    <p
+                        id="pw-match-message"
+                        class="password-feedback"
+                        aria-live="polite"
+                        hidden
+                    ></p>
+                </div>
+
+                <p
+                    id="pw-error"
+                    class="password-feedback error"
+                    role="alert"
+                    hidden
+                ></p>
+
+                <div class="actions">
+                    <button
+                        class="btn btn-secondary"
+                        type="button"
+                        data-close
+                    >
+                        취소
+                    </button>
+
+                    <button
+                        class="btn btn-primary"
+                        id="pw-submit"
+                        type="submit"
+                        disabled
+                    >
+                        변경하기
+                    </button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+    <!-- ==================================
+         로그아웃 확인 모달
+    =================================== -->
+
+    <div
+        class="modal-backdrop"
+        id="logout-modal"
+        aria-hidden="true"
+    >
+        <div
+            class="modal"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="logout-title"
+            style="width: min(470px, calc(100vw - 32px)); max-width: 470px;"
+        >
+            <h2 id="logout-title">로그아웃할까요?</h2>
 
             <p class="muted">
-                비밀번호 변경 기능은 현재 연동 준비 중이에요.
+                이 브라우저에서 진행 중이던 추천은 지워져요.
+                저장된 추천 기록은 그대로 남아요.
             </p>
 
             <div class="actions">
@@ -370,14 +480,24 @@
                     type="button"
                     data-close
                 >
-                    닫기
+                    취소
+                </button>
+
+                <button
+                    class="btn btn-primary"
+                    id="logout-confirm"
+                    type="button"
+                >
+                    로그아웃
                 </button>
             </div>
-
         </div>
     </div>
 
-    <!-- 회원 탈퇴 -->
+    <!-- ==================================
+         회원 탈퇴 모달
+    =================================== -->
+
     <div
         class="modal-backdrop"
         id="withdraw-modal"
@@ -389,15 +509,20 @@
             aria-modal="true"
             aria-labelledby="wd-title"
         >
+            <h2 id="wd-title">정말 탈퇴할까요?</h2>
 
-            <h2 id="wd-title">
-                정말 탈퇴할까요?
-            </h2>
+            <ul class="muted">
+                <li>
+                    추천 기록 <b id="wd-history">—</b>건,
+                    본 작품 <b id="wd-watched">—</b>개가
+                    모두 지워져요.
+                </li>
 
-            <p class="muted">
-                회원 탈퇴 시 계정 정보와 선호 장르 등
-                관련 데이터가 삭제되며 되돌릴 수 없어요.
-            </p>
+                <li>
+                    같은 이메일로 다시 가입할 수 있지만
+                    기록은 돌아오지 않아요.
+                </li>
+            </ul>
 
             <div class="field">
                 <label for="wd-confirm">
@@ -418,7 +543,6 @@
             ></p>
 
             <div class="actions">
-
                 <button
                     class="btn btn-secondary"
                     type="button"
@@ -435,21 +559,15 @@
                 >
                     탈퇴하기
                 </button>
-
             </div>
-
         </div>
     </div>
 
-    <!-- 기존 푸터 -->
     <footer id="site-footer"></footer>
 
-    <!-- 기존 공통 스크립트 유지 -->
     <script type="module" src="../js/navbar.js"></script>
     <script type="module" src="../js/auth-ui.js"></script>
     <script type="module" src="../js/footer.js"></script>
-
-    <!-- 프로필 기능 -->
     <script type="module" src="../js/profile.js"></script>
 
 </body>
