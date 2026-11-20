@@ -2,7 +2,6 @@ import { getCurrentUser } from "aws-amplify/auth";
 
 import { requireLogin, apiFetch, publicFetch, ApiError } from "./api.js";
 import { loadGenres } from "./genres.js";
-import { withLogin } from "./login-gate.js";
 import {
     GUEST_REQUEST_KEY,
     GUEST_RESULT_KEY,
@@ -248,8 +247,7 @@ async function initResultPage() {
         const picked = new Set(personGenres);
         const overlap = itemGenres.filter((g) => picked.has(g)).length;
         const base = Math.min(personGenres.length, itemGenres.length);
-
-        return base ? overlap / base : 0;
+                return base ? overlap / base : 0;
     };
 
     // 작품별 · 사람별 일치율 [작품][사람] (0~1)
@@ -408,7 +406,7 @@ async function initResultPage() {
         }, duration);
     };
 
-    // 비회원이 "이미 봤어요"를 누르면 로그인 안내 (시안: 로그인하면 본 작품을 빼고 추천받을 수 있어요)
+    // 비회원이 "이미 봤어요"를 누르면 로그인 안내
     const promptLogin = () => flash(
         "로그인하면 본 작품을 빼고 추천받을 수 있어요.",
         { label: "로그인", href: "login.html" },
@@ -417,37 +415,50 @@ async function initResultPage() {
 
     const comingSoon = (name) => flash(`‘${name}’ 기능은 준비 중이에요.`);
 
-    // 작품 상세는 로그인 전용 (팀 결정 11/17): 비회원은 로그인 안내 모달, 로그인하면 이 결과 화면으로 돌아옴
-    // 회원은 아래 TODO대로 상세 페이지가 생기면 comingSoon 대신 이동
-    const openDetail = (target) => withLogin(() => comingSoon("상세 보기"), {
-        title: target.dataset.title
-            ? `‘${target.dataset.title}’ 상세 정보는 로그인 후 볼 수 있어요`
-            : "로그인이 필요해요",
-        reason: "로그인하면 작품 줄거리, 출연진, 볼 수 있는 OTT를 확인할 수 있어요."
-    });
+    // 작품 상세는 로그인 전용
+    // 비회원은 모달 없이 로그인 페이지로 이동, 회원은 상세 페이지로 이동
+    const openDetail = (target) => {
+        if (isGuest) {
+            window.location.href = "login.html";
+            return;
+        }
 
-    // 작품 상세 보기: 상세 화면과 API 가 생기면 이동하도록 연결
-    // TODO: 상세 페이지 주소가 정해지면 comingSoon 대신 이동 처리
+        const tmdbId = target.dataset.tmdbId;
+        const mediaType = target.dataset.mediaType;
+
+        if (!tmdbId || !["movie", "tv"].includes(mediaType)) {
+            flash("작품 정보를 확인할 수 없어요.");
+            return;
+        }
+
+        const query = new URLSearchParams({ mediaType, tmdbId });
+        window.location.href = `detail.html?${query.toString()}`;
+    };
+
+    // 작품 상세 보기 버튼
     const createDetailButton = (item) => {
         const btn = el("button", "btn btn-primary");
 
         btn.type = "button";
         btn.dataset.act = "detail";
         btn.dataset.title = item.title || "";
-        btn.title = "준비 중이에요";
+        btn.dataset.tmdbId = item.tmdbId;
+        btn.dataset.mediaType = item.mediaType;
         btn.innerHTML = ICON_PLAY;
         btn.append("상세 보기");
 
         return btn;
     };
 
-    // 포스터도 상세 보기로 들어가는 입구 (시안의 포스터 링크 자리)
+    // 포스터도 상세 보기로 들어가는 입구
     const createPosterLink = (item, rank) => {
         const link = el("button", "poster-link");
 
         link.type = "button";
         link.dataset.act = "detail";
         link.dataset.title = item.title || "";
+        link.dataset.tmdbId = item.tmdbId;
+        link.dataset.mediaType = item.mediaType;
         link.setAttribute("aria-label", `${item.title || ""} 상세 보기`);
         link.append(createPoster(item, rank));
 
@@ -492,8 +503,7 @@ async function initResultPage() {
 
         return box;
     };
-
-    const createSeenButton = (item, small) => {
+        const createSeenButton = (item, small) => {
         const btn = el("button", `btn btn-ghost${small ? " btn-sm" : ""}`);
 
         btn.type = "button";
@@ -746,8 +756,7 @@ async function initResultPage() {
             useFallback();
         }
     };
-
-    const renderAnalysis = (people) => {
+        const renderAnalysis = (people) => {
         const { analysis, recommendations } = data;
 
         destroyCharts();
@@ -765,7 +774,7 @@ async function initResultPage() {
                 chartColor: brandGradient
             }));
 
-        // 사람별 일치도: 서버가 계산한 값 (참여자별로 추천 작품 평균, matchRate 는 0~1)
+        // 사람별 일치도: 서버가 계산한 값 (참여자별 추천 작품 평균, matchRate 는 0~1)
         const matchRows = (analysis?.participantMatch || []).map((m) => {
             const i = m.index - 1;
             const pct = Math.round(m.matchRate * 100);
@@ -781,8 +790,7 @@ async function initResultPage() {
         });
 
         const genreMax = Math.max(1, total, ...genreRows.map((r) => r.value));
-
-        drawChart("genre-chart", "genre-bars", genreRows, genreMax);
+                drawChart("genre-chart", "genre-bars", genreRows, genreMax);
         drawChart("match-chart", "match-bars", matchRows, 100);
 
         // 모두가 함께 고른 장르
@@ -935,6 +943,7 @@ async function initResultPage() {
                     <div class="card">
                         <div class="panel-title"><h3>사람별 취향 일치도</h3></div>
                         <div class="chart-box"><canvas id="match-chart" role="img" aria-label="참여자별 추천 작품 평균 일치도"></canvas></div>
+                        <div class="chart-box"><canvas id="match-chart" role="img" aria-label="참여자별 추천 작품 평균 일치도"></canvas></div>
                         <div class="genre-bars" id="match-bars" hidden></div>
                         <p class="muted" style="font-size:13px;margin:14px 0 0" id="match-note"></p>
                         <div class="list" id="people" style="margin-top:8px"></div>
@@ -988,7 +997,7 @@ async function initResultPage() {
                 bar.style.width = `${bar.dataset.w}%`;
             });
         });
-    };
+            };
 
     const renderExhausted = () => {
         app.innerHTML = `
@@ -1235,10 +1244,7 @@ async function initResultPage() {
             excludedCount += 1;
             saveExcludedCount();
             rememberSeen(seen);
-
-            // 서버 결과가 바뀌었으므로 이전에 불러온 다른 작품 묶음은 버림
-            pages = null;
-            pageIndex = 0;
+                        pageIndex = 0;
             localSeen = [];
             replaceCache(next);
 
@@ -1433,7 +1439,7 @@ async function initResultPage() {
                 return;
             }
 
-            pages[pageIndex] = {
+                        pages[pageIndex] = {
                 recommendations: recs,
                 analysis: {
                     genreScores: page.analysis?.genreScores || [],
@@ -1454,7 +1460,6 @@ async function initResultPage() {
             render(true);
         }
     }
-
     // ---------- 시작 ----------
 
     // 새로고침 등으로 재방문한 경우 저장된 결과 사용

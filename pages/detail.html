@@ -1,0 +1,971 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="RecoMate 작품 상세 정보">
+    <title>콘텐츠 상세 | RecoMate</title>
+
+    <link rel="stylesheet" href="../css/index.css">
+    <link rel="stylesheet" href="../css/navbar.css">
+    <link rel="stylesheet" href="../css/footer.css">
+
+    <style>
+        :root {
+            --detail-bg: #141414;
+            --detail-card: #1e1e1e;
+            --detail-border: rgba(255, 255, 255, .12);
+            --detail-text: #f5f5f5;
+            --detail-muted: #999;
+            --detail-accent: #e57a14;
+        }
+
+        body {
+            margin: 0;
+            background: var(--detail-bg);
+            color: var(--detail-text);
+        }
+
+        .detail-container {
+            width: min(100% - 32px, 1160px);
+            margin-inline: auto;
+        }
+
+        .detail-loading {
+            padding: 100px 20px;
+            text-align: center;
+            color: var(--detail-muted);
+        }
+
+        /* =====================================
+           상단 작품 소개
+        ===================================== */
+
+        .detail-hero {
+            position: relative;
+            min-height: 400px;
+            overflow: hidden;
+            background: #191919;
+            border-bottom: 1px solid rgba(255, 255, 255, .08);
+        }
+
+        .detail-backdrop {
+            position: absolute;
+            inset: 0;
+            background-position: center;
+            background-size: cover;
+            background-repeat: no-repeat;
+            opacity: .28;
+        }
+
+        .detail-hero::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background: linear-gradient(
+                90deg,
+                rgba(20, 20, 20, .92) 0%,
+                rgba(20, 20, 20, .72) 45%,
+                rgba(20, 20, 20, .35) 100%
+            );
+        }
+
+        .detail-hero-inner {
+            position: relative;
+            z-index: 1;
+            display: grid;
+            grid-template-columns: 200px minmax(0, 1fr);
+            align-items: center;
+            gap: 28px;
+            min-height: 400px;
+            padding-block: 32px;
+            box-sizing: border-box;
+        }
+
+        .detail-poster {
+            display: block;
+            width: 200px;
+            aspect-ratio: 2 / 3;
+            object-fit: cover;
+            border-radius: 10px;
+            background: #303030;
+            box-shadow: 0 12px 32px rgba(0, 0, 0, .35);
+        }
+
+        .detail-hero-info {
+            min-width: 0;
+        }
+
+        .detail-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            min-height: 30px;
+            margin-bottom: 16px;
+            padding: 4px 8px;
+            border: 0;
+            border-radius: 7px;
+            background: transparent;
+            color: #e2e2e2;
+            font: inherit;
+            font-size: 13px;
+            font-weight: 500;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .detail-back:hover {
+            background: rgba(255, 255, 255, .08);
+            color: #fff;
+        }
+
+        .detail-back svg {
+            display: block;
+            width: 16px;
+            height: 16px;
+            flex-shrink: 0;
+        }
+
+        /* =====================================
+           영화 종류 / 평점 / 국가
+        ===================================== */
+
+        .detail-badges {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .detail-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 26px;
+            padding: 4px 9px;
+            border-radius: 7px;
+            background: rgba(255, 255, 255, .06);
+            color: #e9e9e9;
+            font-size: 13px;
+            font-weight: 600;
+            line-height: 1.4;
+            box-sizing: border-box;
+        }
+
+        .detail-badge.detail-rating {
+            background: rgba(229, 122, 20, .18);
+            color: #ff923d;
+        }
+
+        .detail-meta {
+            color: #999;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .detail-title {
+            margin: 12px 0 6px;
+            color: #f5f5f5;
+            font-size: clamp(30px, 3.5vw, 38px);
+            font-weight: 700;
+            line-height: 1.2;
+            letter-spacing: -.035em;
+            word-break: keep-all;
+        }
+
+        .detail-original {
+            color: #aaa;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .detail-original:empty {
+            display: none;
+        }
+
+        .detail-genres {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .detail-chip {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 32px;
+            padding: 5px 13px;
+            border: 1px solid rgba(255, 255, 255, .2);
+            border-radius: 999px;
+            background: transparent;
+            color: #ddd;
+            font-size: 13px;
+            font-weight: 500;
+            line-height: 1.4;
+            box-sizing: border-box;
+        }
+
+        /* =====================================
+           상단 버튼
+        ===================================== */
+
+        .detail-actions {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 18px;
+        }
+
+        .detail-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            min-height: 42px;
+            padding: 10px 15px;
+            border: 1px solid rgba(255, 255, 255, .18);
+            border-radius: 9px;
+            background: #252525;
+            color: #f5f5f5;
+            font: inherit;
+            font-size: 13px;
+            font-weight: 600;
+            line-height: 1.4;
+            text-decoration: none;
+            cursor: pointer;
+            box-sizing: border-box;
+        }
+
+        .detail-button svg {
+            display: block;
+            width: 18px;
+            height: 18px;
+            flex-shrink: 0;
+        }
+
+        .detail-button.primary {
+            border: 0;
+            background: linear-gradient(
+                110deg,
+                #7b3b86,
+                #c4630f
+            );
+            color: #fff;
+        }
+
+        .detail-button.primary:hover {
+            filter: brightness(1.1);
+        }
+
+        .detail-button:disabled {
+            cursor: not-allowed;
+        }
+
+        .detail-button.primary:disabled {
+            opacity: 1;
+        }
+
+        #watched-btn {
+            background: rgba(35, 35, 35, .92);
+            border: 1px solid rgba(255, 255, 255, .24);
+        }
+
+        #watched-btn:hover:not(:disabled) {
+            background: rgba(255, 255, 255, .12);
+        }
+
+        #watched-btn[aria-pressed="true"] {
+            background: rgba(255, 255, 255, .1);
+        }
+
+        #share-btn {
+            border: 0;
+            background: transparent;
+            box-shadow: none;
+        }
+
+        #share-btn:hover {
+            background: rgba(255, 255, 255, .06);
+        }
+
+        #share-btn:focus-visible,
+        #watched-btn:focus-visible,
+        .detail-back:focus-visible {
+            outline: 2px solid #fff;
+            outline-offset: 3px;
+        }
+
+        /* =====================================
+           본문
+        ===================================== */
+
+        .detail-page {
+            padding-top: 32px;
+            padding-bottom: 72px;
+        }
+
+        .detail-grid {
+            display: grid;
+            grid-template-columns:
+                minmax(0, 2fr) minmax(0, 1fr);
+            align-items: stretch;
+            gap: 24px;
+        }
+
+        .detail-card {
+            min-width: 0;
+            padding: 24px;
+            border: 1px solid var(--detail-border);
+            border-radius: 13px;
+            background: var(--detail-card);
+            box-sizing: border-box;
+        }
+
+        .detail-card h2 {
+            margin: 0 0 14px;
+            color: #f5f5f5;
+            font-size: 18px;
+            font-weight: 700;
+            line-height: 1.4;
+        }
+
+        .detail-overview {
+            margin: 0;
+            color: #c9c4c4;
+            font-size: 14px;
+            line-height: 1.8;
+            white-space: pre-line;
+            overflow-wrap: anywhere;
+        }
+
+        .detail-divider {
+            display: block;
+            height: 1px;
+            margin: 24px 0;
+            border: 0;
+            background: var(--detail-border);
+        }
+
+        .detail-info {
+            display: grid;
+            grid-template-columns: 80px minmax(0, 1fr);
+            gap: 12px 16px;
+            margin: 0;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .detail-info dt {
+            color: #999;
+        }
+
+        .detail-info dd {
+            min-width: 0;
+            margin: 0;
+            color: #f2f2f2;
+            overflow-wrap: anywhere;
+        }
+
+        /* =====================================
+           OTT
+        ===================================== */
+
+        .detail-ott {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .detail-provider {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 36px;
+            padding: 8px 12px;
+            border: 1px solid rgba(255, 255, 255, .13);
+            border-radius: 8px;
+            background: #252525;
+            color: #f5f5f5;
+            font: inherit;
+            font-size: 12px;
+            font-weight: 600;
+            line-height: 1.4;
+            text-align: center;
+            text-decoration: none;
+            box-sizing: border-box;
+            transition:
+                background .2s ease,
+                border-color .2s ease;
+        }
+
+        a.detail-provider {
+            cursor: pointer;
+        }
+
+        a.detail-provider:hover {
+            background: #333;
+            border-color: rgba(255, 255, 255, .28);
+            color: #fff;
+        }
+
+        .detail-provider-disabled {
+            opacity: .65;
+            cursor: default;
+        }
+
+        .detail-muted {
+            margin: 12px 0 0;
+            color: #999;
+            font-size: 12px;
+            line-height: 1.7;
+        }
+
+        .detail-justwatch-link,
+        .detail-justwatch-link:link,
+        .detail-justwatch-link:visited {
+            color: #c9c4c4;
+            text-decoration: underline;
+            text-decoration-color: rgba(201, 196, 196, .5);
+            text-underline-offset: 3px;
+        }
+
+        .detail-justwatch-link:hover,
+        .detail-justwatch-link:focus-visible {
+            color: #f2f2f2;
+            text-decoration-color: #f2f2f2;
+        }
+
+        .detail-card .detail-button.primary {
+            width: 100%;
+            margin-top: 16px;
+        }
+
+        /* =====================================
+           주요 출연진 - 크기 축소
+        ===================================== */
+
+        .detail-section {
+            margin-top: 42px;
+        }
+
+        .detail-section h2 {
+            margin: 0 0 18px;
+            font-size: 20px;
+            font-weight: 700;
+            line-height: 1.4;
+        }
+
+        .detail-cast {
+            display: grid;
+
+            /* 기존 5등분 대신 고정 최대 너비 */
+            grid-template-columns:
+                repeat(6, minmax(0, 155px));
+
+            gap: 14px;
+            justify-content: start;
+        }
+
+        .detail-person {
+            width: 100%;
+            min-width: 0;
+            max-width: 155px;
+            overflow: hidden;
+            border: 1px solid var(--detail-border);
+            border-radius: 10px;
+            background: #202020;
+            box-sizing: border-box;
+        }
+
+        .detail-person img,
+        .detail-person-placeholder {
+            display: block;
+            width: 100%;
+            aspect-ratio: 2 / 3;
+            object-fit: cover;
+            background: #333;
+        }
+
+        .detail-person-placeholder {
+            display: grid;
+            place-items: center;
+            color: var(--detail-muted);
+            font-size: 12px;
+        }
+
+        .detail-person-info {
+            padding: 10px 11px;
+        }
+
+        .detail-person-name {
+            color: #f5f5f5;
+            font-weight: 700;
+            font-size: 13px;
+            line-height: 1.5;
+            overflow-wrap: anywhere;
+        }
+
+        .detail-person-role {
+            margin-top: 4px;
+            color: #aaa;
+            font-size: 11px;
+            line-height: 1.5;
+            overflow-wrap: anywhere;
+        }
+
+        /* =====================================
+           오류 화면
+        ===================================== */
+
+        .detail-error {
+            padding: 75px 20px;
+            text-align: center;
+        }
+
+        .detail-error h1 {
+            font-size: 24px;
+        }
+
+        [hidden] {
+            display: none !important;
+        }
+
+        /* =====================================
+           태블릿
+        ===================================== */
+
+        @media (max-width: 1060px) {
+            .detail-cast {
+                grid-template-columns:
+                    repeat(5, minmax(0, 155px));
+            }
+        }
+
+        @media (max-width: 860px) {
+            .detail-hero-inner {
+                grid-template-columns: 170px minmax(0, 1fr);
+                gap: 24px;
+                min-height: 350px;
+            }
+
+            .detail-poster {
+                width: 170px;
+            }
+
+            .detail-grid {
+                grid-template-columns:
+                    minmax(0, 1.5fr) minmax(0, 1fr);
+                gap: 16px;
+            }
+
+            .detail-card {
+                padding: 20px;
+            }
+
+            .detail-title {
+                font-size: 32px;
+            }
+
+            .detail-cast {
+                grid-template-columns:
+                    repeat(4, minmax(0, 145px));
+                gap: 12px;
+            }
+
+            .detail-person {
+                max-width: 145px;
+            }
+        }
+
+        /* =====================================
+           모바일
+        ===================================== */
+
+        @media (max-width: 640px) {
+            .detail-container {
+                width: min(100% - 28px, 1160px);
+            }
+
+            .detail-hero {
+                min-height: 0;
+            }
+
+            .detail-hero-inner {
+                grid-template-columns: 110px minmax(0, 1fr);
+                align-items: start;
+                gap: 16px;
+                min-height: 0;
+                padding: 28px 0;
+            }
+
+            .detail-poster {
+                width: 110px;
+                border-radius: 8px;
+            }
+
+            .detail-back {
+                margin-bottom: 10px;
+            }
+
+            .detail-title {
+                margin-top: 10px;
+                font-size: 26px;
+            }
+
+            .detail-badges {
+                gap: 6px;
+            }
+
+            .detail-meta {
+                font-size: 12px;
+            }
+
+            .detail-genres {
+                gap: 6px;
+                margin-top: 10px;
+            }
+
+            .detail-chip {
+                min-height: 28px;
+                padding: 4px 10px;
+                font-size: 12px;
+            }
+
+            .detail-actions {
+                gap: 8px;
+                margin-top: 14px;
+            }
+
+            .detail-button {
+                min-height: 38px;
+                padding: 8px 12px;
+                font-size: 12px;
+            }
+
+            .detail-grid {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+
+            .detail-page {
+                padding-top: 20px;
+                padding-bottom: 48px;
+            }
+
+            .detail-card {
+                padding: 20px;
+            }
+
+            .detail-section {
+                margin-top: 32px;
+            }
+
+            .detail-cast {
+                grid-template-columns:
+                    repeat(3, minmax(0, 1fr));
+                gap: 10px;
+            }
+
+            .detail-person {
+                max-width: 155px;
+            }
+
+            .detail-person-info {
+                padding: 9px;
+            }
+
+            .detail-person-name {
+                font-size: 12px;
+            }
+
+            .detail-person-role {
+                font-size: 11px;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .detail-hero-inner {
+                grid-template-columns: 1fr;
+            }
+
+            .detail-poster {
+                width: 145px;
+            }
+
+            .detail-cast {
+                grid-template-columns:
+                    repeat(2, minmax(0, 145px));
+                gap: 12px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 공통 네비게이션 -->
+    <div id="navbar-container"></div>
+
+    <main id="main">
+
+        <div
+            id="detail-loading"
+            class="detail-loading"
+            role="status"
+        >
+            작품 정보를 불러오는 중입니다...
+        </div>
+
+        <div id="detail-content" hidden>
+
+            <!-- 상단 작품 정보 -->
+            <section class="detail-hero">
+
+                <div
+                    id="hero-bg"
+                    class="detail-backdrop"
+                ></div>
+
+                <div class="detail-container detail-hero-inner">
+
+                    <img
+                        id="hero-poster"
+                        class="detail-poster"
+                        alt="작품 포스터"
+                    >
+
+                    <div class="detail-hero-info">
+
+                        <a
+                            href="index.html"
+                            class="detail-back"
+                            id="detail-back"
+                        >
+                            <svg
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                aria-hidden="true"
+                            >
+                                <path d="m15 18-6-6 6-6"/>
+                            </svg>
+                            <span>뒤로</span>
+                        </a>
+
+                        <div
+                            id="hero-badges"
+                            class="detail-badges"
+                        ></div>
+
+                        <h1
+                            id="hero-title"
+                            class="detail-title"
+                        ></h1>
+
+                        <div
+                            id="hero-original"
+                            class="detail-original"
+                        ></div>
+
+                        <div
+                            id="hero-genres"
+                            class="detail-genres"
+                        ></div>
+
+                        <div class="detail-actions">
+
+                            <button
+                                id="trailer-btn"
+                                class="detail-button primary"
+                                type="button"
+                                disabled
+                            >
+                                <svg
+                                    viewBox="0 0 24 24"
+                                    fill="currentColor"
+                                    aria-hidden="true"
+                                >
+                                    <path d="M8 5v14l11-7z"/>
+                                </svg>
+                                <span>예고편 보기</span>
+                            </button>
+
+                            <button
+                                id="watched-btn"
+                                class="detail-button"
+                                type="button"
+                                aria-pressed="false"
+                            >
+                                이미 봤어요
+                            </button>
+
+                            <button
+                                id="share-btn"
+                                class="detail-button"
+                                type="button"
+                            >
+                                <svg
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    aria-hidden="true"
+                                >
+                                    <circle cx="18" cy="5" r="3"/>
+                                    <circle cx="6" cy="12" r="3"/>
+                                    <circle cx="18" cy="19" r="3"/>
+                                    <path d="m8.7 13.5 6.6 4M15.3 6.5l-6.6 4"/>
+                                </svg>
+                                <span>공유</span>
+                            </button>
+
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 본문 -->
+            <div class="detail-container detail-page">
+
+                <div class="detail-grid">
+
+                    <!-- 줄거리 -->
+                    <section class="detail-card">
+
+                        <h2>줄거리</h2>
+
+                        <p
+                            id="overview"
+                            class="detail-overview"
+                        ></p>
+
+                        <hr class="detail-divider">
+
+                        <dl
+                            id="info"
+                            class="detail-info"
+                        ></dl>
+
+                    </section>
+
+                    <!-- OTT -->
+                    <aside class="detail-card">
+
+                        <h2>어디서 볼 수 있나요?</h2>
+
+                        <div
+                            id="ott"
+                            class="detail-ott"
+                        ></div>
+
+                        <p class="detail-muted">
+                            OTT 정보 제공:
+                            <a
+                                class="detail-justwatch-link"
+                                href="https://www.justwatch.com/kr"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >JustWatch</a>.
+                            국가와 시점에 따라 달라질 수 있어요.
+                        </p>
+
+                        <hr class="detail-divider">
+
+                        <h2>같이 볼 사람이 있나요?</h2>
+
+                        <p class="detail-muted">
+                            이 작품의 장르를 좋아하는 친구들과
+                            취향을 맞춰보세요.
+                        </p>
+
+                        <a
+                            href="start.html"
+                            class="detail-button primary"
+                        >
+                            같이 추천받기
+                        </a>
+
+                    </aside>
+                </div>
+
+                <!-- 주요 출연진 -->
+                <section class="detail-section detail-cast-section">
+
+                    <h2>주요 출연진</h2>
+
+                    <div
+                        id="cast"
+                        class="detail-cast"
+                    ></div>
+
+                </section>
+
+                <!-- 비슷한 작품 -->
+                <section class="detail-section">
+
+                    <h2>비슷한 작품</h2>
+
+                    <p class="detail-muted">
+                        비슷한 작품 정보는 추후 제공될 예정입니다.
+                    </p>
+
+                </section>
+
+            </div>
+        </div>
+
+        <!-- 오류 화면 -->
+        <section
+            id="detail-error"
+            class="detail-error"
+            hidden
+        >
+            <h1>작품 정보를 불러올 수 없어요</h1>
+
+            <p
+                id="detail-error-message"
+                class="detail-muted"
+            ></p>
+
+            <a
+                href="index.html"
+                class="detail-button"
+            >
+                홈으로 돌아가기
+            </a>
+        </section>
+
+    </main>
+
+    <!-- 공통 푸터 -->
+    <footer id="site-footer"></footer>
+
+    <!-- 공통 네비게이션 -->
+    <script
+        type="module"
+        src="../js/navbar.js"
+    ></script>
+
+    <!-- 상세 페이지 기능 -->
+    <script
+        type="module"
+        src="../js/detail.js"
+    ></script>
+
+    <!-- 공통 푸터 -->
+    <script
+        type="module"
+        src="../js/footer.js"
+    ></script>
+</body>
+</html>
