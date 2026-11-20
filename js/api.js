@@ -1,3 +1,4 @@
+
 import "./cognito-config.js";
 
 import { fetchAuthSession, getCurrentUser } from "aws-amplify/auth";
@@ -20,6 +21,7 @@ export async function requireLogin() {
         }
     } catch {
         window.location.replace(LOGIN_PAGE);
+
         // 이후 코드가 실행되지 않도록 대기
         return new Promise(() => {});
     }
@@ -30,6 +32,7 @@ export async function isLoggedIn() {
     try {
         await getCurrentUser();
         const session = await fetchAuthSession();
+
         return Boolean(session.tokens?.idToken);
     } catch {
         return false;
@@ -41,7 +44,10 @@ async function getIdToken(forceRefresh = false) {
     const idToken = session.tokens?.idToken?.toString();
 
     if (!idToken) {
-        const error = new Error("인증 세션이 만료되었습니다. 다시 로그인해주세요.");
+        const error = new Error(
+            "인증 세션이 만료되었습니다. 다시 로그인해주세요."
+        );
+
         error.name = "AuthSessionError";
         throw error;
     }
@@ -59,6 +65,7 @@ async function getIdToken(forceRefresh = false) {
 export class ApiError extends Error {
     constructor(status, code, message) {
         super(message);
+
         this.name = "ApiError";
         this.status = status;
         this.code = code;
@@ -71,7 +78,10 @@ async function send(path, options, forceRefresh) {
     const headers = new Headers(options.headers || {});
     headers.set("Authorization", `Bearer ${idToken}`);
 
-    return request(path, { ...options, headers });
+    return request(path, {
+        ...options,
+        headers
+    });
 }
 
 async function request(path, options) {
@@ -79,11 +89,18 @@ async function request(path, options) {
         return await fetch(`${API_BASE_URL}${path}`, options);
     } catch (error) {
         // 호출한 쪽이 지정한 시간 제한은 그대로 전달
-        if (error.name === "AbortError" || error.name === "TimeoutError") {
+        if (
+            error.name === "AbortError" ||
+            error.name === "TimeoutError"
+        ) {
             throw error;
         }
 
-        throw new ApiError(0, "NETWORK_ERROR", NETWORK_ERROR_MESSAGE);
+        throw new ApiError(
+            0,
+            "NETWORK_ERROR",
+            NETWORK_ERROR_MESSAGE
+        );
     }
 }
 
@@ -113,13 +130,20 @@ export async function apiFetch(path, options = {}) {
 }
 
 // ================================
-// 로그인 없이 부르는 공개 API (장르 목록, 비회원 추천)
-// - 토큰을 보내지 않음. 에러 형식은 apiFetch와 같음
+// 로그인 없이 부르는 공개 API
+// - 토큰을 보내지 않음
+// - 에러 형식은 apiFetch와 같음
 // ================================
 
 export async function publicFetch(path, options = {}) {
     return readJson(await request(path, options));
 }
+
+// ================================
+// API 응답 처리
+// - 오류 응답을 ApiError로 변환
+// - 204 No Content는 JSON 파싱 없이 처리
+// ================================
 
 async function readJson(response) {
     if (!response.ok) {
@@ -129,13 +153,24 @@ async function readJson(response) {
 
         try {
             const body = await response.json();
+
             code = body?.error?.code || code;
             message = body?.error?.message || message;
         } catch {
             /* JSON 아님 */
         }
 
-        throw new ApiError(response.status, code, message);
+        throw new ApiError(
+            response.status,
+            code,
+            message
+        );
+    }
+
+    // DELETE 성공 시 반환되는 204 No Content 처리
+    // 응답 본문이 없으므로 response.json()을 호출하지 않음
+    if (response.status === 204 || response.status === 205) {
+        return null;
     }
 
     return response.json();
