@@ -175,7 +175,6 @@ function formatCountries(countries) {
 
         const code = country.trim().toUpperCase();
 
-        // ISO 3166-1 alpha-2 국가 코드만 처리
         if (!/^[A-Z]{2}$/.test(code)) return;
 
         try {
@@ -345,12 +344,10 @@ const renderBadges = (content) => {
 
     const meta = [];
 
-    // 공개 연도
     if (content.releaseYear) {
         meta.push(String(content.releaseYear));
     }
 
-    // 상영 시간
     if (
         content.runtime !== undefined &&
         content.runtime !== null &&
@@ -359,19 +356,12 @@ const renderBadges = (content) => {
         meta.push(`${content.runtime}분`);
     }
 
-    // =====================================
-    // 국가 정보 추가
-    // 예: ["US"] → "미국"
-    // 예: ["US", "KR"] → "미국, 대한민국"
-    // =====================================
-
     const countries = formatCountries(content.countries);
 
     if (countries !== "정보 없음") {
         meta.push(countries);
     }
 
-    // 예: 2014, 169분, 미국
     if (meta.length) {
         badges.append(
             create(
@@ -442,7 +432,6 @@ const renderInfo = (content) => {
         );
     }
 
-    // 국가 정보
     addInfo(
         info,
         "국가",
@@ -493,7 +482,6 @@ const renderProviders = (providers) => {
         return;
     }
 
-    // 동일한 OTT 서비스 중복 표시 방지
     const seenNames = new Set();
 
     providers.forEach((provider) => {
@@ -607,11 +595,69 @@ const renderCast = (cast) => {
 };
 
 // =====================================
+// 본 작품 목록 API 조회
+// GET /api/users/me/watched
+// =====================================
+
+async function checkWatchedStatus(content) {
+    const targetMediaType = String(content.mediaType);
+    const targetTmdbId = Number(content.tmdbId);
+
+    let nextToken = null;
+    const seenTokens = new Set();
+
+    do {
+        const params = new URLSearchParams();
+        params.set("limit", "20");
+
+        if (nextToken) {
+            params.set("nextToken", nextToken);
+        }
+
+        const response = await apiFetch(
+            `/api/users/me/watched?${params.toString()}`
+        );
+
+        const items = Array.isArray(response?.items)
+            ? response.items
+            : [];
+
+        const isWatched = items.some((item) =>
+            String(item.mediaType) === targetMediaType &&
+            Number(item.tmdbId) === targetTmdbId
+        );
+
+        if (isWatched) {
+            return true;
+        }
+
+        const newToken = response?.nextToken || null;
+
+        if (!newToken) {
+            return false;
+        }
+
+        if (seenTokens.has(newToken)) {
+            throw new Error(
+                "본 작품 목록의 페이지 정보를 확인하지 못했어요."
+            );
+        }
+
+        seenTokens.add(newToken);
+        nextToken = newToken;
+    } while (nextToken);
+
+    return false;
+}
+
+// =====================================
 // 이미 봤어요 버튼
 // =====================================
 
 function updateWatchedButton(watched) {
     const button = $("#watched-btn");
+
+    if (!button) return;
 
     button.innerHTML = watched
         ? `${ICON_CHECK}<span>봤어요</span>`
@@ -623,49 +669,77 @@ function updateWatchedButton(watched) {
     );
 }
 
-function setupWatchedButton(content) {
-    let watched = Boolean(content.watched);
+// =====================================
+// 본 작품 저장·삭제
+// POST /api/users/me/watched
+// DELETE /api/users/me/watched/{mediaType}/{tmdbId}
+// =====================================
+
+async function setupWatchedButton(content) {
+    const button = $("#watched-btn");
+
+    if (!button) return;
+
+    let watched = false;
     let pending = false;
+    let ready = false;
 
-    updateWatchedButton(watched);
+    // 목록 조회가 끝나기 전에는 클릭 불가
+    button.disabled = true;
+    button.setAttribute("aria-busy", "true");
 
-    $("#watched-btn").addEventListener("click", async () => {
-        if (pending) return;
+    updateWatchedButton(false);
+
+    try {
+        watched = await checkWatchedStatus(content);
+        updateWatchedButton(watched);
+
+        ready = true;
+        button.disabled = false;
+    } catch (error) {
+        console.error(
+            "본 작품 상태 조회 실패:",
+            error
+        );
+
+        showToast(
+            "본 작품 상태를 불러오지 못했어요. 새로고침 후 다시 시도해주세요."
+        );
+    } finally {
+        button.removeAttribute("aria-busy");
+    }
+
+    button.addEventListener("click", async () => {
+        if (!ready || pending) return;
 
         pending = true;
-
-        const button = $("#watched-btn");
         button.disabled = true;
 
         try {
-            let path;
-            let options;
-
             if (watched) {
-                path =
+                await apiFetch(
                     `/api/users/me/watched/` +
                     `${encodeURIComponent(content.mediaType)}/` +
-                    `${encodeURIComponent(content.tmdbId)}`;
-
-                options = {
-                    method: "DELETE"
-                };
+                    `${encodeURIComponent(content.tmdbId)}`,
+                    {
+                        method: "DELETE"
+                    }
+                );
             } else {
-                path = "/api/users/me/watched";
-
-                options = {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({
-                        tmdbId: content.tmdbId,
-                        mediaType: content.mediaType
-                    })
-                };
+                await apiFetch(
+                    "/api/users/me/watched",
+                    {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            tmdbId: content.tmdbId,
+                            mediaType: content.mediaType
+                        })
+                    }
+                );
             }
-
-            await apiFetch(path, options);
 
             watched = !watched;
             updateWatchedButton(watched);
@@ -682,12 +756,12 @@ function setupWatchedButton(content) {
             );
 
             showToast(
-                error.message ||
+                error?.message ||
                 "본 작품 상태를 변경하지 못했어요."
             );
         } finally {
             pending = false;
-            button.disabled = false;
+            button.disabled = !ready;
         }
     });
 }
@@ -930,7 +1004,9 @@ const renderDetail = (content) => {
     renderProviders(content.providers || []);
     renderCast(content.cast || []);
 
+    // 본 작품 API에서 실제 저장 상태 조회
     setupWatchedButton(content);
+
     setupShareButton();
 
     $("#detail-loading").hidden = true;
