@@ -274,12 +274,17 @@ $("#done").addEventListener("click", () => {
 
 // ---------- 추천 요청 ----------
 
-// API 명세: { participantCount, participants: [{ index, genres }] }
+// 이름을 적지 않아 "참여자 N"으로 채워진 참여자는 이름 없음으로 봄
+const customName = (p) => (p.name === `참여자 ${p.index}` ? "" : p.name.trim());
+
+// API 명세: { participantCount, participants: [{ index, name?, genres }] }
+// name 은 선택(트림 후 1~10자). 회원 세션 API 에만 보냄 (비회원 추천 API 명세에는 없음)
 function buildRequest() {
     return {
         participantCount: P.length,
-        participants: P.map(({ index, genres: picked, want, avoid }) => ({
+        participants: P.map(({ index, name, genres: picked, want, avoid }) => ({
             index,
+            ...(member && customName({ index, name }) && { name: customName({ index, name }) }),
             genres: picked,
             ...(SEND_MEDIA_PREFERENCE && want.length && { [PAYLOAD_LIKE_FIELD]: want }),
             ...(SEND_MEDIA_PREFERENCE && avoid.length && { [PAYLOAD_DISLIKE_FIELD]: avoid })
@@ -391,7 +396,7 @@ async function submit() {
 
     // 결과 화면에 보여줄 이름만 따로 넘김 (고른 장르는 서버/요청 쪽 값을 사용)
     // (이름을 적지 않아 "참여자 N"으로 표시된 사람은 빈 값으로 저장해 다시 추천받을 때 입력칸을 채우지 않음)
-    saveResultNames(resultKey, P.map((p, i) => (p.name === `참여자 ${i + 1}` ? "" : p.name)));
+    saveResultNames(resultKey, P.map(customName));
 
     // 서버로 넘어간 선택 내용은 더 두지 않음 (이름·인원은 다시 하기를 위해 남김)
     patchFlow({ participants: null, prefilled: false });

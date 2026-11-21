@@ -54,9 +54,10 @@
       <!-- 2. 이름 -->
       <section class="stage-panel" data-step="2" hidden aria-labelledby="t2">
         <h1 id="t2" tabindex="-1">누구와 함께 보나요?</h1>
-        <p class="lead">이름을 적으면 차례 안내에서 이름으로 불러드려요. 비워두면 '참여자 1'처럼 표시돼요.</p>
+        <p class="lead">이름을 적으면 차례 안내에서 이름으로 불러드려요. 비워두면 '참여자 1'처럼 표시돼요. (이름은 선택, 최대 10자)</p>
         <div class="stage-card">
           <div class="name-list" id="names"></div>
+          <p class="grp-note" id="name-note" role="status" aria-live="polite" style="text-align:center"></p>
           <div style="text-align:center;margin-top:14px"><button class="btn btn-ghost btn-sm" id="clear-names" type="button">이름 지우기</button></div>
           <div class="stage-actions" style="margin-top:14px"><button class="btn btn-ghost btn-lg" type="button" data-prev>이전</button><button class="btn btn-primary btn-lg" type="button" data-next>다음</button></div>
         </div>
