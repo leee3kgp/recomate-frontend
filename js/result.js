@@ -1013,7 +1013,6 @@ async function initResultPage() {
                     <div class="card">
                         <div class="panel-title"><h3>사람별 취향 일치도</h3></div>
                         <div class="chart-box"><canvas id="match-chart" role="img" aria-label="참여자별 추천 작품 평균 일치도"></canvas></div>
-                        <div class="chart-box"><canvas id="match-chart" role="img" aria-label="참여자별 추천 작품 평균 일치도"></canvas></div>
                         <div class="genre-bars" id="match-bars" hidden></div>
                         <p class="muted" style="font-size:13px;margin:14px 0 0" id="match-note"></p>
                         <div class="list" id="people" style="margin-top:8px"></div>
@@ -1133,13 +1132,18 @@ async function initResultPage() {
             return;
         }
 
+        // recomate-0: "추천 기록에 저장했어요" + 기록 보기
         const sub = el("div", "muted", pageIndex > 0
-            ? "다른 작품 묶음은 저장되지 않아요. 처음 추천은 내 계정에 저장되어 있어요."
-            : "이 추천은 내 계정에 저장되어 있어요.");
+            ? "다른 작품 묶음은 저장되지 않아요. 처음 추천은 추천 기록에 저장되어 있어요."
+            : "언제든 다시 보고 친구에게 공유할 수 있어요.");
 
         sub.style.fontSize = "14px";
-        text.append(el("strong", "", "추천 결과를 저장했어요"), sub);
-        box.append(text);
+        text.append(el("strong", "", "추천 기록에 저장했어요"), sub);
+
+        const historyLink = el("a", "btn btn-secondary", "기록 보기");
+
+        historyLink.href = "profile.html#history";
+        box.append(text, historyLink);
     }
 
     // ---------- 렌더링 진입점 ----------

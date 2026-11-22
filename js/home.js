@@ -506,7 +506,7 @@ async function setupRecent(section) {
             return;
         }
 
-        section.innerHTML = '<div class="section-head"><h2 id="recent-title">최근 추천</h2></div><div class="grid cols-2"></div>';
+        section.innerHTML = '<div class="section-head"><h2 id="recent-title">최근 추천</h2><a class="btn btn-ghost btn-sm" href="profile.html#history">전체 기록</a></div><div class="grid cols-2"></div>';
 
         const grid = section.querySelector(".grid");
 

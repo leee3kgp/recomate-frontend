@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="닉네임, 선호 장르, 본 작품, 설정을 관리하세요.">
+    <meta name="description" content="추천 기록, 본 작품, 닉네임·선호 장르 설정을 관리하세요.">
     <meta name="theme-color" content="#141414">
 
     <title>마이 페이지 | RecoMate</title>
@@ -13,6 +13,8 @@
     <link rel="stylesheet" href="../css/footer.css">
     <link rel="stylesheet" href="../css/toast.css">
     <link rel="stylesheet" href="../css/profile.css">
+    <link rel="stylesheet" href="../css/history.css">
+    <link rel="stylesheet" href="../css/profile-tabs.css">
 </head>
 
 <body class="profile-page" data-page="profile">
@@ -46,11 +48,10 @@
                 </div>
 
                 <div class="row" style="gap: 28px;">
-                    <!-- 추천 기록 화면(Issue #3) 구현 시 링크 연결 -->
-                    <div class="stat">
+                    <a class="stat" href="#history">
                         <b id="st-history">—</b>
                         <span>추천 기록</span>
-                    </div>
+                    </a>
 
                     <a class="stat" href="#watched">
                         <b id="st-watched">—</b>
@@ -60,26 +61,89 @@
 
             </section>
 
-            <div
-                class="profile-layout section"
-                style="margin-top: 24px;"
+            <!-- 마이 페이지 탭: 주소(#history, #watched, #settings)로 열림 (recomate-1) -->
+            <div class="mp-tabs" role="tablist" aria-label="마이 페이지 메뉴">
+                <button type="button" role="tab" id="tab-history" aria-controls="panel-history" data-tab="history">추천 기록</button>
+                <button type="button" role="tab" id="tab-watched" aria-controls="panel-watched" data-tab="watched">본 작품</button>
+                <button type="button" role="tab" id="tab-settings" aria-controls="panel-settings" data-tab="settings">설정</button>
+            </div>
+
+            <!-- 추천 기록 탭 (js/history.js, 처음 열 때 불러옴) -->
+            <section
+                class="mp-panel history-page"
+                id="panel-history"
+                role="tabpanel"
+                aria-labelledby="tab-history"
+                hidden
             >
+                <div class="section-head">
+                    <p class="muted" id="summary" aria-live="polite"></p>
 
-                <nav
-                    class="side-nav"
-                    id="side-nav"
-                    aria-label="마이 페이지 메뉴"
-                >
-                    <a href="#account">계정 정보</a>
-                    <a href="#watched">본 콘텐츠</a>
-                    <a href="#settings">설정</a>
-                </nav>
+                    <button class="btn btn-ghost btn-sm" type="button" id="clear-all" disabled>전체 삭제</button>
+                </div>
 
-                <div class="stack" style="--gap: 20px;">
+                <div class="row wrap history-toolbar" id="toolbar">
+                    <div class="tabs" id="range-tabs" role="tablist" aria-label="기간">
+                        <button class="tab" type="button" role="tab" aria-selected="true" data-range="all">전체</button>
+                        <button class="tab" type="button" role="tab" aria-selected="false" tabindex="-1" data-range="7">최근 7일</button>
+                        <button class="tab" type="button" role="tab" aria-selected="false" tabindex="-1" data-range="30">최근 30일</button>
+                    </div>
 
+                    <span class="spacer"></span>
+
+                    <label class="sr-only" for="q">함께 본 사람 이름으로 찾기</label>
+                    <input
+                        class="input history-search"
+                        id="q"
+                        type="search"
+                        placeholder="함께 본 사람 이름으로 찾기"
+                        autocomplete="off"
+                    >
+                </div>
+
+                <!-- js/history.js 가 기록 카드 / 로딩 / 빈 화면 / 오류를 렌더링 -->
+                <div class="stack" id="list" aria-busy="true"></div>
+            </section>
+
+            <!-- 본 작품 탭 -->
+            <div
+                class="mp-panel"
+                id="panel-watched"
+                role="tabpanel"
+                aria-labelledby="tab-watched"
+                hidden
+            >
                     <section
                         class="card"
-                        id="account"
+                        id="watched-card"
+                        aria-labelledby="watched-title"
+                    >
+
+                        <div class="panel-title">
+                            <h3 id="watched-title">본 작품</h3>
+
+                            <span class="muted" style="font-size: 13px;">
+                                자동 제외가 켜져 있으면 새 추천에서 빠져요
+                            </span>
+                        </div>
+
+                        <div class="list" id="watched-list"></div>
+
+                    </section>
+
+            </div>
+
+            <!-- 설정 탭: 계정 정보 + 설정 -->
+            <div
+                class="mp-panel stack"
+                id="panel-settings"
+                role="tabpanel"
+                aria-labelledby="tab-settings"
+                hidden
+            >
+                    <section
+                        class="card"
+                        id="account-card"
                         aria-labelledby="account-title"
                     >
 
@@ -182,25 +246,7 @@
 
                     <section
                         class="card"
-                        id="watched"
-                        aria-labelledby="watched-title"
-                    >
-
-                        <div class="panel-title">
-                            <h3 id="watched-title">본 콘텐츠</h3>
-
-                            <span class="muted" style="font-size: 13px;">
-                                여기 있는 작품은 추천에서 빠져요
-                            </span>
-                        </div>
-
-                        <div class="list" id="watched-list"></div>
-
-                    </section>
-
-                    <section
-                        class="card"
-                        id="settings"
+                        id="settings-card"
                         aria-labelledby="settings-title"
                     >
 
@@ -296,7 +342,6 @@
 
                     </section>
 
-                </div>
             </div>
         </div>
     </main>
@@ -564,12 +609,44 @@
         </div>
     </div>
 
+    <!-- ==================================
+         추천 기록 전체 삭제 확인 (js/history.js)
+         항목별 삭제는 확인 없이 "되돌리기" 토스트
+    =================================== -->
+
+    <div
+        class="modal-backdrop history-page"
+        id="clear-modal"
+        aria-hidden="true"
+    >
+        <div
+            class="modal"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="clear-title"
+        >
+            <h2 id="clear-title">추천 기록을 모두 지울까요?</h2>
+
+            <p class="muted">본 작품 목록과 선호 장르는 그대로 남아요. 지운 기록은 되돌릴 수 없어요.</p>
+
+            <p id="clear-status" class="muted history-modal-status" aria-live="polite"></p>
+            <p id="clear-error" class="history-modal-error" role="alert"></p>
+
+            <div class="actions">
+                <button class="btn btn-secondary" type="button" id="clear-cancel">취소</button>
+                <button class="btn btn-danger" id="clear-go" type="button">모두 지우기</button>
+            </div>
+        </div>
+    </div>
+
     <footer id="site-footer"></footer>
 
     <script type="module" src="../js/navbar.js"></script>
     <script type="module" src="../js/auth-ui.js"></script>
     <script type="module" src="../js/footer.js"></script>
     <script type="module" src="../js/profile.js"></script>
+    <!-- 마이 페이지 탭 (추천 기록 탭은 처음 열 때 js/history.js 로드) -->
+    <script type="module" src="../js/profile-tabs.js"></script>
 
 </body>
 </html>

@@ -1,4 +1,5 @@
 import { apiFetch } from "./api.js";
+import { showToast as showCommonToast } from "./toast.js";
 
 import {
     getLoginUser,
@@ -107,111 +108,12 @@ let currentExcludeWatched = true;
 // 토스트
 // =====================================
 
-let toastTimer = null;
-let toastElement = null;
-
-function initializeToast() {
-    if (!document.getElementById("profile-toast-style")) {
-        const style = document.createElement("style");
-        style.id = "profile-toast-style";
-
-        style.textContent = `
-            #profile-toast {
-                position: fixed;
-                left: 50%;
-                bottom: 32px;
-                z-index: 9999;
-                width: max-content;
-                max-width: calc(100vw - 40px);
-                min-width: min(360px, calc(100vw - 40px));
-                padding: 18px 24px;
-                background: #2c2927;
-                color: #f5f2ef;
-                border: 1px solid rgba(255,255,255,0.18);
-                border-radius: 12px;
-                box-shadow: 0 16px 40px rgba(0,0,0,0.48);
-                font-family:
-                    "IBM Plex Sans KR",
-                    "Apple SD Gothic Neo",
-                    "Malgun Gothic",
-                    sans-serif;
-                font-size: 15px;
-                font-weight: 600;
-                line-height: 1.6;
-                opacity: 0;
-                visibility: hidden;
-                transform: translate(-50%, 12px);
-                transition:
-                    opacity 0.22s ease,
-                    transform 0.22s ease,
-                    visibility 0.22s ease;
-                pointer-events: none;
-            }
-
-            #profile-toast.show {
-                opacity: 1;
-                visibility: visible;
-                transform: translate(-50%, 0);
-            }
-
-            #profile-toast.error {
-                border-color: rgba(232,106,95,0.5);
-            }
-
-            @media (max-width: 600px) {
-                #profile-toast {
-                    bottom: 20px;
-                    padding: 16px 20px;
-                    font-size: 14px;
-                }
-            }
-
-            @media (prefers-reduced-motion: reduce) {
-                #profile-toast {
-                    transition: none;
-                }
-            }
-        `;
-
-        document.head.appendChild(style);
-    }
-
-    toastElement = document.getElementById("profile-toast");
-
-    if (!toastElement) {
-        toastElement = document.createElement("div");
-        toastElement.id = "profile-toast";
-        toastElement.setAttribute("role", "status");
-        toastElement.setAttribute("aria-live", "polite");
-        document.body.appendChild(toastElement);
-    }
-}
-
+// 추천 기록 탭(history.js)과 같은 공통 토스트 사용 (모양·위치 통일)
 function showToast(message, isError = false) {
     if (!message) return;
 
-    if (!toastElement) initializeToast();
-
-    if (toastTimer) {
-        clearTimeout(toastTimer);
-        toastTimer = null;
-    }
-
-    toastElement.textContent = message;
-    toastElement.classList.toggle("error", isError);
-    toastElement.classList.remove("show");
-
-    void toastElement.offsetWidth;
-
-    toastElement.classList.add("show");
-
-    toastTimer = setTimeout(() => {
-        toastElement.classList.remove("show");
-        toastTimer = null;
-    }, 3000);
+    showCommonToast(message, isError ? "error" : "success");
 }
-
-initializeToast();
 
 // =====================================
 // 닉네임 길이 제한
@@ -608,16 +510,7 @@ async function loadHistoryCount() {
             nextToken = token;
         } while (nextToken);
 
-        historyTotalCount = total;
-
-        if (historyCount) {
-            historyCount.textContent = String(total);
-        }
-
-        if (withdrawHistoryCount) {
-            withdrawHistoryCount.textContent =
-                String(total);
-        }
+        setHistoryCount(total);
     } catch (error) {
         console.error(
             "추천 기록 개수 조회 실패:",
@@ -632,7 +525,7 @@ async function loadHistoryCount() {
 }
 
 // =====================================
-// 본 콘텐츠 공통
+// 본 작품 공통
 // =====================================
 
 function watchedKey(item) {
@@ -670,7 +563,7 @@ function createWatchedEmpty(title, description) {
 }
 
 // =====================================
-// 본 콘텐츠 개수
+// 본 작품 개수
 // =====================================
 
 function updateWatchedCount() {
@@ -690,7 +583,7 @@ function updateWatchedCount() {
 }
 
 // =====================================
-// 본 콘텐츠 포스터
+// 본 작품 포스터
 // =====================================
 
 function createWatchedPoster(item) {
@@ -736,7 +629,7 @@ function createWatchedPoster(item) {
 }
 
 // =====================================
-// 본 콘텐츠 목록 행
+// 본 작품 목록 행
 // =====================================
 
 function createWatchedRow(item) {
@@ -800,7 +693,7 @@ function createWatchedRow(item) {
 }
 
 // =====================================
-// 본 콘텐츠 렌더링
+// 본 작품 렌더링
 // =====================================
 
 function renderWatched() {
@@ -851,7 +744,7 @@ function renderWatched() {
 }
 
 // =====================================
-// 본 콘텐츠 조회
+// 본 작품 조회
 // =====================================
 
 async function loadWatched(reset = true) {
@@ -928,7 +821,7 @@ async function loadWatched(reset = true) {
 }
 
 // =====================================
-// 본 콘텐츠 삭제
+// 본 작품 삭제
 // =====================================
 
 watchedList?.addEventListener(
@@ -968,7 +861,7 @@ watchedList?.addEventListener(
             renderWatched();
 
             showMessage("");
-            showToast("본 콘텐츠 목록에서 뺐어요");
+            showToast("본 작품 목록에서 뺐어요");
         } catch (error) {
             handleError(error, "본 작품 삭제");
 
@@ -1665,43 +1558,33 @@ withdrawButton?.addEventListener(
 );
 
 // =====================================
-// 사이드 메뉴 활성화
+// 추천 기록 개수 (추천 기록 탭이 다 불러오면 알려줌)
 // =====================================
 
-function activateSideNavigation() {
-    const links = $$("#side-nav a");
+function setHistoryCount(total) {
+    historyTotalCount = total;
 
-    const scrollPosition =
-        window.scrollY + 140;
-
-    let activeLink = links[0];
-
-    for (const link of links) {
-        const target = document.querySelector(
-            link.getAttribute("href")
-        );
-
-        if (
-            target &&
-            target.offsetTop <= scrollPosition
-        ) {
-            activeLink = link;
-        }
+    if (historyCount) {
+        historyCount.textContent = String(total);
     }
 
-    links.forEach((link) => {
-        link.classList.toggle(
-            "active",
-            link === activeLink
-        );
-    });
+    if (withdrawHistoryCount) {
+        withdrawHistoryCount.textContent =
+            String(total);
+    }
 }
 
-window.addEventListener(
-    "scroll",
-    activateSideNavigation,
-    { passive: true }
+document.addEventListener(
+    "history:count",
+    (event) => setHistoryCount(event.detail.total)
 );
+
+// 추천 기록 탭(기본 탭)으로 열리면 history.js가 개수를 알려주므로 따로 세지 않음
+function opensOnHistoryTab() {
+    const hash = window.location.hash.slice(1);
+
+    return !["watched", "settings"].includes(hash);
+}
 
 // =====================================
 // 프로필 초기화
@@ -1761,7 +1644,9 @@ async function initializeProfile() {
         await Promise.allSettled([
             loadWatched(true),
             loadWatchedSettings(),
-            loadHistoryCount()
+            opensOnHistoryTab()
+                ? Promise.resolve()
+                : loadHistoryCount()
         ]);
     } catch (error) {
         handleError(
@@ -1769,8 +1654,6 @@ async function initializeProfile() {
             "프로필 조회"
         );
     }
-
-    activateSideNavigation();
 }
 
 initializeProfile();

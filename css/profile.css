@@ -80,7 +80,7 @@ body.profile-page .row {
     gap: 12px;
 }
 
-body.profile-page .row\.wrap {
+body.profile-page .row.wrap {
     flex-wrap: wrap;
 }
 
@@ -178,71 +178,6 @@ body.profile-page .stat b {
 body.profile-page .stat span {
     font-size: 12px;
     color: var(--muted);
-}
-
-/* =========================================
-   5. 프로필 본문 레이아웃
-========================================= */
-
-body.profile-page .profile-layout {
-    display: grid;
-    grid-template-columns: 200px minmax(0, 1fr);
-    gap: 28px;
-    align-items: start;
-    margin-top: 24px;
-}
-
-/* =========================================
-   6. 카드 사이 간격
-========================================= */
-
-body.profile-page .profile-layout > .stack {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    min-width: 0;
-}
-
-body.profile-page .profile-layout > .stack > * {
-    margin-top: 0;
-    margin-bottom: 0;
-}
-
-body.profile-page .profile-layout > .stack > * + * {
-    margin-top: 0;
-}
-
-/* =========================================
-   7. 왼쪽 사이드 메뉴
-========================================= */
-
-body.profile-page .side-nav {
-    display: grid;
-    gap: 2px;
-    position: sticky;
-    top: calc(var(--header-h) + 16px);
-}
-
-body.profile-page .side-nav a {
-    display: block;
-    padding: 9px 12px;
-    border-radius: var(--radius-sm);
-    border-left: 2px solid transparent;
-    color: var(--text-2);
-    font-size: 14px;
-    font-weight: 500;
-    text-decoration: none;
-}
-
-body.profile-page .side-nav a:hover {
-    background: var(--surface);
-}
-
-body.profile-page .side-nav a.active {
-    color: var(--text);
-    font-weight: 700;
-    border-left-color: var(--accent);
-    border-radius: 0;
 }
 
 /* =========================================
@@ -799,34 +734,6 @@ body.profile-page #genre-message {
 }
 
 /* =========================================
-   17. 반응형 - 태블릿
-========================================= */
-
-@media (max-width: 860px) {
-    body.profile-page .profile-layout {
-        grid-template-columns: 1fr;
-        gap: 20px;
-    }
-
-    body.profile-page .side-nav {
-        position: static;
-        display: grid;
-        grid-auto-flow: column;
-        overflow-x: auto;
-        border-bottom: 1px solid var(--line);
-    }
-
-    body.profile-page .side-nav a {
-        border-left: 0;
-        white-space: nowrap;
-    }
-
-    body.profile-page .side-nav a.active {
-        box-shadow: inset 0 -2px 0 var(--accent);
-    }
-}
-
-/* =========================================
    18. 반응형 - 모바일
 ========================================= */
 
@@ -887,19 +794,4 @@ body.profile-page #genre-message {
         gap: 6px 10px;
         font-size: 11px;
     }
-}
-
-/* =========================================
-   19. 최종 카드 간격 고정
-========================================= */
-
-body.profile-page .profile-layout > .stack {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
-
-body.profile-page .profile-layout > .stack > .card {
-    margin-top: 0;
-    margin-bottom: 0;
 }
