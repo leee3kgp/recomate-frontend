@@ -1,5 +1,6 @@
 /* =========================================
-   RecoMate - 추천 기록 (history.html, recomate-0/history.html 시안 기준)
+   RecoMate - 추천 기록 (마이 페이지 > 추천 기록 탭, recomate-0/history.html 시안 기준)
+   - profile-tabs.js가 탭을 처음 열 때 startHistory()를 호출해 그때 API 조회
    - GET    /api/sessions?limit&nextToken : 내 추천 세션 목록 (최신순, 이름·TOP 3 요약 포함)
    - DELETE /api/sessions/{sessionId}     : 추천 기록 삭제 (결과·분석도 함께 삭제)
    - 시안처럼 전체 개수·기간·이름 검색이 모든 기록에 적용되도록 모든 페이지를 이어서 불러옴
@@ -11,8 +12,6 @@
 import { requireLogin, apiFetch } from "./api.js";
 import { showToast } from "./toast.js";
 import { clearFlow, patchFlow, isValidCount } from "./flow-state.js";
-
-await requireLogin();
 
 const PAGE_SIZE = 100;          // 명세 최대값 (요청 수 최소화)
 const TMDB_POSTER_BASE_URL = "https://image.tmdb.org/t/p/w185";
@@ -32,7 +31,7 @@ const rangeTabs = $("#range-tabs");
 const clearAllButton = $("#clear-all");
 const clearModal = $("#clear-modal");
 const clearGo = $("#clear-go");
-const clearCancel = clearModal.querySelector("[data-close-modal]");
+const clearCancel = $("#clear-cancel");
 const clearStatus = $("#clear-status");
 const clearError = $("#clear-error");
 
@@ -336,6 +335,11 @@ function renderSummary() {
     summaryEl.textContent = state.nextToken
         ? `최근 기록 ${total}개를 보여드려요`
         : `지금까지 ${total}번 함께 골랐어요`;
+
+    // 다 불러왔을 때만 마이 페이지 상단 개수·탈퇴 안내 개수에 반영 (profile.js)
+    if (!state.nextToken) {
+        document.dispatchEvent(new CustomEvent("history:count", { detail: { total } }));
+    }
 }
 
 function render() {
@@ -786,5 +790,13 @@ document.addEventListener("keydown", (event) => {
 
 // ---------- 시작 ----------
 
-render();
-loadAll();
+let started = false;
+
+export async function startHistory() {
+    if (started) return;
+
+    started = true;
+    render();
+    await requireLogin();
+    loadAll();
+}

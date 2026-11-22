@@ -1,0 +1,85 @@
+/* =========================================
+   RecoMate - 마이 페이지 탭 (profile.html, recomate-1 시안)
+   - 탭: 추천 기록(#history) / 본 작품(#watched) / 설정(#settings)
+   - 색·간격은 profile.css 디자인 변수 사용
+========================================= */
+
+/* 사이드 메뉴 없이 한 단: recomate-0 추천 기록 화면과 같은 폭 */
+body.profile-page .page > .container {
+    width: min(100% - 32px, 880px);
+}
+
+body.profile-page .mp-tabs {
+    display: flex;
+    gap: 4px;
+    margin: 24px 0 20px;
+    overflow-x: auto;
+    border-bottom: 1px solid var(--line);
+    scrollbar-width: none;
+}
+
+body.profile-page .mp-tabs::-webkit-scrollbar {
+    display: none;
+}
+
+body.profile-page .mp-tabs button {
+    flex: none;
+    padding: 10px 16px;
+    border: 0;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    background: none;
+    color: var(--text-2);
+    font: inherit;
+    font-size: 15px;
+    font-weight: 600;
+    white-space: nowrap;
+    cursor: pointer;
+}
+
+body.profile-page .mp-tabs button:hover {
+    color: var(--text);
+}
+
+body.profile-page .mp-tabs button[aria-selected="true"] {
+    color: var(--text);
+    font-weight: 700;
+    border-bottom-color: var(--accent);
+}
+
+body.profile-page .mp-tabs button:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: -2px;
+    border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+}
+
+/* 설정 탭: 계정 정보 카드 + 설정 카드 */
+body.profile-page .mp-panel.stack {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+body.profile-page .mp-panel.stack > .card {
+    margin: 0;
+}
+
+/* 추천 기록 탭: 제목은 탭이 대신하므로 요약 + 전체 삭제만 */
+body.profile-page #panel-history .section-head {
+    align-items: center;
+}
+
+body.profile-page #panel-history .section-head p {
+    margin: 0;
+}
+
+@media (max-width: 600px) {
+    body.profile-page .mp-tabs {
+        margin-top: 20px;
+    }
+
+    body.profile-page .mp-tabs button {
+        flex: 1;
+        padding: 10px 8px;
+    }
+}

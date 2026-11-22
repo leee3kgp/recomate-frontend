@@ -1142,7 +1142,7 @@ async function initResultPage() {
 
         const historyLink = el("a", "btn btn-secondary", "기록 보기");
 
-        historyLink.href = "history.html";
+        historyLink.href = "profile.html#history";
         box.append(text, historyLink);
     }
 

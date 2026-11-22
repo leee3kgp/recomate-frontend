@@ -3,96 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="지난 추천 결과를 다시 보고, 같은 사람들과 다시 추천받으세요.">
-    <meta name="theme-color" content="#141414">
-
+    <meta name="robots" content="noindex">
+    <!-- 추천 기록은 마이 페이지 탭으로 이동 (recomate-1). 예전 링크·북마크용 -->
+    <meta http-equiv="refresh" content="0; url=profile.html#history">
     <title>추천 기록 | RecoMate</title>
-
-    <link rel="stylesheet" href="../css/common.css">
-    <link rel="stylesheet" href="../css/navbar.css">
-    <link rel="stylesheet" href="../css/footer.css">
-    <link rel="stylesheet" href="../css/toast.css">
-    <!-- 디자인 변수·카드·버튼·모달은 마이 페이지와 공유 -->
-    <link rel="stylesheet" href="../css/profile.css">
-    <link rel="stylesheet" href="../css/history.css">
+    <script>location.replace("profile.html#history");</script>
 </head>
-
-<!-- recomate-0/history.html 시안 기준 -->
-<body class="profile-page history-page" data-page="history">
-
-    <a class="sr-only" href="#main">본문 바로가기</a>
-
-    <div id="navbar-container"></div>
-
-    <main id="main" class="page">
-        <div class="container history-container">
-
-            <div class="section-head">
-                <div>
-                    <h1>추천 기록</h1>
-                    <p class="muted" id="summary" aria-live="polite"></p>
-                </div>
-
-                <button class="btn btn-ghost btn-sm" type="button" id="clear-all" disabled>전체 삭제</button>
-            </div>
-
-            <div class="row wrap history-toolbar" id="toolbar">
-                <div class="tabs" id="range-tabs" role="tablist" aria-label="기간">
-                    <button class="tab" type="button" role="tab" aria-selected="true" data-range="all">전체</button>
-                    <button class="tab" type="button" role="tab" aria-selected="false" tabindex="-1" data-range="7">최근 7일</button>
-                    <button class="tab" type="button" role="tab" aria-selected="false" tabindex="-1" data-range="30">최근 30일</button>
-                </div>
-
-                <span class="spacer"></span>
-
-                <label class="sr-only" for="q">함께 본 사람 이름으로 찾기</label>
-                <input
-                    class="input history-search"
-                    id="q"
-                    type="search"
-                    placeholder="함께 본 사람 이름으로 찾기"
-                    autocomplete="off"
-                >
-            </div>
-
-            <!-- js/history.js 가 기록 카드 / 로딩 / 빈 화면 / 오류를 렌더링 -->
-            <div class="stack" id="list" aria-busy="true"></div>
-
-        </div>
-    </main>
-
-    <!-- 전체 삭제 확인 (항목별 삭제는 확인 없이 "되돌리기" 토스트) -->
-    <div
-        class="modal-backdrop"
-        id="clear-modal"
-        aria-hidden="true"
-    >
-        <div
-            class="modal"
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="clear-title"
-        >
-            <h2 id="clear-title">추천 기록을 모두 지울까요?</h2>
-
-            <p class="muted">본 작품 목록과 선호 장르는 그대로 남아요. 지운 기록은 되돌릴 수 없어요.</p>
-
-            <p id="clear-status" class="muted history-modal-status" aria-live="polite"></p>
-            <p id="clear-error" class="history-modal-error" role="alert"></p>
-
-            <div class="actions">
-                <button class="btn btn-secondary" type="button" data-close-modal data-autofocus>취소</button>
-                <button class="btn btn-danger" id="clear-go" type="button">모두 지우기</button>
-            </div>
-        </div>
-    </div>
-
-    <footer id="site-footer"></footer>
-
-    <script type="module" src="../js/navbar.js"></script>
-    <script type="module" src="../js/auth-ui.js"></script>
-    <script type="module" src="../js/footer.js"></script>
-    <script type="module" src="../js/history.js"></script>
-
+<body>
+    <p><a href="profile.html#history">마이 페이지 &gt; 추천 기록</a>으로 이동해요.</p>
 </body>
 </html>
