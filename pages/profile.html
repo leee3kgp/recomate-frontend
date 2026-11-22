@@ -6,7 +6,7 @@
     <meta name="description" content="닉네임, 선호 장르, 본 작품, 설정을 관리하세요.">
     <meta name="theme-color" content="#141414">
 
-    <title>내 프로필 | RecoMate</title>
+    <title>마이 페이지 | RecoMate</title>
 
     <link rel="stylesheet" href="../css/common.css">
     <link rel="stylesheet" href="../css/navbar.css">
@@ -46,10 +46,11 @@
                 </div>
 
                 <div class="row" style="gap: 28px;">
-                    <a class="stat" href="history.html">
+                    <!-- 추천 기록 화면(Issue #3) 구현 시 링크 연결 -->
+                    <div class="stat">
                         <b id="st-history">—</b>
                         <span>추천 기록</span>
-                    </a>
+                    </div>
 
                     <a class="stat" href="#watched">
                         <b id="st-watched">—</b>
@@ -67,7 +68,7 @@
                 <nav
                     class="side-nav"
                     id="side-nav"
-                    aria-label="프로필 메뉴"
+                    aria-label="마이 페이지 메뉴"
                 >
                     <a href="#account">계정 정보</a>
                     <a href="#watched">본 콘텐츠</a>
