@@ -12,6 +12,7 @@ import {
     patchFlow,
     loadResultNames
 } from "./flow-state.js";
+import { getUniqueOtts } from "./ott.js";
 
 // =====================================
 // 추천 결과 화면 (최종 디자인 시안 result.html 기준)
@@ -473,44 +474,106 @@ async function initResultPage() {
     };
 
     // 이 작품을 볼 수 있는 OTT (시안의 "여기서 볼 수 있어요")
-    // TODO: 추천 응답에 OTT 정보가 추가되면 여기서 읽어 이름 배열을 돌려줌. 지금은 정보가 없어 빈 배열
-    const getProviders = () => [];
+    // 추천 응답에는 OTT가 없어서 작품 상세 API(GET /api/contents/{mediaType}/{tmdbId})의 providers를 사용
+    // 상세 API는 회원 전용이라 비회원은 로그인 안내만 표시
+    // 다시 그릴 때(이미 봤어요·다른 작품 보기) 같은 작품은 다시 부르지 않도록 요청을 보관
+    const providerRequests = new Map();
 
-    const createOtt = () => {
-        const box = el("div");
-        const providers = getProviders();
+    const loadProviders = (item) => {
+        const key = `${item.mediaType}:${item.tmdbId}`;
 
-        box.style.marginTop = "6px";
+        if (!providerRequests.has(key)) {
+            const request = apiFetch(
+                `/api/contents/${encodeURIComponent(item.mediaType)}/${encodeURIComponent(item.tmdbId)}`
+            )
+                .then((content) => getUniqueOtts(content?.providers || []))
+                .catch((error) => {
+                    // 실패한 요청은 다음 렌더링에서 다시 시도
+                    providerRequests.delete(key);
+                    throw error;
+                });
 
-        const label = el("div", "muted", "여기서 볼 수 있어요");
-
-        label.style.fontSize = "13px";
-        label.style.marginBottom = "8px";
-        box.append(label);
-
-        if (!providers.length) {
-            const empty = el("span", "muted", "OTT 정보를 준비 중이에요");
-
-            empty.style.fontSize = "13px";
-            box.append(empty);
-
-            return box;
+            providerRequests.set(key, request);
         }
 
+        return providerRequests.get(key);
+    };
+
+    const createOttNote = (text) => {
+        const note = el("span", "muted", text);
+
+        note.style.fontSize = "13px";
+
+        return note;
+    };
+
+    const createOttList = (otts) => {
         const list = el("div", "ott");
 
-        providers.forEach((name) => {
-            const link = el("a", "", name);
+        otts.forEach((ott) => {
+            // 공식 사이트 주소를 모르는 OTT는 링크 없이 이름만
+            if (!ott.url) {
+                const name = el("span", "ott-name", ott.name);
 
-            link.href = "#";
+                name.title = "공식 사이트 링크가 아직 등록되지 않았어요";
+                list.append(name);
+                return;
+            }
+
+            const link = el("a", "", ott.name);
+
+            link.href = ott.url;
+            link.target = "_blank";
+            link.rel = "noopener noreferrer";
+            link.setAttribute("aria-label", `${ott.name} 공식 사이트 열기 (새 창)`);
             list.append(link);
         });
 
-        box.append(list);
+        return list;
+    };
+
+    // 시안: 1위는 "여기서 볼 수 있어요 (OTT 정보 제공: JustWatch)" 제목 + 칩, 2·3위는 칩만
+    const createOtt = (item, withLabel = false) => {
+        const box = el("div");
+
+        if (withLabel) {
+            const label = el("div", "muted", "여기서 볼 수 있어요 ");
+            const source = el("span", "", "(OTT 정보 제공: JustWatch)");
+
+            source.style.fontSize = "12px";
+            label.append(source);
+            label.style.fontSize = "13px";
+            label.style.marginBottom = "8px";
+            box.append(label);
+        }
+
+        if (isGuest) {
+            box.append(createOttNote("로그인하면 볼 수 있는 OTT를 알려드려요"));
+            return box;
+        }
+
+        const slot = el("div");
+
+        slot.setAttribute("aria-live", "polite");
+        slot.append(createOttNote("OTT 정보를 불러오는 중이에요"));
+        box.append(slot);
+
+        loadProviders(item)
+            .then((otts) => {
+                slot.replaceChildren(
+                    otts.length
+                        ? createOttList(otts)
+                        : createOttNote("국내 구독형 OTT에서는 찾지 못했어요")
+                );
+            })
+            .catch(() => {
+                slot.replaceChildren(createOttNote("OTT 정보를 불러오지 못했어요"));
+            });
 
         return box;
     };
-        const createSeenButton = (item, small) => {
+
+    const createSeenButton = (item, small) => {
         const btn = el("button", `btn btn-ghost${small ? " btn-sm" : ""}`);
 
         btn.type = "button";
@@ -591,7 +654,7 @@ async function initResultPage() {
             }
         }
 
-        card.append(createOtt());
+        card.append(createOtt(item, true));
 
         const actions = el("div", "row wrap");
         actions.style.marginTop = "20px";
@@ -648,7 +711,7 @@ async function initResultPage() {
                 main.append(holder);
             }
 
-            main.append(createOtt());
+            main.append(createOtt(item));
 
             const actions = el("div", "actions");
             actions.append(createSeenButton(item, true));

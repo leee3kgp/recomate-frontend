@@ -1,4 +1,5 @@
 import { requireLogin, apiFetch, ApiError } from "./api.js";
+import { getOttInfo } from "./ott.js";
 
 // =====================================
 // RecoMate - 작품 상세 페이지
@@ -20,115 +21,6 @@ const create = (tag, className = "", text = "") => {
     node.textContent = text;
     return node;
 };
-
-// =====================================
-// OTT 공식 사이트
-// =====================================
-
-const OTT_BY_ID = {
-    8: {
-        name: "넷플릭스",
-        url: "https://www.netflix.com/kr/"
-    },
-    337: {
-        name: "디즈니플러스",
-        url: "https://www.disneyplus.com/ko-kr"
-    },
-    97: {
-        name: "왓챠",
-        url: "https://watcha.com/"
-    },
-    356: {
-        name: "웨이브",
-        url: "https://www.wavve.com/"
-    },
-    350: {
-        name: "애플 TV",
-        url: "https://tv.apple.com/kr"
-    },
-    119: {
-        name: "아마존 프라임 비디오",
-        url: "https://www.primevideo.com/"
-    },
-    283: {
-        name: "크런치롤",
-        url: "https://www.crunchyroll.com/"
-    }
-};
-
-const OTT_BY_NAME = [
-    {
-        keywords: ["netflix", "넷플릭스"],
-        name: "넷플릭스",
-        url: "https://www.netflix.com/kr/"
-    },
-    {
-        keywords: ["disney", "디즈니"],
-        name: "디즈니플러스",
-        url: "https://www.disneyplus.com/ko-kr"
-    },
-    {
-        keywords: ["coupang", "쿠팡"],
-        name: "쿠팡플레이",
-        url: "https://www.coupangplay.com/"
-    },
-    {
-        keywords: ["tving", "티빙"],
-        name: "티빙",
-        url: "https://www.tving.com/"
-    },
-    {
-        keywords: ["wavve", "웨이브"],
-        name: "웨이브",
-        url: "https://www.wavve.com/"
-    },
-    {
-        keywords: ["watcha", "왓챠"],
-        name: "왓챠",
-        url: "https://watcha.com/"
-    },
-    {
-        keywords: ["apple tv", "애플 tv"],
-        name: "애플 TV",
-        url: "https://tv.apple.com/kr"
-    },
-    {
-        keywords: ["prime video", "amazon", "프라임"],
-        name: "아마존 프라임 비디오",
-        url: "https://www.primevideo.com/"
-    },
-    {
-        keywords: ["crunchyroll", "크런치롤"],
-        name: "크런치롤",
-        url: "https://www.crunchyroll.com/"
-    }
-];
-
-function getOttInfo(provider) {
-    const id = Number(provider.id);
-
-    if (OTT_BY_ID[id]) {
-        return OTT_BY_ID[id];
-    }
-
-    const name = String(provider.name || "").toLowerCase();
-
-    const matched = OTT_BY_NAME.find((ott) =>
-        ott.keywords.some((keyword) => name.includes(keyword))
-    );
-
-    if (matched) {
-        return {
-            name: matched.name,
-            url: matched.url
-        };
-    }
-
-    return {
-        name: provider.name || "OTT",
-        url: null
-    };
-}
 
 // =====================================
 // 공통 유틸리티
@@ -595,7 +487,7 @@ const renderCast = (cast) => {
 };
 
 // =====================================
-// 본 작품 목록 API 조회
+// 본 작품 목록 API 조회 (상세 응답에 watched가 없을 때만 사용)
 // GET /api/users/me/watched
 // =====================================
 
@@ -684,14 +576,18 @@ async function setupWatchedButton(content) {
     let pending = false;
     let ready = false;
 
-    // 목록 조회가 끝나기 전에는 클릭 불가
+    // 상태 확인이 끝나기 전에는 클릭 불가
     button.disabled = true;
     button.setAttribute("aria-busy", "true");
 
     updateWatchedButton(false);
 
     try {
-        watched = await checkWatchedStatus(content);
+        // 상세 응답의 watched(요청마다 서버가 새로 조회)를 우선 사용
+        // 응답에 없을 때만 본 작품 목록을 넘겨 가며 확인
+        watched = typeof content.watched === "boolean"
+            ? content.watched
+            : await checkWatchedStatus(content);
         updateWatchedButton(watched);
 
         ready = true;

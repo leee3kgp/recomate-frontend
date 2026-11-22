@@ -460,3 +460,121 @@
         transition: none;
     }
 }
+
+/* =========================================
+   로그인 상태별 계정 영역 / 준비 중 메뉴
+   로그인 상태는 auth-ui.js가 <html data-auth="in|out">로 표시
+========================================= */
+
+/* 상태 확인 전에는 비로그인 화면이 기본 (로그인 화면이 잠깐 보였다 바뀌는 깜빡임 방지) */
+.site-header .dropdown.auth-in-only {
+    display: none;
+}
+
+html[data-auth="in"] .site-header .dropdown.auth-in-only {
+    display: inline-block;
+}
+
+html[data-auth="in"] .site-header .nav-guest-actions {
+    display: none;
+}
+
+/* 비로그인 로그인·회원가입 버튼 (recomate-0 시안: 로그인 고스트 + 회원가입 그라데이션) */
+.site-header .nav-guest-actions {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.site-header .nav-login-btn,
+.site-header .nav-signup-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 32px;
+    padding: 0 12px;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    font-family: "IBM Plex Sans KR", sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1;
+    text-decoration: none;
+    white-space: nowrap;
+    transition:
+        background 150ms ease,
+        color 150ms ease,
+        filter 150ms ease;
+}
+
+.site-header .nav-login-btn {
+    background: transparent;
+    color: var(--nav-text-2);
+}
+
+.site-header .nav-login-btn:hover {
+    background: var(--nav-surface);
+    color: var(--nav-text);
+}
+
+/* 로그인 화면 회원가입 버튼과 같은 그라데이션 (signup-design.css --grad) */
+.site-header .nav-signup-btn {
+    background:
+        linear-gradient(100deg, #793988 0%, #9e4d4b 52%, #c16311 100%)
+        border-box;
+    color: #fff;
+}
+
+.site-header .nav-signup-btn:hover {
+    filter: brightness(1.12);
+}
+
+.site-header .nav-login-btn:focus-visible,
+.site-header .nav-signup-btn:focus-visible {
+    outline: 2px solid var(--nav-accent);
+    outline-offset: 2px;
+}
+
+/* 아주 좁은 화면: 버튼 두 개가 들어가도록 준비 중인 검색 아이콘 숨김 */
+@media (max-width: 420px) {
+    .site-header .nav-search-disabled {
+        display: none;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .site-header .nav-login-btn,
+    .site-header .nav-signup-btn {
+        transition: none;
+    }
+}
+
+/* 준비 중 메뉴 */
+.site-header .nav-disabled {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 38px;
+    padding: 8px 12px;
+    color: var(--nav-text-2);
+    opacity: 0.45;
+    font-family: "IBM Plex Sans KR", sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    white-space: nowrap;
+    cursor: not-allowed;
+}
+
+.site-header .nav-disabled small {
+    padding: 1px 6px;
+    border: 1px solid currentColor;
+    border-radius: var(--radius-pill, 999px);
+    font-size: 11px;
+}
+
+@media (max-width: 860px) {
+    .site-header .nav-mobile-panel .nav-disabled {
+        min-height: 44px;
+        padding: 10px 12px;
+    }
+}

@@ -31,8 +31,10 @@ function showLoggedOutUI() {
 
     isLoggedIn = false;
 
-    // 시안에 맞춰 sign-in 표시
-    authButton.textContent = "sign-in";
+    // 메뉴가 버튼 글자 대신 <html data-auth>로 로그인 상태를 판단
+    document.documentElement.dataset.auth = "out";
+
+    authButton.textContent = "로그인";
     authButton.href = "login.html";
 
     authButton.style.visibility = "visible";
@@ -49,8 +51,9 @@ function showLoggedInUI() {
 
     isLoggedIn = true;
 
-    // 로그인 상태에서는 로그아웃 표시
-    authButton.textContent = "sign-out";
+    document.documentElement.dataset.auth = "in";
+
+    authButton.textContent = "로그아웃";
     authButton.removeAttribute("href");
 
     authButton.style.visibility = "visible";
@@ -113,7 +116,7 @@ if (authButton) {
 
         // 중복 클릭 방지
         authButton.style.pointerEvents = "none";
-        authButton.textContent = "signing out...";
+        authButton.textContent = "로그아웃 중...";
 
         try {
 
@@ -133,7 +136,7 @@ if (authButton) {
 
             alert("로그아웃에 실패했습니다.");
 
-            authButton.textContent = "sign-out";
+            authButton.textContent = "로그아웃";
             authButton.style.pointerEvents = "auto";
         }
     });

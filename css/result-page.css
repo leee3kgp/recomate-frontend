@@ -140,6 +140,8 @@
 .result-page .ott { display: flex; flex-wrap: wrap; gap: 6px; }
 .result-page .ott a { height: 32px; padding: 0 12px; border-radius: var(--radius-sm); display: inline-flex; align-items: center; background: var(--surface-2); border: 1px solid var(--line); font-size: 13px; font-weight: 600; }
 .result-page .ott a:hover { border-color: var(--line-strong); }
+/* 공식 사이트 링크가 없는 OTT는 같은 칩 모양으로 이름만 (클릭 불가) */
+.result-page .ott .ott-name { height: 32px; padding: 0 12px; border-radius: var(--radius-sm); display: inline-flex; align-items: center; background: var(--surface-2); border: 1px solid var(--line); font-size: 13px; font-weight: 600; cursor: default; }
 
 /* 이미 봤어요 요청 중 */
 .result-page .btn[disabled] { pointer-events: none; }
