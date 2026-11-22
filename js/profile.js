@@ -1669,7 +1669,8 @@ withdrawButton?.addEventListener(
 // =====================================
 
 function activateSideNavigation() {
-    const links = $$("#side-nav a");
+    // 페이지 안 섹션 링크만 (추천 기록은 history.html로 이동하는 링크)
+    const links = $$('#side-nav a[href^="#"]');
 
     const scrollPosition =
         window.scrollY + 140;

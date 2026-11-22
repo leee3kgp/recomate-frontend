@@ -46,11 +46,10 @@
                 </div>
 
                 <div class="row" style="gap: 28px;">
-                    <!-- 추천 기록 화면(Issue #3) 구현 시 링크 연결 -->
-                    <div class="stat">
+                    <a class="stat" href="history.html">
                         <b id="st-history">—</b>
                         <span>추천 기록</span>
-                    </div>
+                    </a>
 
                     <a class="stat" href="#watched">
                         <b id="st-watched">—</b>
@@ -70,6 +69,8 @@
                     id="side-nav"
                     aria-label="마이 페이지 메뉴"
                 >
+                    <!-- 추천 기록은 마이 페이지에서 진입 (recomate-1) -->
+                    <a href="history.html">추천 기록</a>
                     <a href="#account">계정 정보</a>
                     <a href="#watched">본 콘텐츠</a>
                     <a href="#settings">설정</a>

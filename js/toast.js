@@ -37,8 +37,10 @@ function getToastZone() {
 export function showToast(
     message,
     type = "info",
-    duration = TOAST_DURATION
+    duration = TOAST_DURATION,
+    options = {}
 ) {
+    const { action } = options;
     const zone = getToastZone();
 
     const toast = document.createElement("div");
@@ -55,19 +57,26 @@ export function showToast(
     messageElement.className = "toast-message";
     messageElement.textContent = String(message);
 
-    const closeButton =
+    // 액션(예: 되돌리기)이 있으면 시안처럼 닫기 대신 액션 버튼 하나만 표시
+    const button =
         document.createElement("button");
 
-    closeButton.type = "button";
-    closeButton.className = "toast-close";
-    closeButton.textContent = "닫기";
-    closeButton.setAttribute(
-        "aria-label",
-        "알림 닫기"
-    );
+    button.type = "button";
+
+    if (action) {
+        button.className = "toast-action";
+        button.textContent = String(action.label);
+    } else {
+        button.className = "toast-close";
+        button.textContent = "닫기";
+        button.setAttribute(
+            "aria-label",
+            "알림 닫기"
+        );
+    }
 
     toast.appendChild(messageElement);
-    toast.appendChild(closeButton);
+    toast.appendChild(button);
 
     zone.appendChild(toast);
 
@@ -81,10 +90,13 @@ export function showToast(
         toast.remove();
     }
 
-    closeButton.addEventListener(
-        "click",
-        removeToast
-    );
+    button.addEventListener("click", () => {
+        if (action && typeof action.onClick === "function") {
+            action.onClick();
+        }
+
+        removeToast();
+    });
 
     if (duration > 0) {
         timeoutId = setTimeout(

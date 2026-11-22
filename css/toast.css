@@ -53,9 +53,10 @@
     overflow-wrap: anywhere;
 }
 
-/* ---------- 닫기 버튼 ---------- */
+/* ---------- 닫기 / 액션(되돌리기) 버튼 ---------- */
 
-.toast-zone .toast-close {
+.toast-zone .toast-close,
+.toast-zone .toast-action {
     flex: none;
 
     margin-left: auto;
@@ -71,8 +72,15 @@
     cursor: pointer;
 }
 
-.toast-zone .toast-close:hover {
+.toast-zone .toast-close:hover,
+.toast-zone .toast-action:hover {
     color: #ff9c40;
+}
+
+.toast-zone .toast-action:focus-visible {
+    outline: 2px solid #e57a14;
+    outline-offset: 2px;
+    border-radius: 4px;
 }
 
 /* ---------- 알림 유형 ---------- */
