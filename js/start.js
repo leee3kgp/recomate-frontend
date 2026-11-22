@@ -13,6 +13,7 @@ import {
     MAX_PARTICIPANTS,
     isValidCount,
     limitName,
+    NAME_MAX_LENGTH,
     getFlow,
     patchFlow,
     createParticipants
@@ -122,26 +123,43 @@ function renderNames() {
         `<div class="name-row">
             <span class="p-avatar" style="background:${P_COLORS[i]}">${i + 1}</span>
             <label class="sr-only" for="name-${i}">참여자 ${i + 1} 이름</label>
-            <input class="input" id="name-${i}" data-i="${i}" placeholder="참여자 ${i + 1}" value="${escapeHtml(names[i] || "")}" maxlength="40" autocomplete="off">
+            <input class="input" id="name-${i}" data-i="${i}" placeholder="참여자 ${i + 1}" value="${escapeHtml(limitName(names[i] || ""))}" aria-describedby="name-note" autocomplete="off">
+            <span class="name-count" data-count="${i}" aria-hidden="true">${Array.from(names[i] || "").length}/${NAME_MAX_LENGTH}</span>
         </div>`
     )).join("");
+}
+
+// 글자 수 표시와 초과 안내 (붙여넣기·직접 입력으로 넘친 글자는 잘라냄)
+function paintCount(i, length, trimmed = false) {
+    const counter = $(`[data-count="${i}"]`);
+
+    if (counter) counter.textContent = `${length}/${NAME_MAX_LENGTH}`;
+
+    const note = $("#name-note");
+
+    note.textContent = trimmed ? `이름은 ${NAME_MAX_LENGTH}자까지 입력할 수 있어요.` : "";
 }
 
 // 이름 저장 + 글자 수 제한 (한글 조합 중에는 값을 건드리지 않고 조합이 끝난 뒤 적용)
 function applyName(input) {
     const i = Number(input.dataset.i);
     const limited = limitName(input.value);
+    const trimmed = limited !== input.value;
 
-    if (limited !== input.value) input.value = limited;
+    if (trimmed) input.value = limited;
 
     names[i] = limited.trim();
+    paintCount(i, Array.from(limited).length, trimmed);
 }
 
 $("#names").addEventListener("input", (e) => {
     if (!e.target.matches("input")) return;
 
     if (e.isComposing) {
-        names[Number(e.target.dataset.i)] = e.target.value.trim();
+        const i = Number(e.target.dataset.i);
+
+        names[i] = e.target.value.trim();
+        paintCount(i, Array.from(e.target.value).length);
         return;
     }
 
@@ -170,6 +188,7 @@ $("#names").addEventListener("keydown", (e) => {
 $("#clear-names").addEventListener("click", () => {
     names = [];
     renderNames();
+    $("#name-note").textContent = "";
 });
 
 // ---------- 옵션 ----------

@@ -123,6 +123,8 @@ async function initResultPage() {
 
         const result = list.map((p) => ({
             index: Number(p?.index),
+            // 서버 저장 이름 (입력하지 않았으면 null)
+            name: typeof p?.name === "string" ? p.name.trim() : "",
             genres: Array.isArray(p?.genres) ? p.genres.filter((g) => typeof g === "string") : null
         }));
 
@@ -229,6 +231,11 @@ async function initResultPage() {
         }
     };
 
+    // 입력한 이름: 서버에 저장된 이름(회원) → 이 탭에 저장한 이름 순. 없으면 빈 문자열
+    const savedName = (index) => (
+        participants?.find((p) => p.index === index)?.name || names[index - 1] || ""
+    );
+
     // 화면에 그릴 참여자 목록 [{ index, name, genres|null }]
     const getPeople = () => {
         const count = participants?.length
@@ -237,7 +244,7 @@ async function initResultPage() {
 
         return Array.from({ length: count }, (_, i) => ({
             index: i + 1,
-            name: names[i] || `참여자 ${i + 1}`,
+            name: savedName(i + 1) || `참여자 ${i + 1}`,
             genres: participants?.find((p) => p.index === i + 1)?.genres ?? null
         }));
     };
@@ -863,7 +870,7 @@ async function initResultPage() {
 
         patchFlow({
             count: people.length,
-            names: people.map((p) => (names[p.index - 1] || "")),
+            names: people.map((p) => savedName(p.index)),
             participants: people.map((p) => ({
                 index: p.index,
                 name: p.name,
