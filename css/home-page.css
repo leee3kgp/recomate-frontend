@@ -177,13 +177,25 @@
    시안에 없는 요소 (직접 디자인)
 ========================================= */
 
-/* 인기 목록 필터 줄: 종류 탭 + 국가 선택 */
-.home-page .trend-filter { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; }
-.home-page .trend-filter .select { height: 38px; width: auto; min-width: 128px; }
-.home-page .genre-filter { margin-top: 14px; }
-
-/* 순위 카드(링크 없는 버전): 포스터 아래 제목, 종류·연도·평점 */
+/* 순위 카드: 포스터·제목 링크 (시안 a.title 은 블록, 링크 밑줄 없음) */
+.home-page .poster-card a { color: inherit; text-decoration: none; }
 .home-page .poster-card .title { display: block; }
+.home-page .poster-card a.title:hover { text-decoration: underline; text-underline-offset: 3px; }
+.home-page .poster-card a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: var(--radius-sm); }
+
+/* 포스터에 마우스를 올리면 장르 미리보기 (시안 .poster .peek) */
+.home-page .poster .peek {
+  position: absolute; inset: auto 0 0 0; padding: 28px 10px 10px; font-size: 12px; line-height: 1.5; color: var(--text-2);
+  background: linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.92) 30%);
+  opacity: 0; transform: translateY(6px); transition: opacity .15s ease-out, transform .15s ease-out; pointer-events: none;
+}
+.home-page .poster .peek b { display: block; color: var(--text); font-weight: 600; }
+@media (hover: hover) {
+  .home-page .poster-card a:hover .peek, .home-page .poster-card a:focus-visible .peek { opacity: 1; transform: none; transition-delay: .25s; }
+}
+
+/* 비회원 블러 미리보기의 탭 줄 */
+.home-page .trend-filter { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; }
 
 /* 불러오는 중 / 오류 / 결과 없음 */
 .home-page .state-card { margin-top: 16px; padding: 28px 20px; text-align: center; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-lg); }

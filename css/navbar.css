@@ -471,7 +471,7 @@
 }
 
 /* =========================================
-   로그인 상태별 계정 영역 / 준비 중 메뉴
+   로그인 상태별 계정 영역 / 로그인 전용 메뉴
    로그인 상태는 auth-ui.js가 <html data-auth="in|out">로 표시
 ========================================= */
 
@@ -558,32 +558,7 @@ html[data-auth="in"] .site-header .nav-guest-actions {
     }
 }
 
-/* 준비 중 메뉴 */
-.site-header .nav-disabled {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    min-height: 38px;
-    padding: 8px 12px;
-    color: var(--nav-text-2);
-    opacity: 0.45;
-    font-family: "IBM Plex Sans KR", sans-serif;
-    font-size: 14px;
-    font-weight: 500;
-    white-space: nowrap;
-    cursor: not-allowed;
-}
-
-.site-header .nav-disabled small {
-    padding: 1px 6px;
-    border: 1px solid currentColor;
-    border-radius: var(--radius-pill, 999px);
-    font-size: 11px;
-}
-
-@media (max-width: 860px) {
-    .site-header .nav-mobile-panel .nav-disabled {
-        min-height: 44px;
-        padding: 10px 12px;
-    }
+/* 로그인했을 때만 보이는 메뉴 링크 (요즘 대세) */
+html:not([data-auth="in"]) .site-header .auth-in-only-link {
+    display: none;
 }
