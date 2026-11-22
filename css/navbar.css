@@ -238,6 +238,15 @@
 
 /* ---------- 드롭다운 ---------- */
 
+/* common.css를 안 쓰는 페이지(detail.html 등)에서도 같은 크기로 보이도록
+   상단 메뉴 안은 직접 border-box 지정 (없으면 드롭다운 항목이 width 100% + padding으로 넘침) */
+.site-header,
+.site-header *,
+.site-header *::before,
+.site-header *::after {
+    box-sizing: border-box;
+}
+
 .site-header .dropdown {
     position: relative;
 }
