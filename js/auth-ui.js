@@ -27,12 +27,13 @@ let isLoggedIn = false;
 
 function showLoggedOutUI() {
 
-    if (!authButton) return;
-
     isLoggedIn = false;
 
-    // 메뉴가 버튼 글자 대신 <html data-auth>로 로그인 상태를 판단
+    // 로그인 상태를 html data-auth로 관리
     document.documentElement.dataset.auth = "out";
+
+    // 인증 페이지에서는 버튼이 없을 수 있음
+    if (!authButton) return;
 
     authButton.textContent = "로그인";
     authButton.href = "login.html";
@@ -47,11 +48,12 @@ function showLoggedOutUI() {
 
 function showLoggedInUI() {
 
-    if (!authButton) return;
-
     isLoggedIn = true;
 
     document.documentElement.dataset.auth = "in";
+
+    // 인증 페이지에서는 버튼이 없을 수 있음
+    if (!authButton) return;
 
     authButton.textContent = "로그아웃";
     authButton.removeAttribute("href");
@@ -66,11 +68,11 @@ function showLoggedInUI() {
 
 async function checkAuthSession() {
 
-    if (!authButton) return;
-
-    // 세션 확인 중 버튼 숨기기
-    authButton.style.visibility = "hidden";
-    authButton.style.pointerEvents = "none";
+    // 버튼이 있는 페이지에서만 숨김 처리
+    if (authButton) {
+        authButton.style.visibility = "hidden";
+        authButton.style.pointerEvents = "none";
+    }
 
     try {
 
@@ -94,7 +96,7 @@ async function checkAuthSession() {
 
     } catch {
 
-        // 로그인하지 않은 정상 상태도 여기로 오므로 기록하지 않음
+        // 로그인하지 않은 정상 상태
         showLoggedOutUI();
     }
 }

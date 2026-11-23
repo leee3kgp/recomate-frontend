@@ -1,8 +1,10 @@
 
 /* =========================================
    RecoMate - 공통 네비게이션
+
    - 상단 메뉴: 홈 / 요즘 대세(로그인 시) / 같이 볼 작품 찾기
    - 계정 영역: 비로그인 → 로그인·회원가입 버튼, 로그인 → "나" 드롭다운(마이 페이지·로그아웃), 추천 기록은 마이 페이지에서
+   - 인증 관련 페이지에서는 계정 버튼 숨김
    - 작은 화면 ☰ 메뉴는 페이지 메뉴만, 계정 영역은 화면 크기와 상관없이 오른쪽 위
    - 로그인 상태는 auth-ui.js가 <html data-auth="in|out">로 표시
 ========================================= */
@@ -17,6 +19,14 @@ const navbarContainer =
 const isHome = currentPage === "index.html";
 const isStart = ["start.html", "select.html"].includes(currentPage);
 const isTrending = currentPage === "trending.html";
+
+// 인증 관련 페이지에서는 로그인·회원가입 버튼 제거
+const isAuthPage = [
+    "login.html",
+    "forgot-password.html",
+    "reset-password.html",
+    "verify-email.html"
+].includes(currentPage);
 
 const ticketIcon = `
     <svg viewBox="0 0 24 24"
@@ -98,53 +108,55 @@ if (navbarContainer) {
                             ${searchIcon}
                         </span>
 
-                        <!-- 비로그인: 로그인 + 회원가입 (recomate-0 시안) -->
-                        <div class="nav-guest-actions">
-                            <a class="nav-login-btn"
-                               href="login.html">
-                                로그인
-                            </a>
-
-                            <a class="nav-signup-btn"
-                               href="signup.html">
-                                회원가입
-                            </a>
-                        </div>
-
-                        <!-- 로그인: "나" 드롭다운 -->
-                        <div class="dropdown auth-in-only" id="profileDropdown">
-
-                            <button
-                                class="avatar"
-                                id="profileAvatar"
-                                type="button"
-                                aria-label="내 계정 메뉴 열기"
-                                aria-haspopup="menu"
-                                aria-expanded="false"
-                                aria-controls="profileDropdownMenu">
-                                나
-                            </button>
-
-                            <div class="dropdown-menu"
-                                 id="profileDropdownMenu"
-                                 role="menu">
-
-                                <a href="profile.html"
-                                   role="menuitem">
-                                    마이 페이지
-                                </a>
-
-                                <hr>
-
-                                <a id="authButton"
-                                   class="nav-auth-link"
-                                   href="login.html"
-                                   role="menuitem">
+                        ${!isAuthPage ? `
+                            <!-- 비로그인: 로그인 + 회원가입 -->
+                            <div class="nav-guest-actions">
+                                <a class="nav-login-btn"
+                                   href="login.html">
                                     로그인
                                 </a>
 
+                                <a class="nav-signup-btn"
+                                   href="signup.html">
+                                    회원가입
+                                </a>
                             </div>
-                        </div>
+
+                            <!-- 로그인: "나" 드롭다운 -->
+                            <div class="dropdown auth-in-only" id="profileDropdown">
+
+                                <button
+                                    class="avatar"
+                                    id="profileAvatar"
+                                    type="button"
+                                    aria-label="내 계정 메뉴 열기"
+                                    aria-haspopup="menu"
+                                    aria-expanded="false"
+                                    aria-controls="profileDropdownMenu">
+                                    나
+                                </button>
+
+                                <div class="dropdown-menu"
+                                     id="profileDropdownMenu"
+                                     role="menu">
+
+                                    <a href="profile.html"
+                                       role="menuitem">
+                                        마이 페이지
+                                    </a>
+
+                                    <hr>
+
+                                    <a id="authButton"
+                                       class="nav-auth-link"
+                                       href="login.html"
+                                       role="menuitem">
+                                        로그인
+                                    </a>
+
+                                </div>
+                            </div>
+                        ` : ""}
 
                         <button
                             class="nav-menu-toggle"
@@ -173,7 +185,7 @@ if (navbarContainer) {
                        ${isStart ? 'aria-current="page"' : ""}>
                         같이 볼 작품 찾기
                     </a>
-                    <!-- 계정 메뉴는 화면 크기와 상관없이 오른쪽 위(로그인 버튼 / "나" 드롭다운)에만 -->
+                    <!-- 계정 메뉴는 오른쪽 위에만 표시 -->
                 </div>
             </nav>
         </header>
@@ -193,6 +205,8 @@ if (navbarContainer) {
         document.getElementById("profileDropdownMenu");
 
     function closeProfileMenu() {
+        if (!dropdown || !avatar) return;
+
         dropdown.classList.remove("open");
 
         avatar.setAttribute(
@@ -202,6 +216,8 @@ if (navbarContainer) {
     }
 
     function toggleProfileMenu() {
+        if (!dropdown || !avatar) return;
+
         const isOpen =
             dropdown.classList.toggle("open");
 
@@ -211,21 +227,23 @@ if (navbarContainer) {
         );
     }
 
-    avatar.addEventListener("click", (event) => {
-        event.stopPropagation();
-        closeMobileMenu();
-        toggleProfileMenu();
-    });
+    if (avatar && dropdown && dropdownMenu) {
+        avatar.addEventListener("click", (event) => {
+            event.stopPropagation();
+            closeMobileMenu();
+            toggleProfileMenu();
+        });
 
-    document.addEventListener("click", (event) => {
-        if (!dropdown.contains(event.target)) {
-            closeProfileMenu();
-        }
-    });
+        document.addEventListener("click", (event) => {
+            if (!dropdown.contains(event.target)) {
+                closeProfileMenu();
+            }
+        });
 
-    dropdownMenu.querySelectorAll("a").forEach((link) => {
-        link.addEventListener("click", closeProfileMenu);
-    });
+        dropdownMenu.querySelectorAll("a").forEach((link) => {
+            link.addEventListener("click", closeProfileMenu);
+        });
+    }
 
     // =====================================
     // 모바일 메뉴
