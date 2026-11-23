@@ -1,10 +1,11 @@
 
 /* =========================================
    RecoMate - 공통 네비게이션
-   - 상단 메뉴: 홈 / 요즘 대세(준비 중) / 같이 볼 작품 찾기
-   - 계정 영역: 비로그인 → 로그인·회원가입 버튼, 로그인 → "나" 드롭다운
+
+   - 상단 메뉴: 홈 / 요즘 대세(로그인 시) / 같이 볼 작품 찾기
+   - 계정 영역: 비로그인 → 로그인·회원가입 버튼, 로그인 → "나" 드롭다운(마이 페이지·로그아웃), 추천 기록은 마이 페이지에서
    - 인증 관련 페이지에서는 계정 버튼 숨김
-   - 작은 화면 ☰ 메뉴는 페이지 메뉴만
+   - 작은 화면 ☰ 메뉴는 페이지 메뉴만, 계정 영역은 화면 크기와 상관없이 오른쪽 위
    - 로그인 상태는 auth-ui.js가 <html data-auth="in|out">로 표시
 ========================================= */
 
@@ -17,6 +18,7 @@ const navbarContainer =
 
 const isHome = currentPage === "index.html";
 const isStart = ["start.html", "select.html"].includes(currentPage);
+const isTrending = currentPage === "trending.html";
 
 // 인증 관련 페이지에서는 로그인·회원가입 버튼 제거
 const isAuthPage = [
@@ -61,13 +63,13 @@ const menuIcon = `
     </svg>
 `;
 
-// 요즘 대세 페이지(trending.html)가 생기기 전까지 링크 없이 비활성
+// 요즘 대세: 로그인 전용 화면이라 시안처럼 로그인했을 때만 메뉴에 표시
 const trendingItem = `
-    <span class="nav-disabled"
-          aria-disabled="true"
-          title="요즘 대세 화면 준비 중입니다">
-        요즘 대세 <small>준비 중</small>
-    </span>
+    <a class="auth-in-only-link"
+       href="trending.html"
+       ${isTrending ? 'aria-current="page"' : ""}>
+        요즘 대세
+    </a>
 `;
 
 if (navbarContainer) {

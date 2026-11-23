@@ -269,6 +269,56 @@ const renderBadges = (content) => {
 // 장르
 // =====================================
 
+// TMDB는 TV 장르 일부를 한국어 번역 없이 영어 묶음 이름으로 줌 ("Action & Adventure" 등)
+// → 한국어 장르 하나씩으로 나누고, 영화 장르와 겹치면 한 번만 표시
+const TMDB_GENRE_KO = {
+    "Action & Adventure": ["액션", "모험"],
+    "Sci-Fi & Fantasy": ["SF", "판타지"],
+    "War & Politics": ["전쟁", "정치"],
+    Action: ["액션"],
+    Adventure: ["모험"],
+    Animation: ["애니메이션"],
+    Comedy: ["코미디"],
+    Crime: ["범죄"],
+    Documentary: ["다큐멘터리"],
+    Drama: ["드라마"],
+    Family: ["가족"],
+    Fantasy: ["판타지"],
+    History: ["역사"],
+    Horror: ["공포"],
+    Music: ["음악"],
+    Mystery: ["미스터리"],
+    Romance: ["로맨스"],
+    "Science Fiction": ["SF"],
+    "Sci-Fi": ["SF"],
+    "TV Movie": ["TV 영화"],
+    Thriller: ["스릴러"],
+    War: ["전쟁"],
+    Western: ["서부"],
+    Kids: ["키즈"],
+    News: ["뉴스"],
+    Reality: ["리얼리티"],
+    Soap: ["연속극"],
+    Talk: ["토크쇼"]
+};
+
+const toKoreanGenres = (genres) => [
+    ...new Set(
+        (Array.isArray(genres) ? genres : [])
+            .filter((genre) => typeof genre === "string" && genre.trim())
+            .flatMap((genre) => {
+                const name = genre.trim();
+
+                if (TMDB_GENRE_KO[name]) return TMDB_GENRE_KO[name];
+
+                // 목록에 없는 "A & B" 형식도 하나씩 나눔
+                return name.includes(" & ")
+                    ? name.split(" & ").map((part) => TMDB_GENRE_KO[part.trim()]?.[0] || part.trim())
+                    : [name];
+            })
+    )
+];
+
 const renderGenres = (genres) => {
     const box = $("#hero-genres");
     box.replaceChildren();
@@ -339,7 +389,7 @@ const renderInfo = (content) => {
     addInfo(
         info,
         "장르",
-        (content.genres || []).join(", ") || "정보 없음"
+        toKoreanGenres(content.genres).join(", ") || "정보 없음"
     );
 
     if (typeof content.voteAverage === "number") {
@@ -895,7 +945,7 @@ const renderDetail = (content) => {
     }
 
     renderBadges(content);
-    renderGenres(content.genres || []);
+    renderGenres(toKoreanGenres(content.genres));
     renderInfo(content);
     renderProviders(content.providers || []);
     renderCast(content.cast || []);

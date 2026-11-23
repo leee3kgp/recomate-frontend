@@ -1,33 +1,19 @@
-import { isLoggedIn, apiFetch, ApiError } from "./api.js";
-import { loadGenres } from "./genres.js";
+import { isLoggedIn, apiFetch } from "./api.js";
+import { GENRES, loadGenres } from "./genres.js";
+import { TYPES, fetchPopular, popularErrorText, createPosterCard, placeholderRail, posterBackground } from "./popular.js";
 
 // =====================================
 // 홈 화면 (최종 디자인 시안 index.html 기준)
 //   비회원: 소개 + 인기 목록 블러 미리보기(API를 호출하지 않음) + 로그인 안내
-//   회원  : 추천 시작 배너 + 인기 목록(GET /api/popular) + 최근 추천(GET /api/sessions)
+//   회원  : 추천 시작 배너 + 최근 추천(GET /api/sessions)
+//           + 요즘 많이 보는 10편(GET /api/popular?type, 인기순 상위 10개) + 장르로 둘러보기
 //
-// 인기 목록 API는 영화와 TV를 섞어 인기순 최대 20개를 돌려주므로,
-// "전체 / 영화 / TV 시리즈" 탭과 "평점순 10개"는 프론트에서 type · voteAverage 로 거르고 정렬함
+// "전체 / 영화 / TV 시리즈" 탭은 API type 파라미터로 조회하고, 전체 목록·필터는 요즘 대세(trending.html)에서
 // =====================================
 
 const TMDB_IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500";
 
 const SHOW_COUNT = 10;
-const CACHE_MS = 10 * 60 * 1000;
-
-const TYPES = [
-    { value: "all", label: "전체" },
-    { value: "movie", label: "영화" },
-    { value: "tv", label: "TV 시리즈" }
-];
-
-const COUNTRIES = [
-    { value: "", label: "모든 국가" },
-    { value: "KR", label: "한국" },
-    { value: "US", label: "미국" },
-    { value: "JP", label: "일본" },
-    { value: "GB", label: "영국" }
-];
 
 const el = (tag, className, text) => {
     const node = document.createElement(tag);
@@ -39,14 +25,6 @@ const el = (tag, className, text) => {
 };
 
 const root = document.getElementById("home-root");
-
-const hueOf = (text = "") => [...text].reduce((a, c) => (a * 31 + c.charCodeAt(0)) % 360, 7);
-
-const posterBackground = (seed) => {
-    const hue = hueOf(String(seed));
-
-    return `linear-gradient(160deg, hsl(${hue} 60% 32%), hsl(${(hue + 40) % 360} 55% 14%))`;
-};
 
 // 원본 시안 data.js의 미리보기 작품(m1, t4, m5)과 포스터를 그대로 사용
 // t4는 원본에도 포스터 이미지가 없어 제목 대체 화면으로 표시
@@ -86,17 +64,6 @@ const howHTML = (guest) => `
 
 // ---------- 비회원 ----------
 
-const placeholderRail = () => Array.from({ length: SHOW_COUNT }, (_, i) => `
-    <li class="rank-item">
-        <span class="num" aria-hidden="true">${i + 1}</span>
-        <div>
-            <article class="poster-card">
-                <div class="poster" style="background:${posterBackground(i * 37 + 11)}"></div>
-                <div><div class="line skeleton"></div><div class="line skeleton short"></div></div>
-            </article>
-        </div>
-    </li>`).join("");
-
 const guestTrendHTML = () => `
     <section class="section" aria-labelledby="trend-title">
         <div class="section-head">
@@ -111,7 +78,7 @@ const guestTrendHTML = () => `
                 <div class="trend-filter">
                     <div class="tabs">${TYPES.map((t, i) => `<button class="tab" type="button" aria-selected="${i === 0}" tabindex="-1">${t.label}</button>`).join("")}</div>
                 </div>
-                <ol class="rail rank-rail" style="margin:16px 0 0;padding:0 0 8px;list-style:none">${placeholderRail()}</ol>
+                <ol class="rail rank-rail" style="margin:16px 0 0;padding:0 0 8px;list-style:none">${placeholderRail(SHOW_COUNT)}</ol>
             </div>
             <div class="lock">
                 <div class="lock-card">
@@ -182,300 +149,154 @@ const heroHTML = () => `
         </div>
     </section>`;
 
-// ---------- 회원: 인기 목록 ----------
+// ---------- 회원: 인기 목록 (시안 "요즘 많이 보는 10편") ----------
 
 const memberTrendHTML = () => `
     <section class="section" aria-labelledby="trend-title">
         <div class="section-head">
             <div>
                 <h2 id="trend-title">요즘 많이 보는 10편</h2>
-                <p class="muted" id="trend-sub" style="margin:4px 0 0;font-size:14px"></p>
+                <p class="muted" style="margin:4px 0 0;font-size:14px">TMDB 인기 순위 기준</p>
             </div>
+            <a class="btn btn-ghost btn-sm" href="trending.html">전체 보기</a>
         </div>
-        <div class="trend-filter">
-            <div class="tabs" id="type-tabs" role="tablist" aria-label="콘텐츠 종류">
-                ${TYPES.map((t, i) => `<button class="tab" type="button" role="tab" aria-selected="${i === 0}" data-type="${t.value}">${t.label}</button>`).join("")}
-            </div>
-            <div>
-                <label class="sr-only" for="country">국가</label>
-                <select class="input select" id="country">
-                    ${COUNTRIES.map((c) => `<option value="${c.value}">${c.label}</option>`).join("")}
-                </select>
-            </div>
+        <div class="tabs" id="type-tabs" role="tablist" aria-label="콘텐츠 종류">
+            ${TYPES.map((t, i) => `<button class="tab" type="button" role="tab" aria-selected="${i === 0}" data-type="${t.value}">${t.label}</button>`).join("")}
         </div>
-        <div class="chips genre-filter" id="genre-filter" role="group" aria-label="장르 필터"></div>
         <div id="trend-body" aria-busy="true"></div>
         <p class="sr-only" id="trend-status" role="status"></p>
     </section>`;
 
-function setupMemberTrend() {
-    const state = { type: "all", genre: "", country: "" };
-    const cache = new Map();
-    let genreNames = {};
+// 시안: 장르 칩을 누르면 요즘 대세 화면에서 해당 장르로 바로 필터
+const genreLinksHTML = () => `
+    <section class="section" aria-labelledby="genre-title">
+        <div class="section-head"><h2 id="genre-title">장르로 둘러보기</h2></div>
+        <div class="chips" id="genre-links"></div>
+    </section>`;
+
+function setupGenreLinks(genresReady) {
+    const box = document.getElementById("genre-links");
+
+    const render = (genres) => {
+        box.replaceChildren(...genres.map((g) => {
+            const link = el("a", "chip", g.name);
+
+            link.href = `trending.html?genre=${encodeURIComponent(g.code)}`;
+
+            return link;
+        }));
+    };
+
+    render(GENRES);
+    genresReady.then(render);
+}
+
+function setupMemberTrend(genresReady) {
+    let type = "";
+    let genreNames = Object.fromEntries(GENRES.map((g) => [g.code, g.name]));
     let requestId = 0;
 
     const body = document.getElementById("trend-body");
     const status = document.getElementById("trend-status");
-    const sub = document.getElementById("trend-sub");
 
-    const cacheKey = () => `${state.genre}|${state.country}`;
+    const railList = () => {
+        const list = el("ol", "rail rank-rail");
 
-    const readCache = () => {
-        const hit = cache.get(cacheKey());
+        list.style.cssText = "margin:16px 0 0;padding:0 0 8px;list-style:none";
 
-        return hit && Date.now() - hit.at < CACHE_MS ? hit.items : null;
+        return list;
     };
-
-    // ----- 카드 -----
-
-    const createCard = (item) => {
-        const card = el("article", "poster-card");
-        const poster = el("div", "poster");
-
-        poster.style.background = posterBackground(item.title);
-        poster.append(el("div", "fallback", item.title || ""));
-
-        if (item.posterPath) {
-            const img = document.createElement("img");
-
-            img.loading = "lazy";
-            img.alt = `${item.title || ""} 포스터`;
-            img.src = `${TMDB_IMAGE_BASE_URL}${item.posterPath}`;
-            img.addEventListener("error", () => img.remove(), { once: true });
-            poster.append(img);
-        }
-
-        const info = el("div");
-        const meta = el("div", "meta");
-
-        meta.append(el("span", "", item.type === "movie" ? "영화" : "TV 시리즈"));
-
-        if (item.releaseYear) meta.append(el("span", "", String(item.releaseYear)));
-
-        if (Number(item.voteAverage) > 0) {
-            meta.append(el("span", "score", `★ ${Number(item.voteAverage).toFixed(1)}`));
-        }
-
-        info.append(el("span", "title", item.title || ""), meta);
-        card.append(poster, info);
-
-        return card;
-    };
-
-    // ----- 상태별 본문 -----
 
     const showSkeleton = () => {
         body.setAttribute("aria-busy", "true");
 
-        const list = el("ol", "rail rank-rail");
+        const list = railList();
 
-        list.style.cssText = "margin:16px 0 0;padding:0 0 8px;list-style:none";
-        list.innerHTML = placeholderRail();
+        list.innerHTML = placeholderRail(SHOW_COUNT);
         list.setAttribute("aria-hidden", "true");
         body.replaceChildren(list);
     };
 
-    const showMessage = (title, text, actions = []) => {
+    const showMessage = (title, text, action) => {
         body.setAttribute("aria-busy", "false");
 
         const card = el("div", "state-card");
 
-        card.setAttribute("role", "status");
         card.append(el("h3", "", title), el("p", "", text));
 
-        actions.forEach(({ label, run, primary }) => {
-            const button = el("button", `btn ${primary ? "btn-primary" : "btn-secondary"} btn-sm`, label);
+        if (action) {
+            const button = el("button", "btn btn-secondary btn-sm", action.label);
 
             button.type = "button";
-            button.addEventListener("click", run);
+            button.addEventListener("click", action.run);
             card.append(button);
-        });
+        }
 
         body.replaceChildren(card);
         status.textContent = title;
     };
 
-    // 영화/TV 탭으로 거르고 평점 높은 순으로 10개
-    const pickItems = (items) => items
-        .filter((item) => state.type === "all" || item.type === state.type)
-        .sort((a, b) => (Number(b.voteAverage) || 0) - (Number(a.voteAverage) || 0))
-        .slice(0, SHOW_COUNT);
-
-    const describeFilter = () => {
-        const parts = [
-            state.genre ? genreNames[state.genre] || state.genre : "",
-            COUNTRIES.find((c) => c.value === state.country)?.value
-                ? COUNTRIES.find((c) => c.value === state.country).label
-                : ""
-        ].filter(Boolean);
-
-        sub.textContent = `${parts.length ? parts.join(" · ") : "TMDB"} 인기작 중 평점이 높은 순이에요`;
-    };
-
-    const resetFilters = () => {
-        state.type = "all";
-        state.genre = "";
-        state.country = "";
-
-        document.querySelectorAll("#type-tabs .tab").forEach((tab) => {
-            tab.setAttribute("aria-selected", String(tab.dataset.type === "all"));
-        });
-        document.getElementById("country").value = "";
-        syncGenreChips();
-        load();
-    };
-
     const render = (items) => {
-        describeFilter();
-
-        const picked = pickItems(items);
+        const picked = items.slice(0, SHOW_COUNT);
 
         if (!picked.length) {
-            showMessage(
-                "조건에 맞는 작품이 없어요",
-                "장르를 바꾸거나 국가를 바꿔보세요.",
-                [{ label: "필터 초기화", run: resetFilters, primary: false }]
-            );
+            showMessage("지금은 보여줄 작품이 없어요", "잠시 후 다시 확인해주세요.", { label: "다시 시도", run: load });
             return;
         }
 
         body.setAttribute("aria-busy", "false");
 
-        const list = el("ol", "rail rank-rail");
-
-        list.style.cssText = "margin:16px 0 0;padding:0 0 8px;list-style:none";
+        const list = railList();
 
         picked.forEach((item, i) => {
             const li = el("li", "rank-item");
+            const num = el("span", "num", String(i + 1));
             const wrap = el("div");
 
-            wrap.append(el("span", "sr-only", `${i + 1}위`), createCard(item));
-            li.append(el("span", "num", String(i + 1)), wrap);
-            li.firstChild.setAttribute("aria-hidden", "true");
+            num.setAttribute("aria-hidden", "true");
+            wrap.append(el("span", "sr-only", `${i + 1}위`), createPosterCard(item, { genreNames }));
+            li.append(num, wrap);
             list.append(li);
         });
 
         body.replaceChildren(list);
-        status.textContent = `${picked.length}편을 보여줘요`;
-    };
-
-    const errorText = (error) => {
-        if (error instanceof ApiError && error.code === "UPSTREAM_ERROR") {
-            return "인기 목록을 가져오지 못했어요. 잠시 후 다시 시도해주세요.";
-        }
-
-        if (error instanceof ApiError && error.code === "NETWORK_ERROR") {
-            return error.message;
-        }
-
-        if (error instanceof ApiError && error.status === 429) {
-            return "요청이 많아 잠시 후 다시 시도해주세요.";
-        }
-
-        return "인기 목록을 불러오지 못했어요. 잠시 후 다시 시도해주세요.";
+        status.textContent = `인기 작품 ${picked.length}편을 보여줘요`;
     };
 
     async function load() {
         const id = ++requestId;
-        const cached = readCache();
 
-        if (cached) {
-            render(cached);
-            return;
-        }
-
-        describeFilter();
         showSkeleton();
 
-        const query = new URLSearchParams();
-
-        if (state.genre) query.set("genre", state.genre);
-        if (state.country) query.set("country", state.country);
-
-        const queryText = query.toString();
-
         try {
-            const data = await apiFetch(`/api/popular${queryText ? `?${queryText}` : ""}`);
+            const items = await fetchPopular({ type });
 
-            if (id !== requestId) return;
-
-            const items = Array.isArray(data?.items) ? data.items : [];
-
-            cache.set(cacheKey(), { at: Date.now(), items });
-            render(items);
+            if (id === requestId) render(items);
         } catch (error) {
             if (id !== requestId) return;
 
             console.error("인기 목록 API 에러:", error);
-            showMessage("인기 목록을 불러오지 못했어요", errorText(error), [
-                { label: "다시 시도", run: load, primary: true }
-            ]);
+            showMessage("인기 목록을 불러오지 못했어요", popularErrorText(error), { label: "다시 시도", run: load });
         }
     }
-
-    // ----- 장르 칩 -----
-
-    const genreBox = document.getElementById("genre-filter");
-
-    function syncGenreChips() {
-        genreBox.querySelectorAll(".chip").forEach((chip) => {
-            chip.setAttribute("aria-pressed", String(chip.dataset.genre === state.genre));
-        });
-    }
-
-    const buildGenreChips = (genres) => {
-        genreNames = Object.fromEntries(genres.map((g) => [g.code, g.name]));
-
-        genreBox.replaceChildren(...[{ code: "", name: "전체 장르" }, ...genres].map((g) => {
-            const chip = el("button", "chip", g.name);
-
-            chip.type = "button";
-            chip.dataset.genre = g.code;
-            chip.setAttribute("aria-pressed", String(g.code === state.genre));
-
-            return chip;
-        }));
-
-        describeFilter();
-    };
-
-    genreBox.addEventListener("click", (e) => {
-        const chip = e.target.closest("[data-genre]");
-
-        if (!chip || chip.dataset.genre === state.genre) return;
-
-        state.genre = chip.dataset.genre;
-        syncGenreChips();
-        load();
-    });
 
     document.getElementById("type-tabs").addEventListener("click", (e) => {
         const tab = e.target.closest("[data-type]");
 
-        if (!tab || tab.dataset.type === state.type) return;
+        if (!tab || tab.dataset.type === type) return;
 
-        state.type = tab.dataset.type;
+        type = tab.dataset.type;
 
         document.querySelectorAll("#type-tabs .tab").forEach((t) => {
             t.setAttribute("aria-selected", String(t === tab));
         });
 
-        const items = readCache();
-
-        if (items) {
-            render(items);
-        } else {
-            load();
-        }
-    });
-
-    document.getElementById("country").addEventListener("change", (e) => {
-        state.country = e.target.value;
         load();
     });
 
-    buildGenreChips([]);
-    loadGenres().then(buildGenreChips);
+    genresReady.then((genres) => {
+        genreNames = Object.fromEntries(genres.map((g) => [g.code, g.name]));
+    });
 
     load();
 }
@@ -544,10 +365,14 @@ if (member) {
         <div class="container">
             <section class="section" id="recent-section" aria-labelledby="recent-title" hidden></section>
             ${memberTrendHTML()}
+            ${genreLinksHTML()}
             ${howHTML(false)}
         </div>`;
 
-    setupMemberTrend();
+    const genresReady = loadGenres();
+
+    setupMemberTrend(genresReady);
+    setupGenreLinks(genresReady);
     setupRecent(document.getElementById("recent-section"));
 } else {
     root.innerHTML = `
