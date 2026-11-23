@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="요즘 많이 보는 영화와 드라마를 종류, 국가, 장르별로 둘러보세요.">
+    <meta name="theme-color" content="#141414">
+    <title>요즘 대세 | RecoMate</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/common.css">
+    <link rel="stylesheet" href="../css/navbar.css">
+    <link rel="stylesheet" href="../css/footer.css">
+    <link rel="stylesheet" href="../css/toast.css">
+    <link rel="stylesheet" href="../css/home-page.css">
+    <link rel="stylesheet" href="../css/trending.css">
+</head>
+<body>
+    <a class="sr-only" href="#main">본문 바로가기</a>
+    <div id="navbar-container"></div>
+
+    <!-- 포스터 카드·칩·탭·버튼 등은 홈과 같은 시안 규칙(home-page.css)을 함께 사용 -->
+    <main id="main" class="home-page trending-page">
+        <div class="container">
+            <div class="section-head" style="margin-bottom:20px">
+                <div>
+                    <h1>요즘 대세</h1>
+                    <p class="muted" style="margin:6px 0 0">TMDB 인기 순위를 바탕으로 보여줘요.</p>
+                </div>
+            </div>
+
+            <div class="card tight trend-controls">
+                <div class="row wrap" style="justify-content:space-between">
+                    <div class="tabs" id="type-tabs" role="tablist" aria-label="콘텐츠 종류"></div>
+                    <div class="row wrap">
+                        <label class="sr-only" for="country">국가</label>
+                        <select class="input select" id="country"></select>
+                        <label class="sr-only" for="sort">정렬</label>
+                        <select class="input select" id="sort"></select>
+                    </div>
+                </div>
+                <div class="chips" id="genre-filter" role="group" aria-label="장르 필터"></div>
+            </div>
+
+            <div class="row result-bar">
+                <span class="muted" id="result-count"></span>
+                <span class="spacer"></span>
+                <button class="btn btn-ghost btn-sm" type="button" id="reset-filter" hidden>필터 초기화</button>
+            </div>
+
+            <div id="trend-body" aria-busy="true"></div>
+            <p class="sr-only" id="trend-status" role="status"></p>
+
+            <div class="card row wrap section" style="justify-content:space-between">
+                <div>
+                    <h3>이 중에서 고르기 어렵다면?</h3>
+                    <p class="muted" style="margin:0">같이 볼 사람들이 고른 장르로 3편까지 좁혀드려요.</p>
+                </div>
+                <a class="btn btn-primary" href="start.html">같이 추천받기</a>
+            </div>
+        </div>
+    </main>
+
+    <footer id="site-footer"></footer>
+
+    <script type="module">
+        import "../js/navbar.js";
+        import "../js/auth-ui.js";
+        import "../js/footer.js";
+    </script>
+    <script type="module" src="../js/trending.js"></script>
+</body>
+</html>
